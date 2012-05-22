@@ -56,12 +56,12 @@ public class ViewRegister extends InfoPharmaPanel{
         btnMainMenu = new javax.swing.JButton();
         comboUserType = new javax.swing.JComboBox();
         comboDiscountPlan = new javax.swing.JComboBox();
-        comboCreditLimit = new javax.swing.JComboBox();
         textNumber = new javax.swing.JTextField();
         textCompany = new javax.swing.JTextField();
         textPostcode = new javax.swing.JTextField();
         paneAddress = new javax.swing.JScrollPane();
         textAreaAddress = new javax.swing.JTextArea();
+        textCredit = new javax.swing.JTextField();
         imageLabel = new javax.swing.JLabel();
 
         btnMainMenu.setText("main menu");
@@ -88,14 +88,6 @@ public class ViewRegister extends InfoPharmaPanel{
         });
         comboDiscountPlan.setBounds(370, 140, 270, 27);
         layeredPanel.add(comboDiscountPlan, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        comboCreditLimit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboCreditLimitActionPerformed(evt);
-            }
-        });
-        comboCreditLimit.setBounds(370, 220, 270, 27);
-        layeredPanel.add(comboCreditLimit, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textNumber.setSize(new java.awt.Dimension(250, 25));
         textNumber.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +125,14 @@ public class ViewRegister extends InfoPharmaPanel{
         paneAddress.setBounds(40, 300, 250, 70);
         layeredPanel.add(paneAddress, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textCredit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textCreditActionPerformed(evt);
+            }
+        });
+        textCredit.setBounds(380, 220, 250, 25);
+        layeredPanel.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
@@ -163,10 +163,6 @@ public class ViewRegister extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_comboDiscountPlanActionPerformed
 
-    private void comboCreditLimitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCreditLimitActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboCreditLimitActionPerformed
-
     private void textNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumberActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textNumberActionPerformed
@@ -179,9 +175,12 @@ public class ViewRegister extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_textPostcodeActionPerformed
 
+    private void textCreditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCreditActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textCreditActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
-    private javax.swing.JComboBox comboCreditLimit;
     private javax.swing.JComboBox comboDiscountPlan;
     private javax.swing.JComboBox comboUserType;
     private javax.swing.JLabel imageLabel;
@@ -189,6 +188,7 @@ public class ViewRegister extends InfoPharmaPanel{
     private javax.swing.JScrollPane paneAddress;
     private javax.swing.JTextArea textAreaAddress;
     private javax.swing.JTextField textCompany;
+    private javax.swing.JTextField textCredit;
     private javax.swing.JTextField textNumber;
     private javax.swing.JTextField textPostcode;
     // End of variables declaration//GEN-END:variables
