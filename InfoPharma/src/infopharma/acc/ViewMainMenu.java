@@ -11,30 +11,23 @@ import javax.swing.JLayeredPane;
  *
  * @author Abdullah
  */
-public class InfoPharmaPanel extends javax.swing.JPanel {
-    private static InfoPharmaFrame frame;
+public class ViewMainMenu extends InfoPharmaPanel{
 	
-    public InfoPharmaPanel(InfoPharmaFrame mainMenuFrame)
+    public ViewMainMenu(InfoPharmaFrame mainMenuFrame)
     {
         initComponents();
-        setFrame(mainMenuFrame);
-        this.setVisible(true);
-    }
-    
-    public InfoPharmaPanel()
-    {
-        initComponents();
+        this.setFrame(mainMenuFrame);
         this.setVisible(true);
     }
 
     public static InfoPharmaFrame getFrame() 
     {
-        return frame;
+        return InfoPharmaPanel.getFrame();
     }
 
     public static void setFrame(InfoPharmaFrame frame) 
     {
-        InfoPharmaPanel.frame = frame;
+        InfoPharmaPanel.setFrame(frame);
     }
 
     /**
@@ -47,21 +40,30 @@ public class InfoPharmaPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        btnMainMenu = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         imageLabel = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(212, 211, 211));
-
-        btnMainMenu.setText("main menu");
-        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("LOGIN");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMainMenuActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
-        btnMainMenu.setBounds(990, 10, 100, 50);
-        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jButton1.setBounds(90, 70, 260, 60);
+        layeredPanel.add(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jButton2.setText("jButton2");
+        jButton2.setBounds(90, 180, 260, 70);
+        layeredPanel.add(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jButton3.setText("jButton3");
+        jButton3.setBounds(100, 280, 240, 80);
+        layeredPanel.add(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/misc/images/mainmenu.gif"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -77,13 +79,16 @@ public class InfoPharmaPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMainMenuActionPerformed
+        this.getFrame().setPanel(new ViewLogin(InfoPharmaPanel.getFrame()));
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnMainMenu;
     private javax.swing.JLabel imageLabel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLayeredPane layeredPanel;
     // End of variables declaration//GEN-END:variables
 }

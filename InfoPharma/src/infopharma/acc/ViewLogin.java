@@ -4,6 +4,9 @@
  */
 package infopharma.acc;
 
+import infopharma.Validator;
+import infopharma.data.UserAccount;
+import infopharma.data.MiscDBAccess;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
@@ -11,30 +14,24 @@ import javax.swing.JLayeredPane;
  *
  * @author Abdullah
  */
-public class InfoPharmaPanel extends javax.swing.JPanel {
+public class ViewLogin extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
 	
-    public InfoPharmaPanel(InfoPharmaFrame mainMenuFrame)
+    public ViewLogin(InfoPharmaFrame mainMenuFrame)
     {
         initComponents();
         setFrame(mainMenuFrame);
         this.setVisible(true);
     }
-    
-    public InfoPharmaPanel()
-    {
-        initComponents();
-        this.setVisible(true);
-    }
 
     public static InfoPharmaFrame getFrame() 
     {
-        return frame;
+        return InfoPharmaPanel.getFrame();
     }
 
     public static void setFrame(InfoPharmaFrame frame) 
     {
-        InfoPharmaPanel.frame = frame;
+        InfoPharmaPanel.setFrame(frame);
     }
 
     /**
@@ -47,10 +44,25 @@ public class InfoPharmaPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
+        txtUsername = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
+        jButton1 = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
         imageLabel = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(212, 211, 211));
+        txtUsername.setBounds(250, 290, 130, 28);
+        layeredPanel.add(txtUsername, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        txtPassword.setBounds(440, 290, 130, 28);
+        layeredPanel.add(txtPassword, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jButton1.setBounds(610, 260, 97, 150);
+        layeredPanel.add(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -62,6 +74,7 @@ public class InfoPharmaPanel extends javax.swing.JPanel {
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/misc/images/login.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -79,11 +92,35 @@ public class InfoPharmaPanel extends javax.swing.JPanel {
 
     private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
         // TODO add your handling code here:
+        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MiscDBAccess miscDBAccess = new MiscDBAccess();
+        String username = txtUsername.getText();
+        String password = txtPassword.getText();
+        System.out.println("username:"+username+" password:"+password);
+        if(Validator.isFilledIn(username, password))
+        {
+            UserAccount userAccount = miscDBAccess.login(username, password);
+            if(userAccount != null)
+            {
+                this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
+            }
+        }
+        else
+        {
+            System.out.println("Fill in the username and password");
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JLabel imageLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane layeredPanel;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }
