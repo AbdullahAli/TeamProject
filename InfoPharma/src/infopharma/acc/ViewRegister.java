@@ -99,11 +99,9 @@ public class ViewRegister extends InfoPharmaPanel{
         textPostcode = new javax.swing.JTextField();
         paneAddress = new javax.swing.JScrollPane();
         textAreaAddress = new javax.swing.JTextArea();
-<<<<<<< HEAD
         textCredit = new javax.swing.JTextField();
-=======
         btnGo = new javax.swing.JButton();
->>>>>>> register
+
         imageLabel = new javax.swing.JLabel();
 
         btnMainMenu.setText("main menu");
@@ -175,7 +173,6 @@ public class ViewRegister extends InfoPharmaPanel{
         paneAddress.setBounds(40, 300, 250, 70);
         layeredPanel.add(paneAddress, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-<<<<<<< HEAD
         textCredit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textCreditActionPerformed(evt);
@@ -183,7 +180,6 @@ public class ViewRegister extends InfoPharmaPanel{
         });
         textCredit.setBounds(380, 220, 250, 25);
         layeredPanel.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
-=======
         btnGo.setText("jButton1");
         btnGo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -192,7 +188,6 @@ public class ViewRegister extends InfoPharmaPanel{
         });
         btnGo.setBounds(1022, 70, 70, 470);
         layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
->>>>>>> register
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register.png"))); // NOI18N
@@ -240,13 +235,10 @@ public class ViewRegister extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_textCreditActionPerformed
 
-<<<<<<< HEAD
-=======
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
         registerValidation();
     }//GEN-LAST:event_btnGoActionPerformed
 
->>>>>>> register
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
