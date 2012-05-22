@@ -8,6 +8,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -33,8 +34,32 @@ public class AccountDBAccess extends DBAccess{
             }
         }catch(SQLException ex){
             
+        }finally{
+            closeConnection(connection);
         }
         return userTypes;
+    }
+    
+    public ArrayList<Integer> getDiscountPlans(){
+        ArrayList<Integer> discountPlans = new ArrayList<Integer>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM DiscountPlans";
+        try{
+            connection = makeConnection();
+            statement = (Statement) connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next()){
+                int discountID = resultSet.getInt("discountPlanID");
+                discountPlans.add(discountID);
+            }
+        }catch(SQLException ex){
+            
+        }finally{
+            closeConnection(connection);
+        }
+        return discountPlans;
     }
     
 }

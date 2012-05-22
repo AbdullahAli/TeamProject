@@ -30,6 +30,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout"/>
       <SubComponents>
+<<<<<<< HEAD
         <Component class="javax.swing.JLabel" name="lblError">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -42,6 +43,18 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
               <JLayeredPaneConstraints x="10" y="520" width="820" height="40" layer="0" position="-1"/>
+=======
+        <Component class="javax.swing.JButton" name="btnMainMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="main menu"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMainMenuActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
+              <JLayeredPaneConstraints x="1010" y="10" width="80" height="50" layer="0" position="-1"/>
+>>>>>>> register
             </Constraint>
           </Constraints>
         </Component>
@@ -55,6 +68,7 @@
             </Constraint>
           </Constraints>
         </Component>
+<<<<<<< HEAD
         <Component class="javax.swing.JButton" name="btnMainMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="main menu"/>
@@ -68,6 +82,8 @@
             </Constraint>
           </Constraints>
         </Component>
+=======
+>>>>>>> register
       </SubComponents>
     </Container>
   </SubComponents>
