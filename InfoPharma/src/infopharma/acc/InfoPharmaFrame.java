@@ -4,6 +4,7 @@
  */
 package infopharma.acc;
 
+import infopharma.cat.ViewNewCatalogue;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -23,7 +24,7 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
 	public InfoPharmaFrame() 
         {
             initComponents();
-            this.setPanel(new ViewLogin(this));
+            this.setPanel(new ViewNewCatalogue(this));
             this.setVisible(true);
             setTitle("InfoPharma");
 	}
