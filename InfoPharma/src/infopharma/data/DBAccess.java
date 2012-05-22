@@ -7,6 +7,10 @@ package infopharma.data;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -18,7 +22,7 @@ public class DBAccess {
     {
         Connection con = null;
 
-        String url = "jdbc:mysql://localhost:8889/epos";
+        String url = "jdbc:mysql://localhost:8889/ipos";
         String user = "username";
         String password = "password";
 
