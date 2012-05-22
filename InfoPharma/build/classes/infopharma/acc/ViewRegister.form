@@ -73,6 +73,24 @@
             </Constraint>
           </Constraints>
         </Component>
+<<<<<<< HEAD
+=======
+        <Component class="javax.swing.JComboBox" name="comboCreditLimit">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboCreditLimitActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
+              <JLayeredPaneConstraints x="370" y="220" width="270" height="-1" layer="0" position="-1"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+>>>>>>> 1cdd4d7c0364ea938fd94e47ce14b7e38f647697
         <Component class="javax.swing.JTextField" name="textNumber">
           <Properties>
             <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -141,6 +159,7 @@
             </Component>
           </SubComponents>
         </Container>
+<<<<<<< HEAD
         <Component class="javax.swing.JTextField" name="textCredit">
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textCreditActionPerformed"/>
@@ -151,6 +170,8 @@
             </Constraint>
           </Constraints>
         </Component>
+=======
+>>>>>>> 1cdd4d7c0364ea938fd94e47ce14b7e38f647697
         <Component class="javax.swing.JLabel" name="imageLabel">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
