@@ -21,6 +21,7 @@ public class Template extends InfoPharmaPanel{
     {
         initComponents();
         setFrame(mainMenuFrame);
+        lblError.setVisible(false);
         this.setVisible(true);
     }
 

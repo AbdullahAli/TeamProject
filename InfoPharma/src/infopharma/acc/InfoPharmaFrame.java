@@ -4,6 +4,7 @@
  */
 package infopharma.acc;
 
+import infopharma.cat.ViewDeleteProduct;
 import infopharma.cat.ViewNewCatalogue;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,7 +25,7 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
 	public InfoPharmaFrame() 
         {
             initComponents();
-            this.setPanel(new ViewNewCatalogue(this));
+            this.setPanel(new ViewDeleteProduct(this));
             this.setVisible(true);
             setTitle("InfoPharma");
 	}

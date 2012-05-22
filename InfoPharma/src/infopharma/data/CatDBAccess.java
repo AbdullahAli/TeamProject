@@ -7,6 +7,8 @@ package infopharma.data;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  *
@@ -102,4 +104,95 @@ public class CatDBAccess extends DBAccess{
             }
         }
     }
+    
+     public HashMap<Integer, String> getProducts()
+     {
+        HashMap<Integer, String> products = new HashMap<Integer, String>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM Products";
+        try
+        {
+            connection = makeConnection();
+            statement = (Statement) connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next())
+            {
+                int roleID = resultSet.getInt("productID");
+                String roleType = resultSet.getString("name");
+                products.put(roleID, roleType);
+            }
+            return products;
+        }
+        catch(SQLException ex)
+        {
+            System.out.println("Error: "+ex.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                {
+                    connection.close();
+                }
+
+                if(resultSet != null)
+                {
+                    resultSet.close();
+                }
+
+                if(statement != null)
+                {
+                    statement.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getProducts");
+            }
+        }
+        return null;
+    }
+     
+     public void deleteProduct(String productName)
+     {
+         Connection con = null;
+         Statement statement = null;
+         
+         try
+         {
+             con = makeConnection();
+             statement = (Statement) con.createStatement();
+             String sql = "DELETE FROM Products WHERE name ='"+productName+"'";
+             System.out.println(sql);
+             statement.executeUpdate(sql);
+             System.out.println("Deleted product.");
+         }
+         catch(Exception e)
+         {
+             System.err.println("Error: "+e.getMessage());
+         }
+         finally
+         {
+            try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(statement != null)
+                {
+                    statement.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess deleteProduct");
+            }
+        }
+     }
+    
 }
