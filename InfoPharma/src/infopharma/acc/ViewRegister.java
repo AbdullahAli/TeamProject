@@ -8,6 +8,7 @@ import infopharma.Validator;
 import infopharma.data.AccountDBAccess;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -43,6 +44,13 @@ public class ViewRegister extends InfoPharmaPanel{
             comboUserType.addItem(userType);
         }
     }
+    
+    public void populateComboDiscountPlan(){
+        ArrayList<Integer> discountPlans = accountDB.getDiscountPlans();
+        for(int discountPlanID : discountPlans){
+            comboDiscountPlan.addItem(discountPlanID);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,8 +64,8 @@ public class ViewRegister extends InfoPharmaPanel{
         btnMainMenu = new javax.swing.JButton();
         comboUserType = new javax.swing.JComboBox();
         comboDiscountPlan = new javax.swing.JComboBox();
-        comboCreditLimit = new javax.swing.JComboBox();
         textNumber = new javax.swing.JTextField();
+        textCredit = new javax.swing.JTextField();
         textCompany = new javax.swing.JTextField();
         textPostcode = new javax.swing.JTextField();
         paneAddress = new javax.swing.JScrollPane();
@@ -89,14 +97,6 @@ public class ViewRegister extends InfoPharmaPanel{
         comboDiscountPlan.setBounds(370, 140, 270, 27);
         layeredPanel.add(comboDiscountPlan, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        comboCreditLimit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboCreditLimitActionPerformed(evt);
-            }
-        });
-        comboCreditLimit.setBounds(370, 220, 270, 27);
-        layeredPanel.add(comboCreditLimit, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
         textNumber.setSize(new java.awt.Dimension(250, 25));
         textNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,6 +105,14 @@ public class ViewRegister extends InfoPharmaPanel{
         });
         textNumber.setBounds(40, 510, 250, 25);
         layeredPanel.add(textNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textCredit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textCreditActionPerformed(evt);
+            }
+        });
+        textCredit.setBounds(380, 220, 250, 25);
+        layeredPanel.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textCompany.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,10 +171,6 @@ public class ViewRegister extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_comboDiscountPlanActionPerformed
 
-    private void comboCreditLimitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCreditLimitActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboCreditLimitActionPerformed
-
     private void textNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumberActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textNumberActionPerformed
@@ -179,9 +183,12 @@ public class ViewRegister extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_textPostcodeActionPerformed
 
+    private void textCreditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCreditActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textCreditActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
-    private javax.swing.JComboBox comboCreditLimit;
     private javax.swing.JComboBox comboDiscountPlan;
     private javax.swing.JComboBox comboUserType;
     private javax.swing.JLabel imageLabel;
@@ -189,6 +196,7 @@ public class ViewRegister extends InfoPharmaPanel{
     private javax.swing.JScrollPane paneAddress;
     private javax.swing.JTextArea textAreaAddress;
     private javax.swing.JTextField textCompany;
+    private javax.swing.JTextField textCredit;
     private javax.swing.JTextField textNumber;
     private javax.swing.JTextField textPostcode;
     // End of variables declaration//GEN-END:variables
