@@ -6,6 +6,7 @@ package infopharma.acc;
 
 import infopharma.cat.ViewDeleteProduct;
 import infopharma.cat.ViewNewCatalogue;
+import infopharma.cat.ViewNewProduct;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -25,7 +26,7 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
 	public InfoPharmaFrame() 
         {
             initComponents();
-            this.setPanel(new ViewDeleteProduct(this));
+            this.setPanel(new ViewNewProduct(this));
             this.setVisible(true);
             setTitle("InfoPharma");
 	}

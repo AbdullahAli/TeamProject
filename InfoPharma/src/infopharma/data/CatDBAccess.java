@@ -8,6 +8,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -193,6 +194,98 @@ public class CatDBAccess extends DBAccess{
                 System.err.println("Could not close the resources in CatDBAccess deleteProduct");
             }
         }
+     }
+     
+     public String getCatalogueName()
+     {
+         Connection con = null;
+         Statement stat = null;
+         ResultSet rs = null;
+         String sql = "SELECT name FROM Catalogue";
+         try
+         {
+             con = makeConnection();
+             stat = (Statement) con.createStatement();
+             rs = stat.executeQuery(sql);
+             if(rs.next())
+             {
+                 return rs.getString("name");
+             }
+         }
+         catch(Exception e)
+         {
+             System.err.println("Error: "+e.getMessage());
+         }
+         finally
+         {
+            try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(stat != null)
+                {
+                    stat.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getCatalogueName");
+            }
+        }
+        return "";
+     }
+     
+     public boolean insertProduct(String name, String description, String unitPrice, String type, String unitsPerPack, String initialStock, String stockLimit)
+     {
+         Connection con = null;
+         Statement stat = null;
+         String sql = "INSERT INTO Products Values(NULL, '"+getCatalogueName()+"', ";
+         sql += "'"+name+"', ";
+         sql += "'"+description+"', ";
+         sql += "'"+unitPrice+"', ";
+         sql += "'"+stockLimit+"', ";
+         sql += "'"+type+"', ";
+         sql += "'box', ";
+         sql += "'"+unitsPerPack+"', ";
+         sql += "'"+initialStock+"', ";
+         sql += "NOW())";
+         System.out.println(sql);
+         
+         try
+         {
+             con = makeConnection();
+             stat = (Statement) con.createStatement();
+             stat.executeUpdate(sql);
+             System.out.println("inserted product");
+             return true;
+         }
+         catch (Exception e)
+         {
+             System.err.println("Error: "+e.getMessage());
+         }
+         finally
+         {
+             try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(stat != null)
+                {
+                    stat.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess insertProduct");
+            }
+         }
+         return false;
      }
     
 }
