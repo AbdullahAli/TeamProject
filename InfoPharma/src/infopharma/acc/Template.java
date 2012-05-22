@@ -44,8 +44,18 @@ public class Template extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        btnMainMenu = new javax.swing.JButton();
+        lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
+        btnMainMenu = new javax.swing.JButton();
+
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
+        lblError.setBounds(10, 520, 820, 40);
+        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setBounds(0, 0, 1100, 570);
+        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -55,10 +65,6 @@ public class Template extends InfoPharmaPanel{
         });
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setBounds(0, 0, 1100, 570);
-        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -81,5 +87,6 @@ public class Template extends InfoPharmaPanel{
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
+    private javax.swing.JLabel lblError;
     // End of variables declaration//GEN-END:variables
 }

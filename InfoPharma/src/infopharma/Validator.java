@@ -31,4 +31,13 @@ public class Validator {
         }
         return true;
     }
+    
+    public static boolean isFilledIn(String fieldText)
+    {
+        if(fieldText.equals(""))
+        {
+            return false;
+        }
+        return true;
+    }
 }
