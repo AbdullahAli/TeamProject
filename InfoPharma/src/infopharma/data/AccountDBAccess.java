@@ -34,6 +34,8 @@ public class AccountDBAccess extends DBAccess{
             }
         }catch(SQLException ex){
             
+        }finally{
+            closeConnection(connection);
         }
         return userTypes;
     }
@@ -54,6 +56,8 @@ public class AccountDBAccess extends DBAccess{
             }
         }catch(SQLException ex){
             
+        }finally{
+            closeConnection(connection);
         }
         return discountPlans;
     }
