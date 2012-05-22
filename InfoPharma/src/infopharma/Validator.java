@@ -5,6 +5,7 @@
 package infopharma;
 
 import java.util.ArrayList;
+import javax.swing.JTextField;
 
 /**
  *
@@ -16,6 +17,18 @@ public class Validator {
         for(String field : fields)
         {
             if(field.equals(""))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static boolean isFilled(ArrayList<JTextField> fields)
+    {
+        for(JTextField field : fields)
+        {
+            if(field.getText().equals(""))
             {
                 return false;
             }
