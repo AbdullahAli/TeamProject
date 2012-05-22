@@ -27,7 +27,7 @@ public class ViewRegister extends InfoPharmaPanel{
         initComponents();
         setFrame(mainMenuFrame);
         this.setVisible(true);
-        populateComboUserTypes();
+        populateCombos();
     }
 
     public static InfoPharmaFrame getFrame() {
@@ -36,6 +36,11 @@ public class ViewRegister extends InfoPharmaPanel{
 
     public static void setFrame(InfoPharmaFrame frame) {
         InfoPharmaPanel.setFrame(frame);
+    }
+    
+    public void populateCombos(){
+        populateComboUserTypes();
+        populateComboDiscountPlan();
     }
     
     public void populateComboUserTypes(){

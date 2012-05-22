@@ -43,7 +43,7 @@ public class AccountDBAccess extends DBAccess{
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
-        String sql = "SELECT * FROM UserRoles";
+        String sql = "SELECT * FROM DiscountPlans";
         try{
             connection = makeConnection();
             statement = (Statement) connection.createStatement();
