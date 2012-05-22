@@ -56,6 +56,30 @@ public class ViewRegister extends InfoPharmaPanel{
             comboDiscountPlan.addItem(discountPlanID);
         }
     }
+    
+    public void registerValidation(){
+        String company = textCompany.getText();
+        String address = textAreaAddress.getText();
+        String contact = textNumber.getText();
+        String postcode = textPostcode.getText();
+        ArrayList<String> fields = new ArrayList<String>();
+        fields.add(company);
+        fields.add(address);
+        fields.add(contact);
+        fields.add(postcode);
+        if(Validator.isFilledIn(fields)){
+            String userType = comboUserType.getSelectedItem().toString().toLowerCase();
+            if(userType.equals("merchant")){
+                String discountPlanID = comboDiscountPlan.getSelectedItem().toString();
+                String creditLimit = comboDiscountPlan.getSelectedItem().toString();
+//                registerMerchantUser();
+            }else{
+//                registerUser();
+            }
+        }else{
+            System.out.println("Fill in all details");
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,6 +99,7 @@ public class ViewRegister extends InfoPharmaPanel{
         textPostcode = new javax.swing.JTextField();
         paneAddress = new javax.swing.JScrollPane();
         textAreaAddress = new javax.swing.JTextArea();
+        btnGo = new javax.swing.JButton();
         imageLabel = new javax.swing.JLabel();
 
         btnMainMenu.setText("main menu");
@@ -146,6 +171,15 @@ public class ViewRegister extends InfoPharmaPanel{
         paneAddress.setBounds(40, 300, 250, 70);
         layeredPanel.add(paneAddress, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnGo.setText("jButton1");
+        btnGo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoActionPerformed(evt);
+            }
+        });
+        btnGo.setBounds(1022, 70, 70, 470);
+        layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
@@ -192,7 +226,12 @@ public class ViewRegister extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_textCreditActionPerformed
 
+    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        registerValidation();
+    }//GEN-LAST:event_btnGoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JComboBox comboDiscountPlan;
     private javax.swing.JComboBox comboUserType;
