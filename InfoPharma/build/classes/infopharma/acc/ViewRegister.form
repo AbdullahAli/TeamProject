@@ -151,7 +151,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JTextField" name="textCredit">
+        <Component class="javax.swing.JTextField" name="textCredit1">
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textCreditActionPerformed"/>
           </Events>
@@ -160,7 +160,7 @@
               <JLayeredPaneConstraints x="380" y="220" width="250" height="25" layer="0" position="-1"/>
             </Constraint>
           </Constraints>
-          </Component>
+        </Component>
         <Component class="javax.swing.JButton" name="btnGo">
           <Properties>
             <Property name="text" type="java.lang.String" value="jButton1"/>

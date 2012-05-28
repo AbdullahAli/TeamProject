@@ -80,6 +80,10 @@ public class ViewRegister extends InfoPharmaPanel{
             System.out.println("Fill in all details");
         }
     }
+    
+    public void registerMerchantUser(){
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
