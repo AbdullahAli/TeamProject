@@ -14,10 +14,10 @@ import javax.swing.JLayeredPane;
  *
  * @author Abdullah
  */
-public class Template extends InfoPharmaPanel{
+public class Template2 extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
 	
-    public Template(InfoPharmaFrame mainMenuFrame)
+    public Template2(InfoPharmaFrame mainMenuFrame)
     {
         initComponents();
         setFrame(mainMenuFrame);

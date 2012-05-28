@@ -30,18 +30,6 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JFormattedTextField" name="txtStockLimit">
-          <Properties>
-            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-              <Format format="#,##0.##" subtype="-1" type="0"/>
-            </Property>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-              <JLayeredPaneConstraints x="370" y="220" width="260" height="-1" layer="0" position="-1"/>
-            </Constraint>
-          </Constraints>
-        </Component>
         <Component class="javax.swing.JLabel" name="lblError">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -59,6 +47,7 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="txtInitialStock">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
               <Format format="#,##0.##" subtype="-1" type="0"/>
             </Property>
@@ -71,6 +60,7 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="txtUnitsInAPack">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
               <Format format="#,##0.##" subtype="-1" type="0"/>
             </Property>
@@ -83,6 +73,7 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="txtCost">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
               <Format format="#,##0.##" subtype="-1" type="0"/>
             </Property>
@@ -108,12 +99,16 @@
             <Component class="javax.swing.JTextArea" name="txtDescription">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="rows" type="int" value="5"/>
               </Properties>
             </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JTextField" name="txtType">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
               <JLayeredPaneConstraints x="40" y="220" width="250" height="-1" layer="0" position="-1"/>
@@ -121,6 +116,9 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="txtName">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
               <JLayeredPaneConstraints x="40" y="140" width="250" height="-1" layer="0" position="-1"/>
@@ -131,7 +129,7 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/infopharma/cat/images/newproduct.png"/>
+              <Image iconType="3" name="/infopharma/cat/images/productinformation.png"/>
             </Property>
           </Properties>
           <Constraints>
@@ -153,16 +151,6 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JButton" name="btnGo">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoActionPerformed"/>
-          </Events>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-              <JLayeredPaneConstraints x="1020" y="70" width="80" height="470" layer="0" position="-1"/>
-            </Constraint>
-          </Constraints>
-        </Component>
         <Component class="javax.swing.JButton" name="btnCancel">
           <Properties>
             <Property name="text" type="java.lang.String" value="jButton1"/>
@@ -173,6 +161,19 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
               <JLayeredPaneConstraints x="1010" y="540" width="-1" height="-1" layer="0" position="-1"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnOk">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="jButton1"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOkActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
+              <JLayeredPaneConstraints x="1017" y="70" width="80" height="500" layer="0" position="-1"/>
             </Constraint>
           </Constraints>
         </Component>

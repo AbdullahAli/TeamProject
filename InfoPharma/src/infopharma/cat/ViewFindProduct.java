@@ -12,19 +12,21 @@ import infopharma.data.CatDBAccess;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Abdullah
  */
-public class ViewDeleteProduct extends InfoPharmaPanel{
-    private static InfoPharmaFrame frame;
+public class ViewFindProduct extends InfoPharmaPanel{
     private CatDBAccess catDBAccess;
     HashMap<Integer, String> products;
 	
-    public ViewDeleteProduct(InfoPharmaFrame mainMenuFrame)
+    public ViewFindProduct(InfoPharmaFrame mainMenuFrame)
     {
         catDBAccess = new CatDBAccess();
         initComponents();
@@ -66,7 +68,9 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        boxConfirm = new javax.swing.JRadioButton();
+        ddlFoundProducts = new javax.swing.JComboBox();
+        txtName = new javax.swing.JTextField();
+        txtID = new javax.swing.JFormattedTextField();
         ddlProducts = new javax.swing.JComboBox();
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
@@ -74,12 +78,17 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
         btnGo = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
-        boxConfirm.setText("I confirm that I would like this product to be deleted permanetly.");
-        boxConfirm.setBounds(30, 240, 450, 23);
-        layeredPanel.add(boxConfirm, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        ddlFoundProducts.setBounds(30, 460, 280, 27);
+        layeredPanel.add(ddlFoundProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        txtName.setBounds(40, 340, 240, 28);
+        layeredPanel.add(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtID.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
+        txtID.setBounds(40, 260, 250, 28);
+        layeredPanel.add(txtID, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         ddlProducts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        ddlProducts.setBounds(30, 140, 270, 27);
+        ddlProducts.setBounds(30, 180, 270, 27);
         layeredPanel.add(ddlProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -88,7 +97,7 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/cat/images/deleteproduct.png"))); // NOI18N
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/cat/images/findproduct.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -101,13 +110,13 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnGo.setText("btnGo");
+        btnGo.setText("jButton1");
         btnGo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoActionPerformed(evt);
             }
         });
-        btnGo.setBounds(1017, 70, 80, 470);
+        btnGo.setBounds(1017, 90, 80, 450);
         layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnCancel.setText("jButton1");
@@ -116,7 +125,7 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
                 btnCancelActionPerformed(evt);
             }
         });
-        btnCancel.setBounds(1020, 540, 80, 29);
+        btnCancel.setBounds(1010, 540, 97, 29);
         layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -137,57 +146,116 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
-        if(isValidDeletion())
+        System.out.println("clicked GO");
+        setErrorParameters(false, "");
+        
+        
+        
+        if(ddlFoundProducts.getItemCount() == 0 && validateSearchInformation())
         {
-            deleteProduct();
-            populateComboProducts();
-            boxConfirm.setSelected(false);
+            System.out.println("Valid infomraotion");
+            populateFoundProducts();
         }
-        boxConfirm.setSelected(false);
+        else if (!validateSearchInformation())
+        {
+            System.out.println("Not valid information");
+        }
+        
+        
+        if(ddlFoundProducts.getItemCount() > 1 && ddlFoundProducts.getSelectedIndex() == 0)
+        {
+            System.out.println(": "+ddlFoundProducts.getSelectedIndex());
+            setErrorParameters(true, "Please select a product to view from the found products");
+        }
+        else if (ddlFoundProducts.getSelectedIndex() != 0)
+        {
+            System.out.println("Product is: "+ddlFoundProducts.getSelectedItem().toString());
+            this.
+            getFrame().setPanel(new ViewProductInformation(getFrame(), ddlFoundProducts.getSelectedItem().toString()));
+        }
+        
     }//GEN-LAST:event_btnGoActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         goToMainMenu();
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    public void populateFoundProducts()
+    {
+        CatDBAccess catDBAccess = new CatDBAccess();
+        String name = "";
+        if(ddlProducts.getSelectedItem() != null)
+        {
+            name = ddlProducts.getSelectedItem().toString();
+        }
+        
+        
+        HashMap<Integer, String> foundProducts = catDBAccess.getMatchingProducts(txtID.getText(), txtName.getText(), name);
+        if(foundProducts != null)
+        {
+            Iterator it = foundProducts.entrySet().iterator();
+            while (it.hasNext())
+            {
+                Map.Entry pairs = (Map.Entry)it.next();
+                System.out.println(pairs.getKey() + " = " + pairs.getValue());
+                
+                
+                
+                ddlFoundProducts.removeAllItems();
+                ddlFoundProducts.addItem("");
+                for(String product : foundProducts.values())
+                {
+                    ddlFoundProducts.addItem(product);
+                }
+                    ddlFoundProducts.updateUI();
+            }
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        else
+        {
+            setErrorParameters(true, "Did not find any matching products");
+        }
+    }
     public void goToMainMenu()
     {
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }
     
-    public void deleteProduct()
+    public boolean validateSearchInformation()
     {
-        String selectedName = ddlProducts.getSelectedItem().toString();
-        System.out.println("selected product name: "+selectedName);
-        catDBAccess.deleteProduct(selectedName);
-    }
-    
-    public boolean isValidDeletion()
-    {
-        lblError.setVisible(false);
-        if(ddlProducts.getSelectedIndex() == 0)//nothing selected...
+        setErrorParameters(false, "");
+        if(!isFilledIn())
         {
-            lblError.setText("You have not selected a product to delete");
-            lblError.setVisible(true);
-            return false;
-        }
-        else if(ddlProducts.getSelectedIndex() != 0 && !boxConfirm.isSelected())
-        {
-            lblError.setText("You need to confirm product deletion");
-            lblError.setVisible(true);
+            setErrorParameters(true, "You need to fill in at least one criteria");
             return false;
         }
         return true;
     }
     
+    public void setErrorParameters(boolean isVisible, String message)
+    {
+        lblError.setVisible(isVisible);
+        lblError.setText(message);
+    }
+    
+    public boolean isFilledIn()
+    {
+        if(txtID.getValue() == null && txtName.getText().equals("") && ddlProducts.getSelectedIndex() == 0)
+        {
+            return false;
+        }
+        return true;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton boxConfirm;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JComboBox ddlFoundProducts;
     private javax.swing.JComboBox ddlProducts;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JFormattedTextField txtID;
+    private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }
