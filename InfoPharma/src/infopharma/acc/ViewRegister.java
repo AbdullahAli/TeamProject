@@ -103,7 +103,13 @@ public class ViewRegister extends InfoPharmaPanel{
     }
     
     public void registerMerchantUser(MerchantAccount merchantAccount){
-//        accountDB.registerMerchantUser(merchantAccount);
+        String username = generateUsername();
+        String password = generatePassword();
+        try{
+            accountDB.registerMerchantUser(username, password, merchantAccount);
+        }catch(Exception e){
+            System.out.println("Could not create user: " + e.getMessage());
+        }
     }
     
     public void registerStaffUser(String role){

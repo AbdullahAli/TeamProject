@@ -62,31 +62,85 @@ public class AccountDBAccess extends DBAccess{
         return discountPlans;
     }
     
-    public void registerMerchantUser(MerchantAccount merchantAccount){
+    public void registerMerchantUser(String username, String password, MerchantAccount merchantAccount) throws SQLException {
         String company = merchantAccount.getCompany();
         String address = merchantAccount.getAddress();
         String postcode = merchantAccount.getPostcode();
         String telNumber = merchantAccount.getTelNumber();
         Double creditLimit = merchantAccount.getCreditLimit();
+        int discountPlanID = merchantAccount.getDiscountPlan();
+        String status = merchantAccount.getStatus();
+        int accountNumber = 0;
+        int roleID = 0;
+        int statusID = 0;
+        
         Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        String maxAccountNumberSQL = "SELECT MAX(accountNumber) AS 'accountNumber' FROM LoginDetails";
-        String roleIDSQL = "SELECT * FROM UserRoles WHERE roleType = 'Merchant'";
-        String sql = "INSERT INTO MerchantDetails VALUES('','status','" + company + "', '" + address + "', '" + postcode + "', '" + telNumber + "', '" + creditLimit + "','','')";
+        
+        Statement statementAccountNumber = null;
+        Statement statementRoleID = null;
+        Statement statementAccountStatus = null;
+        Statement statementCreateLoginDetails = null;
+        Statement statementCreateAccount = null;
+        
+        ResultSet resultSetAccountNumber = null;
+        ResultSet resultSetRoleID = null;
+        ResultSet resultSetAccountStatus = null;
+        
+        String sqlAccountNumber = "SELECT MAX(accountNumber) AS 'accountNumber' FROM MerchantDetails";
+        String sqlRoleID = "SELECT * FROM UserRoles WHERE roleType = 'merchant'";
+        String sqlAccountStatus = "SELECT * FROM AccountStatuses WHERE status = '" + status + "'";
+
         try {
             connection = makeConnection();
-            statement = (Statement) connection.createStatement();
-            statement.executeUpdate(sql);
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(connection.TRANSACTION_SERIALIZABLE);
+            
+            statementAccountNumber = (Statement) connection.createStatement();
+            resultSetAccountNumber = statementAccountNumber.executeQuery(sqlAccountNumber);
+            if(resultSetAccountNumber.next()){
+                accountNumber = resultSetAccountNumber.getInt("accountNumber") + 1;
+            }
+            
+            statementRoleID = (Statement) connection.createStatement();
+            resultSetRoleID = statementRoleID.executeQuery(sqlRoleID);
+            if(resultSetRoleID.next()){
+                roleID = resultSetRoleID.getInt("roleID");
+            }
+            
+            statementAccountStatus = (Statement) connection.createStatement();
+            resultSetAccountStatus = statementAccountStatus.executeQuery(sqlAccountStatus);
+            if(resultSetAccountStatus.next()){
+                statusID = resultSetAccountStatus.getInt("accountStatusID");
+            }
+            
+            String sqlCreateAccount = "INSERT INTO MerchantDetails VALUES('" + accountNumber + "','" + statusID + "','" + company + "', '" + address + "', '" + postcode + "', '" + telNumber + "', '" + creditLimit + "','0.00','" + discountPlanID + "')";
+            statementCreateAccount = (Statement) connection.createStatement();
+            statementCreateAccount.executeUpdate(sqlCreateAccount);
+            
+            String sqlCreateLoginDetails = "INSERT INTO LoginDetails VALUES('" + username + "', '" + password + "', '" + roleID + "', '" + accountNumber + "')";
+            statementCreateLoginDetails = (Statement) connection.createStatement();
+            statementCreateLoginDetails.executeUpdate(sqlCreateLoginDetails);
+            
+            connection.commit();
         }catch(SQLException ex){
             System.err.println("Error: "+ex.getMessage());
+            connection.rollback();
         }finally{
             try{
                 if(connection != null){
                     closeConnection(connection);
                 }
-                if(statement != null){
-                    statement.close();
+                if(statementAccountNumber != null){
+                    statementAccountNumber.close();
+                }
+                if(statementRoleID != null){
+                    statementRoleID.close();
+                }
+                if(statementCreateLoginDetails != null){
+                    statementCreateLoginDetails.close();
+                }
+                if(statementCreateAccount != null){
+                    statementCreateAccount.close();
                 }
             }
             catch(Exception e){
@@ -97,14 +151,12 @@ public class AccountDBAccess extends DBAccess{
     
     public void registerStaffUser(String username, String password, String role) throws SQLException{
         Connection connection = null;
-        Statement statementAccountNumber = null;
         Statement statementRoleID = null;
-        Statement statementCreateAccount = null;
+        Statement statementCreateLoginDetails = null;
         ResultSet resultSetRoleID = null;
         //SHOULD WE HAVE AN ACCOUNT NUMBER?
         int roleID = 1;
         String userRoleIDSQL = "SELECT * FROM UserRoles WHERE roleType = '" + role + "'";
-        String createAccountSQL = "INSERT INTO LoginDetails VALUES('" + username + "', '" + password + "', '" + roleID + "', NULL)";
         
         try{
             connection = makeConnection();
@@ -117,8 +169,9 @@ public class AccountDBAccess extends DBAccess{
                 roleID = resultSetRoleID.getInt("roleID");
             }
             
-            statementCreateAccount = (Statement) connection.createStatement();
-            statementCreateAccount.executeUpdate(createAccountSQL);
+            String createLoginDetailsSQL = "INSERT INTO LoginDetails VALUES('" + username + "', '" + password + "', '" + roleID + "', NULL)";
+            statementCreateLoginDetails = (Statement) connection.createStatement();
+            statementCreateLoginDetails.executeUpdate(createLoginDetailsSQL);
             
             connection.commit();
         }catch(SQLException ex){
@@ -129,14 +182,11 @@ public class AccountDBAccess extends DBAccess{
                 if(connection != null){
                     closeConnection(connection);
                 }
-                if(statementAccountNumber != null){
-                    statementAccountNumber.close();
-                }
                 if(statementRoleID != null){
                     statementRoleID.close();
                 }
-                if(statementCreateAccount != null){
-                    statementCreateAccount.close();
+                if(statementCreateLoginDetails != null){
+                    statementCreateLoginDetails.close();
                 }
             }
             catch(Exception e){
