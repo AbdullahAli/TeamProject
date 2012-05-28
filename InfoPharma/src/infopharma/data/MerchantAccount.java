@@ -15,6 +15,8 @@ public class MerchantAccount extends UserAccount {
     private String postcode;
     private String telNumber;
     private Double creditLimit;
+    private int discountPlan;
+    private String status;
     
     public MerchantAccount() {
         super("merchant");
@@ -24,13 +26,17 @@ public class MerchantAccount extends UserAccount {
                            String address, 
                            String postcode, 
                            String telNumber, 
-                           Double creditLimit) {
+                           Double creditLimit, 
+                           int discountPlan, 
+                           String status) {
         super("merchant");
         this.address = address;
         this.company = company;
         this.postcode = postcode;
         this.telNumber = telNumber;
         this.creditLimit = creditLimit;
+        this.discountPlan = discountPlan;
+        this.status = status;
     }
     
     public String getCompany(){
@@ -53,6 +59,14 @@ public class MerchantAccount extends UserAccount {
         return creditLimit;
     }
     
+    public int getDiscountPlan(){
+        return discountPlan;
+    }
+    
+    public String getStatus(){
+        return status;
+    }
+    
     public void setCompany(String company){
         this.company = company;
     }
@@ -73,4 +87,11 @@ public class MerchantAccount extends UserAccount {
         this.creditLimit = creditLimit;
     }
     
+    public void setDiscountPlan(int discountPlan){
+        this.discountPlan = discountPlan;
+    }
+    
+    public void setStatus(String status){
+        this.status = status;
+    }
 }

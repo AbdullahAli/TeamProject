@@ -87,7 +87,7 @@ public class ViewRegister extends InfoPharmaPanel{
         String contact = textNumber.getText();
         String postcode = textPostcode.getText();
         String telNumber = textNumber.getText();
-        String discountPlanID = comboDiscountPlan.getSelectedItem().toString();
+        int discountPlanID = Integer.parseInt(comboDiscountPlan.getSelectedItem().toString());
         Double creditLimit = Double.parseDouble(comboDiscountPlan.getSelectedItem().toString());
         ArrayList<String> fields = new ArrayList<String>(Arrays.asList(company, 
                                                                        address, 
@@ -95,7 +95,7 @@ public class ViewRegister extends InfoPharmaPanel{
                                                                        postcode,
                                                                        telNumber));
         if(Validator.isFilledIn(fields)){
-            MerchantAccount merchantAccount = new MerchantAccount(company, address, postcode, telNumber, creditLimit);
+            MerchantAccount merchantAccount = new MerchantAccount(company, address, postcode, telNumber, creditLimit, discountPlanID, "default");
             registerMerchantUser(merchantAccount);
         }else{
             System.out.println("Fill in all details");
