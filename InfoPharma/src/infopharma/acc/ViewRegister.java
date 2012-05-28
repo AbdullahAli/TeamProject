@@ -9,6 +9,7 @@ import infopharma.data.AccountDBAccess;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -25,6 +26,7 @@ public class ViewRegister extends InfoPharmaPanel{
     public ViewRegister(InfoPharmaFrame mainMenuFrame){
         accountDB = new AccountDBAccess();
         initComponents();
+        paneMerchant.setVisible(false);
         setFrame(mainMenuFrame);
         this.setVisible(true);
         populateCombos();
@@ -57,28 +59,35 @@ public class ViewRegister extends InfoPharmaPanel{
         }
     }
     
+    public void updatePane(){
+        if(comboUserType.getSelectedItem().toString().toLowerCase().equals("merchant")){
+            paneMerchant.setVisible(true);
+        }else 
+            paneMerchant.setVisible(false);
+    }
+    
     public void registerValidation(){
-        String company = textCompany.getText();
-        String address = textAreaAddress.getText();
-        String contact = textNumber.getText();
-        String postcode = textPostcode.getText();
-        ArrayList<String> fields = new ArrayList<String>();
-        fields.add(company);
-        fields.add(address);
-        fields.add(contact);
-        fields.add(postcode);
-        if(Validator.isFilledIn(fields)){
-            String userType = comboUserType.getSelectedItem().toString().toLowerCase();
-            if(userType.equals("merchant")){
-                String discountPlanID = comboDiscountPlan.getSelectedItem().toString();
-                String creditLimit = comboDiscountPlan.getSelectedItem().toString();
+//        String company = textCompany.getText();
+//        String address = textAreaAddress.getText();
+//        String contact = textNumber.getText();
+//        String postcode = textPostcode.getText();
+//        ArrayList<String> fields = new ArrayList<String>(Arrays.asList(company, 
+//                                                                       address, 
+//                                                                       contact, 
+//                                                                       postcode));
+//        if(Validator.isFilledIn(fields)){
+//            String userType = comboUserType.getSelectedItem().toString().toLowerCase();
+//            if(userType.equals("merchant")){
+//                String discountPlanID = comboDiscountPlan.getSelectedItem().toString();
+//                String creditLimit = comboDiscountPlan.getSelectedItem().toString();
+//                
 //                registerMerchantUser();
-            }else{
-//                registerUser();
-            }
-        }else{
-            System.out.println("Fill in all details");
-        }
+//            }else{
+////                registerUser();
+//            }
+//        }else{
+//            System.out.println("Fill in all details");
+//        }
     }
     
     public void registerMerchantUser(){
@@ -95,18 +104,18 @@ public class ViewRegister extends InfoPharmaPanel{
 
         layeredPanel = new javax.swing.JLayeredPane();
         btnMainMenu = new javax.swing.JButton();
-        comboUserType = new javax.swing.JComboBox();
-        comboDiscountPlan = new javax.swing.JComboBox();
-        textNumber = new javax.swing.JTextField();
-        textCredit = new javax.swing.JTextField();
-        textCompany = new javax.swing.JTextField();
-        textPostcode = new javax.swing.JTextField();
+        btnGo = new javax.swing.JButton();
+        paneMerchant = new javax.swing.JLayeredPane();
+        textCredit = new javax.swing.JFormattedTextField();
         paneAddress = new javax.swing.JScrollPane();
         textAreaAddress = new javax.swing.JTextArea();
-        textCredit = new javax.swing.JTextField();
-        btnGo = new javax.swing.JButton();
-
-        imageLabel = new javax.swing.JLabel();
+        textCompany = new javax.swing.JTextField();
+        comboDiscountPlan = new javax.swing.JComboBox();
+        textPostcode = new javax.swing.JTextField();
+        textNumber = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        comboUserType = new javax.swing.JComboBox();
+        image = new javax.swing.JLabel();
 
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -117,73 +126,6 @@ public class ViewRegister extends InfoPharmaPanel{
         btnMainMenu.setBounds(990, 10, 100, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        comboUserType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboUserTypeActionPerformed(evt);
-            }
-        });
-        comboUserType.setBounds(30, 140, 270, 27);
-        layeredPanel.add(comboUserType, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        comboDiscountPlan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboDiscountPlanActionPerformed(evt);
-            }
-        });
-        comboDiscountPlan.setBounds(370, 140, 270, 27);
-        layeredPanel.add(comboDiscountPlan, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textNumber.setSize(new java.awt.Dimension(250, 25));
-        textNumber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textNumberActionPerformed(evt);
-            }
-        });
-        textNumber.setBounds(40, 510, 250, 25);
-        layeredPanel.add(textNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textCredit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textCreditActionPerformed(evt);
-            }
-        });
-        textCredit.setBounds(380, 220, 250, 25);
-        layeredPanel.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textCompany.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textCompanyActionPerformed(evt);
-            }
-        });
-        textCompany.setBounds(40, 220, 250, 25);
-        layeredPanel.add(textCompany, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textPostcode.setSize(new java.awt.Dimension(250, 25));
-        textPostcode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textPostcodeActionPerformed(evt);
-            }
-        });
-        textPostcode.setBounds(40, 430, 250, 25);
-        layeredPanel.add(textPostcode, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        paneAddress.setBorder(null);
-
-        textAreaAddress.setColumns(20);
-        textAreaAddress.setRows(5);
-        textAreaAddress.setMinimumSize(new java.awt.Dimension(0, 0));
-        paneAddress.setViewportView(textAreaAddress);
-
-        paneAddress.setBounds(40, 300, 250, 70);
-        layeredPanel.add(paneAddress, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textCredit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textCreditActionPerformed(evt);
-            }
-        });
-        textCredit.setBounds(380, 220, 250, 25);
-        layeredPanel.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
         btnGo.setText("jButton1");
         btnGo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,10 +135,75 @@ public class ViewRegister extends InfoPharmaPanel{
         btnGo.setBounds(1022, 70, 70, 470);
         layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register.png"))); // NOI18N
-        imageLabel.setBounds(0, 0, 1100, 570);
-        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        textCredit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textCreditActionPerformed(evt);
+            }
+        });
+        textCredit.setBounds(380, 120, 250, 25);
+        paneMerchant.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        paneAddress.setBorder(null);
+
+        textAreaAddress.setColumns(20);
+        textAreaAddress.setRows(5);
+        textAreaAddress.setMinimumSize(new java.awt.Dimension(0, 0));
+        paneAddress.setViewportView(textAreaAddress);
+
+        paneAddress.setBounds(40, 120, 260, 70);
+        paneMerchant.add(paneAddress, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textCompany.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textCompanyActionPerformed(evt);
+            }
+        });
+        textCompany.setBounds(40, 40, 250, 25);
+        paneMerchant.add(textCompany, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        comboDiscountPlan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboDiscountPlanActionPerformed(evt);
+            }
+        });
+        comboDiscountPlan.setBounds(380, 40, 270, 27);
+        paneMerchant.add(comboDiscountPlan, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textPostcode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textPostcodeActionPerformed(evt);
+            }
+        });
+        textPostcode.setBounds(40, 250, 250, 25);
+        paneMerchant.add(textPostcode, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textNumberActionPerformed(evt);
+            }
+        });
+        textNumber.setBounds(40, 330, 250, 25);
+        paneMerchant.add(textNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register_merchantpanel.png"))); // NOI18N
+        jLabel1.setBounds(10, 0, 990, 360);
+        paneMerchant.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        paneMerchant.setBounds(0, 180, 1020, 380);
+        layeredPanel.add(paneMerchant, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        comboUserType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboUserTypeActionPerformed(evt);
+            }
+        });
+        comboUserType.setBounds(30, 140, 270, 27);
+        layeredPanel.add(comboUserType, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register_background.png"))); // NOI18N
+        image.setBounds(0, 0, 1100, 570);
+        layeredPanel.add(image, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -216,44 +223,46 @@ public class ViewRegister extends InfoPharmaPanel{
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void comboUserTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboUserTypeActionPerformed
-        // TODO add your handling code here:
+        updatePane();
     }//GEN-LAST:event_comboUserTypeActionPerformed
 
     private void comboDiscountPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDiscountPlanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboDiscountPlanActionPerformed
 
-    private void textNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textNumberActionPerformed
-
     private void textCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCompanyActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textCompanyActionPerformed
 
-    private void textPostcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPostcodeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textPostcodeActionPerformed
+    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        registerValidation();
+    }//GEN-LAST:event_btnGoActionPerformed
 
     private void textCreditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCreditActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textCreditActionPerformed
 
-    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
-        registerValidation();
-    }//GEN-LAST:event_btnGoActionPerformed
+    private void textPostcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPostcodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textPostcodeActionPerformed
+
+    private void textNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textNumberActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JComboBox comboDiscountPlan;
     private javax.swing.JComboBox comboUserType;
-    private javax.swing.JLabel imageLabel;
+    private javax.swing.JLabel image;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JScrollPane paneAddress;
+    private javax.swing.JLayeredPane paneMerchant;
     private javax.swing.JTextArea textAreaAddress;
     private javax.swing.JTextField textCompany;
-    private javax.swing.JTextField textCredit;
+    private javax.swing.JFormattedTextField textCredit;
     private javax.swing.JTextField textNumber;
     private javax.swing.JTextField textPostcode;
     // End of variables declaration//GEN-END:variables
