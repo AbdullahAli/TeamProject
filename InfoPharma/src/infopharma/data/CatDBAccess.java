@@ -106,6 +106,60 @@ public class CatDBAccess extends DBAccess{
         }
     }
     
+    public ArrayList<String> getProduct(String name)
+     {
+        ArrayList<String> productInfo = new ArrayList<String>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM Products WHERE name='"+name+"'";
+        try
+        {
+            connection = makeConnection();
+            statement = (Statement) connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next())
+            {
+                productInfo.add(resultSet.getString("name"));
+                productInfo.add(resultSet.getString("packageType"));
+                productInfo.add(resultSet.getString("description"));
+                productInfo.add(resultSet.getString("unitPrice"));
+                productInfo.add(resultSet.getString("unitsInAPack"));
+                productInfo.add(resultSet.getString("minimumStockLimit"));
+            }
+            return productInfo;
+        }
+        catch(SQLException ex)
+        {
+            System.out.println("Error: "+ex.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                {
+                    connection.close();
+                }
+
+                if(resultSet != null)
+                {
+                    resultSet.close();
+                }
+
+                if(statement != null)
+                {
+                    statement.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getProducts");
+            }
+        }
+        return null;
+    }
+    
      public HashMap<Integer, String> getProducts()
      {
         HashMap<Integer, String> products = new HashMap<Integer, String>();
@@ -154,6 +208,63 @@ public class CatDBAccess extends DBAccess{
                 System.err.println("Could not close the resources in CatDBAccess getProducts");
             }
         }
+        return null;
+    }
+     
+     public HashMap<Integer, String> getMatchingProducts(String id, String name, String name2)
+     {
+        HashMap<Integer, String> products = new HashMap<Integer, String>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        String sql = "SELECT productID, name FROM Products WHERE productID LIKE '%"+id+"%' AND name LIKE '%"+name+"%' AND name LIKE '%"+name2+"%'";
+
+        try
+        {
+            connection = makeConnection();
+            statement = (Statement) connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next())
+            {
+                int roleID = resultSet.getInt("productID");
+                String roleType = resultSet.getString("name");
+                products.put(roleID, roleType);
+            }
+            if(!products.isEmpty())
+            {
+                System.out.println("Foudn products");
+                return products;
+            }
+        }
+        catch(SQLException ex)
+        {
+            System.out.println("Error: "+ex.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                {
+                    connection.close();
+                }
+
+                if(resultSet != null)
+                {
+                    resultSet.close();
+                }
+
+                if(statement != null)
+                {
+                    statement.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getProducts");
+            }
+        }
+        System.out.println("Did not find any products");
         return null;
     }
      

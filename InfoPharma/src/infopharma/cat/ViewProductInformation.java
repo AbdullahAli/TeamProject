@@ -20,20 +20,36 @@ import javax.swing.JTextField;
  *
  * @author Abdullah
  */
-public class ViewNewProduct extends InfoPharmaPanel{
+public class ViewProductInformation extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
     private ArrayList<JTextField> fields;
     private CatDBAccess catDBAccess;
 	
-    public ViewNewProduct(InfoPharmaFrame mainMenuFrame)
+    public ViewProductInformation(InfoPharmaFrame mainMenuFrame, String productName)
     {
         initComponents();
         fields = new ArrayList<JTextField>();
         catDBAccess = new CatDBAccess();
+        populateFields(productName);
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         populateFieldsArray();
         this.setVisible(true);
+    }
+    
+    public void populateFields(String productName)
+    {
+        ArrayList<String> productInformation = catDBAccess.getProduct(productName);
+        if(productInformation.size() != 0)
+        {
+            System.out.println("Count is : "+productInformation.size());
+            txtName.setText(productInformation.get(0));
+            txtType.setText(productInformation.get(1));
+            txtDescription.setText(productInformation.get(2));
+            txtCost.setText(productInformation.get(3));
+            txtUnitsInAPack.setText(productInformation.get(4));
+            txtInitialStock.setText(productInformation.get(5));
+        }
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -56,7 +72,6 @@ public class ViewNewProduct extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        txtStockLimit = new javax.swing.JFormattedTextField();
         lblError = new javax.swing.JLabel();
         txtInitialStock = new javax.swing.JFormattedTextField();
         txtUnitsInAPack = new javax.swing.JFormattedTextField();
@@ -67,43 +82,47 @@ public class ViewNewProduct extends InfoPharmaPanel{
         txtName = new javax.swing.JTextField();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
-        btnGo = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-
-        txtStockLimit.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
-        txtStockLimit.setBounds(370, 220, 260, 28);
-        layeredPanel.add(txtStockLimit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        btnOk = new javax.swing.JButton();
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
         lblError.setBounds(10, 520, 990, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        txtInitialStock.setEditable(false);
         txtInitialStock.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
         txtInitialStock.setBounds(380, 140, 250, 28);
         layeredPanel.add(txtInitialStock, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        txtUnitsInAPack.setEditable(false);
         txtUnitsInAPack.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
         txtUnitsInAPack.setBounds(40, 510, 250, 28);
         layeredPanel.add(txtUnitsInAPack, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        txtCost.setEditable(false);
         txtCost.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
         txtCost.setBounds(50, 430, 240, 28);
         layeredPanel.add(txtCost, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtDescription.setColumns(20);
+        txtDescription.setEditable(false);
         txtDescription.setRows(5);
         jScrollPane1.setViewportView(txtDescription);
 
         jScrollPane1.setBounds(40, 300, 250, 70);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtType.setEditable(false);
         txtType.setBounds(40, 220, 250, 28);
         layeredPanel.add(txtType, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtName.setEditable(false);
         txtName.setBounds(40, 140, 250, 28);
         layeredPanel.add(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/cat/images/newproduct.png"))); // NOI18N
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/cat/images/productinformation.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -116,14 +135,6 @@ public class ViewNewProduct extends InfoPharmaPanel{
         btnMainMenu.setBounds(1030, 10, 60, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnGo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoActionPerformed(evt);
-            }
-        });
-        btnGo.setBounds(1020, 70, 80, 470);
-        layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
         btnCancel.setText("jButton1");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,6 +143,15 @@ public class ViewNewProduct extends InfoPharmaPanel{
         });
         btnCancel.setBounds(1010, 540, 97, 29);
         layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnOk.setText("jButton1");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+        btnOk.setBounds(1017, 70, 80, 500);
+        layeredPanel.add(btnOk, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -150,14 +170,16 @@ public class ViewNewProduct extends InfoPharmaPanel{
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
-    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
-        validateFields();
-    }//GEN-LAST:event_btnGoActionPerformed
-
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         goToMainMenu();
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        goToMainMenu();
+        System.out.println("clicked ok");
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    
     public void validateFields()
     {
         lblError.setVisible(false);
@@ -174,10 +196,7 @@ public class ViewNewProduct extends InfoPharmaPanel{
     
     public void insertNewProduct()
     {
-        if(catDBAccess.insertProduct(txtName.getText(), txtDescription.getText(), txtCost.getText(), txtType.getText(), txtUnitsInAPack.getText(), txtInitialStock.getText(), txtStockLimit.getText()))
-        {
-            goToMainMenu();
-        }
+        
     }
     
     public void goToMainMenu()
@@ -190,14 +209,13 @@ public class ViewNewProduct extends InfoPharmaPanel{
         fields.add(txtCost);
         fields.add(txtInitialStock);
         fields.add(txtName);
-        fields.add(txtStockLimit);
         fields.add(txtType);
         fields.add(txtUnitsInAPack);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnOk;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLayeredPane layeredPanel;
@@ -206,7 +224,6 @@ public class ViewNewProduct extends InfoPharmaPanel{
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JFormattedTextField txtInitialStock;
     private javax.swing.JTextField txtName;
-    private javax.swing.JFormattedTextField txtStockLimit;
     private javax.swing.JTextField txtType;
     private javax.swing.JFormattedTextField txtUnitsInAPack;
     // End of variables declaration//GEN-END:variables
