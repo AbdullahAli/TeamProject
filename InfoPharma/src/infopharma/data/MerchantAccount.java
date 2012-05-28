@@ -16,17 +16,16 @@ public class MerchantAccount extends UserAccount {
     private String telNumber;
     private Double creditLimit;
     
-    public MerchantAccount(String role) {
-        super(role);
+    public MerchantAccount() {
+        super("merchant");
     }
     
-    public MerchantAccount(String role, 
-                           String company, 
+    public MerchantAccount(String company, 
                            String address, 
                            String postcode, 
                            String telNumber, 
                            Double creditLimit) {
-        super(role);
+        super("merchant");
         this.address = address;
         this.company = company;
         this.postcode = postcode;

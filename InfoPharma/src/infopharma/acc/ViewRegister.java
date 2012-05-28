@@ -6,8 +6,11 @@ package infopharma.acc;
 
 import infopharma.Validator;
 import infopharma.data.AccountDBAccess;
+import infopharma.data.MerchantAccount;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,12 +24,12 @@ import javax.swing.JLayeredPane;
 public class ViewRegister extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
     private AccountDBAccess accountDB;
+    private boolean isMerchant = false;
     
 	
     public ViewRegister(InfoPharmaFrame mainMenuFrame){
         accountDB = new AccountDBAccess();
         initComponents();
-        paneMerchant.setVisible(false);
         setFrame(mainMenuFrame);
         this.setVisible(true);
         populateCombos();
@@ -62,37 +65,70 @@ public class ViewRegister extends InfoPharmaPanel{
     public void updatePane(){
         if(comboUserType.getSelectedItem().toString().toLowerCase().equals("merchant")){
             paneMerchant.setVisible(true);
-        }else 
+            isMerchant = true;
+        }else{ 
             paneMerchant.setVisible(false);
+            isMerchant = false;
+        }
     }
     
     public void registerValidation(){
-//        String company = textCompany.getText();
-//        String address = textAreaAddress.getText();
-//        String contact = textNumber.getText();
-//        String postcode = textPostcode.getText();
-//        ArrayList<String> fields = new ArrayList<String>(Arrays.asList(company, 
-//                                                                       address, 
-//                                                                       contact, 
-//                                                                       postcode));
-//        if(Validator.isFilledIn(fields)){
-//            String userType = comboUserType.getSelectedItem().toString().toLowerCase();
-//            if(userType.equals("merchant")){
-//                String discountPlanID = comboDiscountPlan.getSelectedItem().toString();
-//                String creditLimit = comboDiscountPlan.getSelectedItem().toString();
-//                
-//                registerMerchantUser();
-//            }else{
-////                registerUser();
-//            }
-//        }else{
-//            System.out.println("Fill in all details");
-//        }
+        if(isMerchant){
+            validateMerchant();
+        }else{
+            String role = comboUserType.getSelectedItem().toString();
+            registerStaffUser(role);
+        }
     }
     
-    public void registerMerchantUser(){
-        
+    public void validateMerchant(){
+        String company = textCompany.getText();
+        String address = textAreaAddress.getText();
+        String contact = textNumber.getText();
+        String postcode = textPostcode.getText();
+        String telNumber = textNumber.getText();
+        String discountPlanID = comboDiscountPlan.getSelectedItem().toString();
+        Double creditLimit = Double.parseDouble(comboDiscountPlan.getSelectedItem().toString());
+        ArrayList<String> fields = new ArrayList<String>(Arrays.asList(company, 
+                                                                       address, 
+                                                                       contact, 
+                                                                       postcode,
+                                                                       telNumber));
+        if(Validator.isFilledIn(fields)){
+            MerchantAccount merchantAccount = new MerchantAccount(company, address, postcode, telNumber, creditLimit);
+            registerMerchantUser(merchantAccount);
+        }else{
+            System.out.println("Fill in all details");
+        }
     }
+    
+    public void registerMerchantUser(MerchantAccount merchantAccount){
+//        accountDB.registerMerchantUser(merchantAccount);
+    }
+    
+    public void registerStaffUser(String role){
+        String username = generateUsername();
+        String password = generatePassword();
+        try{
+            accountDB.registerStaffUser(username, password, role);
+            System.out.println("Username: " + username + "\nPassword: " + password + "");
+        }catch(Exception e){
+            System.out.println("Could not create user.");
+        }
+    }
+    
+    public String generateUsername(){
+        SecureRandom random = new SecureRandom();
+        String username = new BigInteger(60, random).toString(32);
+        return username;
+    }
+    
+    public String generatePassword(){
+        SecureRandom random = new SecureRandom();
+        String password = new BigInteger(60, random).toString(32);
+        return password;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
