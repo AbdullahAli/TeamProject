@@ -24,16 +24,14 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
     /**
      * Creates new form InfoPharmaFrame
      */
-	public InfoPharmaFrame() 
-        {
+	public InfoPharmaFrame() {
             initComponents();
-            this.setPanel(new ViewMerchant(this));
+            this.setPanel(new ViewRestoreAccount(this));
             this.setVisible(true);
             setTitle("InfoPharma");
 	}
 	
-	public void setPanel(JPanel panel)
-        {
+	public void setPanel(JPanel panel) {
             this.setContentPane(panel);
             this.setVisible(true);
 	}

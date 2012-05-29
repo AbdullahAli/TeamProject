@@ -291,4 +291,35 @@ public class AccountDBAccess extends DBAccess{
         return statuses;
     }
     
+    public void updateMerchantStatus(MerchantAccount merchant, int statusID) throws SQLException {
+        int accountNumber = merchant.getAccountNumber();
+        Connection connection = null;
+        Statement statementUpdate = null;
+        String sqlUpdate = "UPDATE MerchantDetails SET accountStatusID='" + statusID + "' WHERE accountNumber = '" + accountNumber + "'";
+        try {
+            connection = makeConnection();
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(connection.TRANSACTION_SERIALIZABLE);
+            
+            statementUpdate = (Statement) connection.createStatement();
+            statementUpdate.executeUpdate(sqlUpdate);
+            
+            connection.commit();
+        }catch(SQLException ex) {
+            connection.rollback();
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(statementUpdate != null) {
+                    statementUpdate.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in AccountDBAccess updateMerchantStatus");
+            }
+        }
+    }
+    
 }
