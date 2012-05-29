@@ -253,4 +253,42 @@ public class AccountDBAccess extends DBAccess{
         return merchants;
     }
     
+    public HashMap<Integer, String> getAccountStatuses(){
+        HashMap<Integer, String> statuses = new HashMap<Integer, String>();
+        
+        Connection connection = null;
+        Statement statementStatuses = null;
+        ResultSet resultSetStatuses = null;
+        
+        String sqlStatuses = "SELECT * FROM AccountStatuses";
+        
+        try{
+            connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
+            
+            statementStatuses = (Statement) connection.createStatement();
+            resultSetStatuses = statementStatuses.executeQuery(sqlStatuses);
+            while(resultSetStatuses.next()){
+                int statusID = resultSetStatuses.getInt("accountStatusID");
+                String status = resultSetStatuses.getString("status");
+                statuses.put(statusID, status);
+            }
+            
+        }catch(SQLException ex){
+            System.err.println("Error: "+ex.getMessage());
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+                if(statementStatuses != null){
+                    statementStatuses.close();
+                }
+            }catch(Exception e){
+                System.err.println("Could not close the resources in AccountDBAccess getAccountStatuses");
+            }
+        }
+        return statuses;
+    }
+    
 }
