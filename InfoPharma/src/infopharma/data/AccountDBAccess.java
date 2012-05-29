@@ -25,6 +25,7 @@ public class AccountDBAccess extends DBAccess{
         String sql = "SELECT * FROM UserRoles";
         try{
             connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
             statement = (Statement) connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while(resultSet.next()){
@@ -33,9 +34,19 @@ public class AccountDBAccess extends DBAccess{
                 userTypes.put(roleID, roleType);
             }
         }catch(SQLException ex){
-            
+            System.err.println("Error: " + ex.getMessage());
         }finally{
-            closeConnection(connection);
+            try{
+                if(connection != null){
+                    closeConnection(connection);
+                }
+                if(statement != null){
+                    statement.close();
+                }
+            }
+            catch(Exception e){
+                System.err.println("Could not close the resources in AccountDBAccess getUserTypes");
+            }
         }
         return userTypes;
     }
@@ -48,6 +59,7 @@ public class AccountDBAccess extends DBAccess{
         String sql = "SELECT * FROM DiscountPlans";
         try{
             connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
             statement = (Statement) connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while(resultSet.next()){
@@ -55,9 +67,19 @@ public class AccountDBAccess extends DBAccess{
                 discountPlans.add(discountID);
             }
         }catch(SQLException ex){
-            
+            System.err.println("Error: " + ex.getMessage());
         }finally{
-            closeConnection(connection);
+            try{
+                if(connection != null){
+                    closeConnection(connection);
+                }
+                if(statement != null){
+                    statement.close();
+                }
+            }
+            catch(Exception e){
+                System.err.println("Could not close the resources in AccountDBAccess getUserTypes");
+            }
         }
         return discountPlans;
     }
@@ -198,20 +220,15 @@ public class AccountDBAccess extends DBAccess{
     
     public ArrayList<MerchantAccount> getAllMerchants(){
         ArrayList<MerchantAccount> merchants = new ArrayList<MerchantAccount>();
-        
         Connection connection = null;
         Statement statementMerchants = null;
         ResultSet resultSetMerchants = null;
-        
         String sqlMerchants = "SELECT * FROM MerchantDetails";
-        
         try{
             connection = makeConnection();
             connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
-            
             statementMerchants = (Statement) connection.createStatement();
             resultSetMerchants = statementMerchants.executeQuery(sqlMerchants);
-            
             while(resultSetMerchants.next()){
                 int accountNumber = resultSetMerchants.getInt("accountNumber");
                 int accountStatusID = resultSetMerchants.getInt("accountStatusID");
@@ -222,7 +239,6 @@ public class AccountDBAccess extends DBAccess{
                 Double credit = resultSetMerchants.getDouble("credit");
                 Double balance = resultSetMerchants.getDouble("balance");
                 int discountPlanID = resultSetMerchants.getInt("discountPlanID");
-                
                 MerchantAccount merchant = 
                         new MerchantAccount(accountNumber, 
                                             accountStatusID,
@@ -235,7 +251,6 @@ public class AccountDBAccess extends DBAccess{
                                             discountPlanID);
                 merchants.add(merchant);
             }
-            
         }catch(SQLException ex){
             System.err.println("Error: "+ex.getMessage());
         }finally{
@@ -255,17 +270,13 @@ public class AccountDBAccess extends DBAccess{
     
     public HashMap<Integer, String> getAccountStatuses(){
         HashMap<Integer, String> statuses = new HashMap<Integer, String>();
-        
         Connection connection = null;
         Statement statementStatuses = null;
         ResultSet resultSetStatuses = null;
-        
         String sqlStatuses = "SELECT * FROM AccountStatuses";
-        
         try{
             connection = makeConnection();
             connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
-            
             statementStatuses = (Statement) connection.createStatement();
             resultSetStatuses = statementStatuses.executeQuery(sqlStatuses);
             while(resultSetStatuses.next()){
@@ -273,7 +284,6 @@ public class AccountDBAccess extends DBAccess{
                 String status = resultSetStatuses.getString("status");
                 statuses.put(statusID, status);
             }
-            
         }catch(SQLException ex){
             System.err.println("Error: "+ex.getMessage());
         }finally{
@@ -300,10 +310,8 @@ public class AccountDBAccess extends DBAccess{
             connection = makeConnection();
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(connection.TRANSACTION_SERIALIZABLE);
-            
             statementUpdate = (Statement) connection.createStatement();
             statementUpdate.executeUpdate(sqlUpdate);
-            
             connection.commit();
         }catch(SQLException ex) {
             connection.rollback();
