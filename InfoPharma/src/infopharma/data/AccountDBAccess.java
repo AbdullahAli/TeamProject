@@ -196,4 +196,61 @@ public class AccountDBAccess extends DBAccess{
         
     }
     
+    public ArrayList<MerchantAccount> getAllMerchants(){
+        ArrayList<MerchantAccount> merchants = new ArrayList<MerchantAccount>();
+        
+        Connection connection = null;
+        Statement statementMerchants = null;
+        ResultSet resultSetMerchants = null;
+        
+        String sqlMerchants = "SELECT * FROM MerchantDetails";
+        
+        try{
+            connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
+            
+            statementMerchants = (Statement) connection.createStatement();
+            resultSetMerchants = statementMerchants.executeQuery(sqlMerchants);
+            
+            while(resultSetMerchants.next()){
+                int accountNumber = resultSetMerchants.getInt("accountNumber");
+                int accountStatusID = resultSetMerchants.getInt("accountStatusID");
+                String company = resultSetMerchants.getString("company");
+                String address = resultSetMerchants.getString("address");
+                String postcode = resultSetMerchants.getString("postcode");
+                String phone = resultSetMerchants.getString("phone");
+                Double credit = resultSetMerchants.getDouble("credit");
+                Double balance = resultSetMerchants.getDouble("balance");
+                int discountPlanID = resultSetMerchants.getInt("discountPlanID");
+                
+                MerchantAccount merchant = 
+                        new MerchantAccount(accountNumber, 
+                                            accountStatusID,
+                                            company,
+                                            address,
+                                            postcode,
+                                            phone,
+                                            credit,
+                                            balance,
+                                            discountPlanID);
+                merchants.add(merchant);
+            }
+            
+        }catch(SQLException ex){
+            System.err.println("Error: "+ex.getMessage());
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+                if(statementMerchants != null){
+                    statementMerchants.close();
+                }
+            }catch(Exception e){
+                System.err.println("Could not close the resources in AccountDBAccess getAllMerchants");
+            }
+        }
+        return merchants;
+    }
+    
 }

@@ -10,11 +10,14 @@ package infopharma.data;
  */
 public class MerchantAccount extends UserAccount {
     
+    private int accountNumber;
+    private int accountStatusID;
     private String company;
     private String address;
     private String postcode;
     private String telNumber;
     private Double creditLimit;
+    private Double balance;
     private int discountPlan;
     private String status;
     
@@ -39,6 +42,35 @@ public class MerchantAccount extends UserAccount {
         this.status = status;
     }
     
+    public MerchantAccount(int accountNumber,
+                           int accountStatusID,
+                           String company, 
+                           String address, 
+                           String postcode, 
+                           String telNumber, 
+                           Double creditLimit,
+                           Double balance,
+                           int discountPlan) {
+        super("merchant");
+        this.accountNumber = accountNumber;
+        this.accountStatusID = accountStatusID;
+        this.address = address;
+        this.company = company;
+        this.postcode = postcode;
+        this.telNumber = telNumber;
+        this.creditLimit = creditLimit;
+        this.balance = balance;
+        this.discountPlan = discountPlan;
+    }
+    
+    public int getAccountNumber(){
+        return accountNumber;
+    }
+    
+    public int getAccountStatusID(){
+        return accountStatusID;
+    }
+    
     public String getCompany(){
         return company;
     }
@@ -59,12 +91,24 @@ public class MerchantAccount extends UserAccount {
         return creditLimit;
     }
     
+    public Double getBalance(){
+        return balance;
+    }
+    
     public int getDiscountPlan(){
         return discountPlan;
     }
     
     public String getStatus(){
         return status;
+    }
+    
+    public void setAccountNumber(int accountNumber){
+        this.accountNumber = accountNumber;
+    }
+    
+    public void setAccountStatusID(int accountStatusID){
+        this.accountStatusID = accountStatusID;
     }
     
     public void setCompany(String company){
@@ -85,6 +129,10 @@ public class MerchantAccount extends UserAccount {
     
     public void setCreditLimit(Double creditLimit){
         this.creditLimit = creditLimit;
+    }
+    
+    public void setBalance(Double balance){
+        this.balance = balance;
     }
     
     public void setDiscountPlan(int discountPlan){
