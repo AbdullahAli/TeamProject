@@ -27,7 +27,7 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
 	public InfoPharmaFrame() 
         {
             initComponents();
-            this.setPanel(new ViewRegister(this));
+            this.setPanel(new ViewMerchant(this));
             this.setVisible(true);
             setTitle("InfoPharma");
 	}
