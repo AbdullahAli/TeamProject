@@ -420,15 +420,18 @@ public class CatDBAccess extends DBAccess{
              rs = stat.executeQuery(sql);
              md = (ResultSetMetaData) rs.getMetaData();
              
-             int columnCount = md.getColumnCount();
              
-             Vector columns = new Vector(columnCount);
-
-
-            for(int i=1; i<=columnCount; i++)
-            {
-                columns.add(md.getColumnName(i));
-            }
+             Vector columns = new Vector(8);
+            
+            columns.add("ID");
+            columns.add("Name");
+            columns.add("Description");
+            columns.add("Package Type");
+            columns.add("Unit");
+            columns.add("Units In A Pack");
+            columns.add("Cost");
+            columns.add("Stock");
+            columns.add("Stock Limit");
 
             Vector data = new Vector();
             Vector row;
@@ -436,12 +439,16 @@ public class CatDBAccess extends DBAccess{
             //store row data
             while(rs.next())
             {
-                row = new Vector(columnCount);
-                for(int i=1; i<=columnCount; i++)
-                {
-                    row.add(rs.getString(i));
-                }
-                
+                row = new Vector(8);
+                row.add(rs.getString("productID"));
+                row.add(rs.getString("name"));
+                row.add(rs.getString("description"));
+                row.add(rs.getString("packageType"));
+                row.add(rs.getString("unit"));
+                row.add(rs.getString("unitsInAPack"));
+                row.add(rs.getString("unitPrice"));
+                row.add(rs.getString("currentStock"));
+                row.add(rs.getString("minimumStockLimit"));
                 data.add(row);
             }
             
@@ -478,4 +485,100 @@ public class CatDBAccess extends DBAccess{
 
         return null;
      }
+     
+    public int getProductStock(String name)
+    {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        
+        try
+        {
+            con = makeConnection();
+            statement = (Statement) con.createStatement();
+            String sql = "SELECT currentStock FROM Products WHERE name='"+name+"'";
+            
+            System.out.println(sql);
+            rs = statement.executeQuery(sql);
+            int stock = 0;
+            while(rs.next())
+            {
+                stock = rs.getInt("currentStock");
+                
+            }
+            
+            System.out.println("current stock is "+stock);
+            return stock;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error: "+e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(rs != null)
+                {
+                    rs.close();
+                }
+
+                if(statement != null)
+                {
+                    statement.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getProductStock");
+            }
+        }
+        return 0;
+    }
+    
+    
+     public void updateStock(String productName, String additionalStock)
+    {
+        Connection con = null;
+        Statement statement = null;
+        
+        try
+        {
+            con = makeConnection();
+            statement = (Statement) con.createStatement();
+            int executeUpdate = statement.executeUpdate("UPDATE Products SET currentStock = currentStock + '"+additionalStock+"' WHERE name ='"+productName+"'");
+            System.out.println("updated stock");
+            
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error: "+e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(statement != null)
+                {
+                    statement.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in insertNewCatalogue in CatDBAcess");
+            }
+        }
+    }
+    
+    
 }

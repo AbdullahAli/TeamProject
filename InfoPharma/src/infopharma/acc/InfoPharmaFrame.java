@@ -4,10 +4,7 @@
  */
 package infopharma.acc;
 
-import infopharma.cat.ViewDeleteProduct;
-import infopharma.cat.ViewFindProduct;
-import infopharma.cat.ViewNewCatalogue;
-import infopharma.cat.ViewNewProduct;
+import infopharma.cat.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -26,7 +23,7 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
      */
 	public InfoPharmaFrame() {
             initComponents();
-            this.setPanel(new ViewRestoreAccount(this));
+            this.setPanel(new ViewStockMaintenance(this));
             this.setVisible(true);
             setTitle("InfoPharma");
 	}

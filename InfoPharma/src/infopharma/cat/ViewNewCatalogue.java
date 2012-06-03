@@ -81,7 +81,7 @@ public class ViewNewCatalogue extends InfoPharmaPanel{
                 btnCancelActionPerformed(evt);
             }
         });
-        btnCancel.setBounds(1020, 529, 80, 40);
+        btnCancel.setBounds(1020, 539, 80, 30);
         layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnGo.setText("jButton1");

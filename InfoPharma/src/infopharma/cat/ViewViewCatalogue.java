@@ -30,6 +30,7 @@ public class ViewViewCatalogue extends InfoPharmaPanel{
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         catDBAccess = new CatDBAccess();
+        fillTable();
         this.setVisible(true);
     }
 
@@ -49,6 +50,7 @@ public class ViewViewCatalogue extends InfoPharmaPanel{
         System.out.println("filling table");
         tblCatalogue.setModel(new DefaultTableModel(catDBAccess.getCatalogueProdcuts().get(0), catDBAccess.getCatalogueProdcuts().get(1)));
         System.out.println("table filled");
+        tblCatalogue.updateUI();
     }
 
     /**
@@ -66,6 +68,7 @@ public class ViewViewCatalogue extends InfoPharmaPanel{
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
+        btnOk = new javax.swing.JButton();
 
         tblCatalogue.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -75,6 +78,8 @@ public class ViewViewCatalogue extends InfoPharmaPanel{
 
             }
         ));
+        tblCatalogue.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tblCatalogue.setEnabled(false);
         jScrollPane1.setViewportView(tblCatalogue);
 
         jScrollPane1.setBounds(40, 134, 570, 390);
@@ -99,6 +104,15 @@ public class ViewViewCatalogue extends InfoPharmaPanel{
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnOk.setText("jButton1");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+        btnOk.setBounds(1017, 70, 80, 500);
+        layeredPanel.add(btnOk, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,8 +130,17 @@ public class ViewViewCatalogue extends InfoPharmaPanel{
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+       goToMainMenu();
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    public void goToMainMenu()
+    {
+        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnOk;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLayeredPane layeredPanel;

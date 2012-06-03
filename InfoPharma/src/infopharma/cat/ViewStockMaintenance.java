@@ -19,19 +19,30 @@ import javax.swing.JLayeredPane;
  *
  * @author Abdullah
  */
-public class ViewDeleteProduct extends InfoPharmaPanel{
+public class ViewStockMaintenance extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
     private CatDBAccess catDBAccess;
     HashMap<Integer, String> products;
 	
-    public ViewDeleteProduct(InfoPharmaFrame mainMenuFrame)
+    public ViewStockMaintenance(InfoPharmaFrame mainMenuFrame)
     {
         catDBAccess = new CatDBAccess();
         initComponents();
         setFrame(mainMenuFrame);
-        populateComboProducts();
         lblError.setVisible(false);
+        populateComboProducts();
         this.setVisible(true);
+    }
+    
+    public void populateComboProducts()
+    {
+        ddlProducts.removeAllItems();
+        products = catDBAccess.getProducts();
+        for(String product : products.values())
+        {
+            ddlProducts.addItem(product);
+        }
+        ddlProducts.updateUI();
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -42,18 +53,6 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
     public static void setFrame(InfoPharmaFrame frame) 
     {
         InfoPharmaPanel.setFrame(frame);
-    }
-    
-    public void populateComboProducts()
-    {
-        ddlProducts.removeAllItems();
-        products = catDBAccess.getProducts();
-        ddlProducts.addItem("");
-        for(String product : products.values())
-        {
-            ddlProducts.addItem(product);
-        }
-        ddlProducts.updateUI();
     }
 
     /**
@@ -66,26 +65,30 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        boxConfirm = new javax.swing.JRadioButton();
         ddlProducts = new javax.swing.JComboBox();
+        txtAdditionalStock = new javax.swing.JFormattedTextField();
+        txtCurrentStock = new javax.swing.JFormattedTextField();
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
         btnGo = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
-        boxConfirm.setText("I confirm that I would like this product to be deleted permanetly.");
-        boxConfirm.setBounds(30, 240, 450, 23);
-        layeredPanel.add(boxConfirm, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        ddlProducts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         ddlProducts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ddlProductsActionPerformed(evt);
             }
         });
-        ddlProducts.setBounds(30, 140, 270, 27);
+        ddlProducts.setBounds(40, 140, 250, 27);
         layeredPanel.add(ddlProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtAdditionalStock.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0"))));
+        txtAdditionalStock.setBounds(40, 300, 250, 28);
+        layeredPanel.add(txtAdditionalStock, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtCurrentStock.setEditable(false);
+        txtCurrentStock.setBounds(30, 218, 260, 30);
+        layeredPanel.add(txtCurrentStock, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -93,7 +96,7 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/cat/images/deleteproduct.png"))); // NOI18N
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/cat/images/stockmaintenance.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -106,13 +109,13 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnGo.setText("btnGo");
+        btnGo.setText("jButton1");
         btnGo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoActionPerformed(evt);
             }
         });
-        btnGo.setBounds(1017, 70, 80, 470);
+        btnGo.setBounds(1020, 70, 80, 470);
         layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnCancel.setText("jButton1");
@@ -121,7 +124,7 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
                 btnCancelActionPerformed(evt);
             }
         });
-        btnCancel.setBounds(1020, 540, 80, 29);
+        btnCancel.setBounds(1017, 540, 80, 29);
         layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -142,56 +145,72 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
-        if(isValidDeletion())
+        if(updateStock())
         {
-            deleteProduct();
-            populateComboProducts();
-            boxConfirm.setSelected(false);
+            goToMainMenu();
         }
-        boxConfirm.setSelected(false);
+        
     }//GEN-LAST:event_btnGoActionPerformed
+
+    public boolean updateStock()
+    {
+        if(isValidStockAmount())
+        {
+            System.out.println("selected product:" +ddlProducts.getSelectedItem().toString());
+            System.out.println("additional amount:" +txtAdditionalStock.getValue().toString());
+            catDBAccess.updateStock(ddlProducts.getSelectedItem().toString(), txtAdditionalStock.getValue().toString());
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public boolean isValidStockAmount()
+    {
+        lblError.setVisible(false);
+        try
+        {
+            int additionalStock = Integer.parseInt(txtAdditionalStock.getValue().toString());
+            if(additionalStock >= 0)
+            {
+                return true;
+            }
+            else
+            {
+               System.out.println("Error!!");
+                lblError.setText("Please enter a valid stock amount");
+                lblError.setVisible(true); 
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error!!");
+            lblError.setText("Please enter a valid stock amount");
+            lblError.setVisible(true);
+           
+        }
+        return false;
+    }
+    
+    private void ddlProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddlProductsActionPerformed
+        System.out.println("Changed selected");
+        int currentStock = catDBAccess.getProductStock(ddlProducts.getSelectedItem().toString());
+        txtCurrentStock.setText(""+currentStock);
+    }//GEN-LAST:event_ddlProductsActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         goToMainMenu();
     }//GEN-LAST:event_btnCancelActionPerformed
-
-    private void ddlProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddlProductsActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_ddlProductsActionPerformed
 
     public void goToMainMenu()
     {
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }
     
-    public void deleteProduct()
-    {
-        String selectedName = ddlProducts.getSelectedItem().toString();
-        System.out.println("selected product name: "+selectedName);
-        catDBAccess.deleteProduct(selectedName);
-    }
-    
-    public boolean isValidDeletion()
-    {
-        lblError.setVisible(false);
-        if(ddlProducts.getSelectedIndex() == 0)//nothing selected...
-        {
-            lblError.setText("You have not selected a product to delete");
-            lblError.setVisible(true);
-            return false;
-        }
-        else if(ddlProducts.getSelectedIndex() != 0 && !boxConfirm.isSelected())
-        {
-            lblError.setText("You need to confirm product deletion");
-            lblError.setVisible(true);
-            return false;
-        }
-        return true;
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton boxConfirm;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
@@ -199,5 +218,7 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JFormattedTextField txtAdditionalStock;
+    private javax.swing.JFormattedTextField txtCurrentStock;
     // End of variables declaration//GEN-END:variables
 }
