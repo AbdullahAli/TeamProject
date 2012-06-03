@@ -43,9 +43,20 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     
     public void popualateComboOrderID() {
         ArrayList<Integer> ordersArray = dbOrder.getAllOrderIDs();
-        for(int id : ordersArray) {
-            comboOrderID.addItem(id);
+        for(int orderID : ordersArray) {
+            comboOrderID.addItem(orderID);
         }
+    }
+    
+    public void setTextOrderStatus() {
+        String orderStatus = getOrderStatus();
+        textOrderStatus.setText(orderStatus);
+    }
+    
+    public String getOrderStatus(){
+        int orderID = Integer.parseInt(comboOrderID.getSelectedItem().toString());
+        String orderStatus = dbOrder.getOrderStatus(orderID);
+        return orderStatus;
     }
     
 
@@ -61,6 +72,7 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         layeredPanel = new javax.swing.JLayeredPane();
         lblError = new javax.swing.JLabel();
         comboOrderID = new javax.swing.JComboBox();
+        textOrderStatus = new javax.swing.JTextField();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
 
@@ -76,6 +88,10 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         });
         comboOrderID.setBounds(30, 140, 270, 27);
         layeredPanel.add(comboOrderID, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textOrderStatus.setEditable(false);
+        textOrderStatus.setBounds(40, 220, 250, 28);
+        layeredPanel.add(textOrderStatus, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/updateorderstatus.png"))); // NOI18N
@@ -109,7 +125,7 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void comboOrderIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrderIDActionPerformed
-        // TODO add your handling code here:
+        setTextOrderStatus();
     }//GEN-LAST:event_comboOrderIDActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -118,5 +134,6 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JTextField textOrderStatus;
     // End of variables declaration//GEN-END:variables
 }
