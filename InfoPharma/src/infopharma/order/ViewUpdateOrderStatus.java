@@ -48,15 +48,26 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         }
     }
     
-    public void setTextOrderStatus() {
+    public void setOrderStatus() {
         String orderStatus = getOrderStatus();
         textOrderStatus.setText(orderStatus);
+        setRadioBtnOrderStatus(orderStatus);
     }
     
-    public String getOrderStatus(){
+    public String getOrderStatus() {
         int orderID = Integer.parseInt(comboOrderID.getSelectedItem().toString());
         String orderStatus = dbOrder.getOrderStatus(orderID);
         return orderStatus;
+    }
+    
+    public void setRadioBtnOrderStatus(String orderStatus) {
+        if(orderStatus.toLowerCase().contains("process")) {
+            radioBtnProcessed.setSelected(true);
+        }else if(orderStatus.toLowerCase().contains("accept")) {
+            radioBtnAccepted.setSelected(true);
+        }else if(orderStatus.toLowerCase().contains("dispatch")) {
+            radioBtnDispatched.setSelected(true);
+        }
     }
     
 
@@ -69,10 +80,14 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        radioBtnGroup = new javax.swing.ButtonGroup();
         layeredPanel = new javax.swing.JLayeredPane();
         lblError = new javax.swing.JLabel();
         comboOrderID = new javax.swing.JComboBox();
         textOrderStatus = new javax.swing.JTextField();
+        radioBtnProcessed = new javax.swing.JRadioButton();
+        radioBtnAccepted = new javax.swing.JRadioButton();
+        radioBtnDispatched = new javax.swing.JRadioButton();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
 
@@ -92,6 +107,21 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         textOrderStatus.setEditable(false);
         textOrderStatus.setBounds(40, 220, 250, 28);
         layeredPanel.add(textOrderStatus, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        radioBtnGroup.add(radioBtnProcessed);
+        radioBtnProcessed.setBounds(new java.awt.Rectangle(28, 319, 30, 23));
+        radioBtnProcessed.setBounds(30, 320, 30, 23);
+        layeredPanel.add(radioBtnProcessed, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        radioBtnGroup.add(radioBtnAccepted);
+        radioBtnAccepted.setBounds(new java.awt.Rectangle(28, 289, 30, 23));
+        radioBtnAccepted.setBounds(30, 290, 30, 23);
+        layeredPanel.add(radioBtnAccepted, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        radioBtnGroup.add(radioBtnDispatched);
+        radioBtnDispatched.setBounds(new java.awt.Rectangle(28, 349, 30, 23));
+        radioBtnDispatched.setBounds(30, 350, 30, 23);
+        layeredPanel.add(radioBtnDispatched, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/updateorderstatus.png"))); // NOI18N
@@ -125,7 +155,7 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void comboOrderIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrderIDActionPerformed
-        setTextOrderStatus();
+        setOrderStatus();
     }//GEN-LAST:event_comboOrderIDActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -134,6 +164,11 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JRadioButton radioBtnAccepted;
+    private javax.swing.JRadioButton radioBtnDispatched;
+    private javax.swing.ButtonGroup radioBtnGroup;
+    private javax.swing.JRadioButton radioBtnProcessed;
     private javax.swing.JTextField textOrderStatus;
     // End of variables declaration//GEN-END:variables
 }
+;
