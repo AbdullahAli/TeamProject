@@ -10,8 +10,10 @@ import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
+import infopharma.data.Order;
 import infopharma.data.OrderDBAccess;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
@@ -23,9 +25,13 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     
     private static InfoPharmaFrame frame;
     private OrderDBAccess dbOrder;
+    private HashMap<Integer, String> orderStatusesHash;
+    private ArrayList<Order> ordersArray;
 	
     public ViewUpdateOrderStatus(InfoPharmaFrame mainMenuFrame) {
         dbOrder = new OrderDBAccess();
+        orderStatusesHash = dbOrder.getOrderStatuses();
+        ordersArray = dbOrder.getAllOrders();
         initComponents();
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
@@ -42,8 +48,8 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     }
     
     public void popualateComboOrderID() {
-        ArrayList<Integer> ordersArray = dbOrder.getAllOrderIDs();
-        for(int orderID : ordersArray) {
+        for(Order order : ordersArray) {
+            int orderID = order.getID();
             comboOrderID.addItem(orderID);
         }
     }
@@ -56,7 +62,14 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     
     public String getOrderStatus() {
         int orderID = Integer.parseInt(comboOrderID.getSelectedItem().toString());
-        String orderStatus = dbOrder.getOrderStatus(orderID);
+        int statusID = 0;
+        for(Order order : ordersArray) {
+            if(order.getID() == orderID) {
+                statusID = order.getStatusID();
+                break;
+            }
+        }
+        String orderStatus = orderStatusesHash.get(statusID);
         return orderStatus;
     }
     

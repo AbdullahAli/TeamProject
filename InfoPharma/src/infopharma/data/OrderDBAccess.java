@@ -9,6 +9,7 @@ import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -16,8 +17,43 @@ import java.util.ArrayList;
  */
 public class OrderDBAccess extends DBAccess {
     
-    public ArrayList<Integer> getAllOrderIDs() {
-        ArrayList<Integer> ordersArray = new ArrayList<Integer>();
+    public HashMap<Integer, String> getOrderStatuses() {
+        HashMap<Integer, String> orderStatuses = new HashMap<Integer, String>();
+        
+        Connection connection = null;
+        Statement statementStatuses = null;
+        ResultSet resultSetStatuses = null;
+        String sqlStatuses = "SELECT * FROM OrderStatuses";
+        
+        try {
+            connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
+            statementStatuses = (Statement) connection.createStatement();
+            resultSetStatuses = statementStatuses.executeQuery(sqlStatuses);
+            while(resultSetStatuses.next()) {
+                int statusID = resultSetStatuses.getInt("statusID");
+                String status = resultSetStatuses.getString("status");
+                orderStatuses.put(statusID, status);
+            }
+        }catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(statementStatuses != null) {
+                    statementStatuses.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getOrderStatuses");
+            }
+        }
+        return orderStatuses;
+    }
+
+    public ArrayList<Order> getAllOrders() {
+        ArrayList<Order> ordersArray = new ArrayList<Order>();
         
         Connection connection = null;
         Statement statementOrders = null;
@@ -31,7 +67,14 @@ public class OrderDBAccess extends DBAccess {
             resultSetOrders = statementOrders.executeQuery(sqlOrders);
             while(resultSetOrders.next()) {
                 int orderID = resultSetOrders.getInt("orderDetailsID");
-                ordersArray.add(orderID);
+                double total = resultSetOrders.getDouble("total");
+                String date = resultSetOrders.getString("orderDate");
+                int statusID = resultSetOrders.getInt("statusID");
+                int paymentID = resultSetOrders.getInt("paymentID");
+                int dispatchID = resultSetOrders.getInt("dispatchID");
+                int accountNumber = resultSetOrders.getInt("accountNumber");
+                Order order = new Order(orderID, total, date, statusID, paymentID, dispatchID, accountNumber);
+                ordersArray.add(order);
             }
             
         }catch(SQLException ex) {
@@ -50,50 +93,4 @@ public class OrderDBAccess extends DBAccess {
         }
         return ordersArray;
     }
-    
-    public String getOrderStatus(int orderID) {
-        String orderStatus = "";
-        
-        Connection connection = null;
-        Statement statementStatusID = null;
-        ResultSet resultSetStatusID = null;
-        Statement statementStatus = null;
-        ResultSet resultSetStatus = null;
-        String sqlStatusID = "SELECT * FROM OrderDetails WHERE orderDetailsID = '" + orderID + "'";
-        
-        try {
-            connection = makeConnection();
-            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
-            statementStatusID = (Statement) connection.createStatement();
-            resultSetStatusID = statementStatusID.executeQuery(sqlStatusID);
-            if(resultSetStatusID.next()) {
-                int orderStatusID = resultSetStatusID.getInt("statusID");
-                String sqlStatus = "SELECT * FROM OrderStatuses WHERE statusID = '" + orderStatusID + "'";
-                statementStatus = (Statement) connection.createStatement();
-                resultSetStatus = statementStatusID.executeQuery(sqlStatus);
-                if(resultSetStatus.next()) {
-                    orderStatus = resultSetStatus.getString("status");
-                }
-            }
-            
-        }catch(SQLException ex) {
-            System.err.println("Error: " + ex.getMessage());
-        }finally {
-            try {
-                if(connection != null) {
-                    connection.close();
-                }
-                if(statementStatusID != null) {
-                    statementStatusID.close();
-                }
-                if(statementStatus != null) {
-                    statementStatus.close();
-                }
-            }catch(Exception e) {
-                System.err.println("Could not close the resources in OrderDBAccess getAllOrderIDs");
-            }
-        }
-        return orderStatus;
-    }
-    
 }
