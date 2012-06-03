@@ -14,6 +14,8 @@ import infopharma.data.Order;
 import infopharma.data.OrderDBAccess;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
@@ -33,6 +35,9 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         orderStatusesHash = dbOrder.getOrderStatuses();
         ordersArray = dbOrder.getAllOrders();
         initComponents();
+        radioBtnProcessed.setActionCommand("process");
+        radioBtnAccepted.setActionCommand("accept");
+        radioBtnDispatched.setActionCommand("dispatch");
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         popualateComboOrderID();
@@ -54,21 +59,15 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         }
     }
     
-    public void setOrderStatus() {
+    public void setFields() {
         String orderStatus = getOrderStatus();
         textOrderStatus.setText(orderStatus);
         setRadioBtnOrderStatus(orderStatus);
     }
     
     public String getOrderStatus() {
-        int orderID = Integer.parseInt(comboOrderID.getSelectedItem().toString());
-        int statusID = 0;
-        for(Order order : ordersArray) {
-            if(order.getID() == orderID) {
-                statusID = order.getStatusID();
-                break;
-            }
-        }
+        Order order = getSelectedOrder();
+        int statusID = order.getStatusID();
         String orderStatus = orderStatusesHash.get(statusID);
         return orderStatus;
     }
@@ -83,6 +82,43 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         }
     }
     
+    public void setOrderStatus() {
+        int statusID = getSelectedRadioBtn();
+        Order order = getSelectedOrder();
+        order.setStatusId(statusID);
+        int orderID = order.getID();
+        try {
+            dbOrder.updateOrderStatus(orderID, statusID);
+        }catch(Exception e) {
+            System.err.println("Could not update the Order's status: " + e.getMessage());
+        }
+        setFields();
+    }
+    
+    public Order getSelectedOrder() {
+        int orderID = Integer.parseInt(comboOrderID.getSelectedItem().toString());
+        for(Order order : ordersArray) {
+            if(order.getID() == orderID) {
+                return order;
+            }
+        }
+        return null;
+    }
+    
+    public int getSelectedRadioBtn() {
+        int statusID = 0;
+        String status = radioBtnGroup.getSelection().getActionCommand();
+        System.out.println(status);
+        Iterator it = orderStatusesHash.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            if(pairs.getValue().toString().toLowerCase().contains(status)) {
+                statusID = (Integer) pairs.getKey();
+                break;
+            }
+        }
+        return statusID;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,6 +137,7 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         radioBtnProcessed = new javax.swing.JRadioButton();
         radioBtnAccepted = new javax.swing.JRadioButton();
         radioBtnDispatched = new javax.swing.JRadioButton();
+        btnOk = new javax.swing.JButton();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
 
@@ -122,19 +159,25 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         layeredPanel.add(textOrderStatus, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         radioBtnGroup.add(radioBtnProcessed);
-        radioBtnProcessed.setBounds(new java.awt.Rectangle(28, 319, 30, 23));
         radioBtnProcessed.setBounds(30, 320, 30, 23);
         layeredPanel.add(radioBtnProcessed, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         radioBtnGroup.add(radioBtnAccepted);
-        radioBtnAccepted.setBounds(new java.awt.Rectangle(28, 289, 30, 23));
         radioBtnAccepted.setBounds(30, 290, 30, 23);
         layeredPanel.add(radioBtnAccepted, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         radioBtnGroup.add(radioBtnDispatched);
-        radioBtnDispatched.setBounds(new java.awt.Rectangle(28, 349, 30, 23));
         radioBtnDispatched.setBounds(30, 350, 30, 23);
         layeredPanel.add(radioBtnDispatched, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnOk.setText("OK");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+        btnOk.setBounds(1020, 70, 80, 470);
+        layeredPanel.add(btnOk, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/updateorderstatus.png"))); // NOI18N
@@ -168,11 +211,16 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void comboOrderIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrderIDActionPerformed
-        setOrderStatus();
+        setFields();
     }//GEN-LAST:event_comboOrderIDActionPerformed
+
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        setOrderStatus();
+    }//GEN-LAST:event_btnOkActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnOk;
     private javax.swing.JComboBox comboOrderID;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
@@ -183,5 +231,4 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
     private javax.swing.JRadioButton radioBtnProcessed;
     private javax.swing.JTextField textOrderStatus;
     // End of variables declaration//GEN-END:variables
-}
-;
+};

@@ -93,4 +93,34 @@ public class OrderDBAccess extends DBAccess {
         }
         return ordersArray;
     }
+    
+    public void updateOrderStatus(int orderID, int statusID) throws SQLException {
+        
+        Connection connection = null;
+        Statement statementUpdate = null;
+        String sqlUpdate = "UPDATE OrderDetails SET statusID='" + statusID + "' WHERE orderDetailsID = '" + orderID + "'";
+        
+        try {
+            connection = makeConnection();
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(connection.TRANSACTION_SERIALIZABLE);
+            statementUpdate = (Statement) connection.createStatement();
+            statementUpdate.executeUpdate(sqlUpdate);
+            connection.commit();
+        }catch(SQLException ex) {
+            connection.rollback();
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(statementUpdate != null) {
+                    statementUpdate.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess updateOrderStatus");
+            }
+        }
+    }
 }
