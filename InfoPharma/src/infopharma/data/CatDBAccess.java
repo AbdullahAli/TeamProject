@@ -5,11 +5,13 @@
 package infopharma.data;
 
 import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.ResultSetMetaData;
 import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 /**
  *
@@ -399,4 +401,81 @@ public class CatDBAccess extends DBAccess{
          return false;
      }
     
+     
+     public ArrayList<Vector> getCatalogueProdcuts()
+     {
+         
+         Connection con = null;
+         Statement stat = null;
+         ResultSet rs = null;
+         ResultSetMetaData md = null;
+         String sql = "SELECT * FROM Products";
+         ArrayList<Vector> products = null;
+         
+         
+         try
+         {
+             con = makeConnection();
+             stat = (Statement) con.createStatement();
+             rs = stat.executeQuery(sql);
+             md = (ResultSetMetaData) rs.getMetaData();
+             
+             int columnCount = md.getColumnCount();
+             
+             Vector columns = new Vector(columnCount);
+
+
+            for(int i=1; i<=columnCount; i++)
+            {
+                columns.add(md.getColumnName(i));
+            }
+
+            Vector data = new Vector();
+            Vector row;
+            
+            //store row data
+            while(rs.next())
+            {
+                row = new Vector(columnCount);
+                for(int i=1; i<=columnCount; i++)
+                {
+                    row.add(rs.getString(i));
+                }
+                
+                data.add(row);
+            }
+            
+            products = new ArrayList<Vector>();
+            products.add(data);
+            products.add(columns);
+            
+            return products;
+            
+         }
+         catch (Exception e)
+         {
+             System.err.println("Error: "+e.getMessage());
+         }
+         finally
+         {
+             try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(stat != null)
+                {
+                    stat.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getcatalogueproducts");
+            }
+         }
+
+        return null;
+     }
 }
