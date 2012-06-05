@@ -7,6 +7,8 @@ package infopharma.acc;
 import infopharma.cat.*;
 import infopharma.misc.ViewLatePayment;
 import infopharma.misc.ViewLowStockNotification;
+import infopharma.rprt.ReportActivity;
+import infopharma.rprt.ReportLowStock;
 import infopharma.rprt.ReportMerchantOrders;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,7 +32,9 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
 
             
             //will generate a pdf on the desktop - im just using this for testing.
-            ReportMerchantOrders x = new ReportMerchantOrders("4", "10/10/10", "10/15/48");
+            //ReportMerchantOrders x = new ReportMerchantOrders("4", "2011-08-07", "2011-08-07");
+            //ReportActivity x = new ReportActivity("4", "2011-08-07", "2011-08-07");
+            ReportLowStock x = new ReportLowStock();
 
             this.setVisible(true);
             setTitle("InfoPharma");

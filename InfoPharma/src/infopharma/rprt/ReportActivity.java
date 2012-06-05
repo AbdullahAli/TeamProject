@@ -21,18 +21,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class ReportMerchantOrders extends GeneralReport
+public class ReportActivity extends GeneralReport
 {
         private static String startDate;
         private static String endDate;
         private RprtDBAccess rprtDBAccess;
+        private OrderDBAccess orderDBAccess;
 
         
-	private static String FILE = "_orders.pdf";
+	private static String FILE = "_activity.pdf";
 
-	public ReportMerchantOrders(String accountNumber, String startDate, String endDate) 
+	public ReportActivity(String accountNumber, String startDate, String endDate) 
         {
             rprtDBAccess = new RprtDBAccess();
+            orderDBAccess = new OrderDBAccess();
             
             
             this.startDate = startDate;
@@ -48,10 +50,11 @@ public class ReportMerchantOrders extends GeneralReport
                     String documentName = desktoppath + timeStamp + "_" +accountNumber + FILE;
                     PdfWriter.getInstance(document, new FileOutputStream(documentName));
                     document.open();
-                    addTitle(document, "Merchants Orders Report");
+                    addTitle(document, "Merchants Activity Report");
                     addLogo(document);
                     addPeriod(document, startDate, endDate);
                     addMerchantDetails(document, ""+accountNumber);
+                    
                     addOrderDetails(document, ""+accountNumber);
                     addDateGenerated(document);
                     addReportGenerator(document);
@@ -93,49 +96,29 @@ public class ReportMerchantOrders extends GeneralReport
                 document.add(preface);
                      
                 
-                PdfPTable table = new PdfPTable(6);         
+                PdfPTable table = new PdfPTable(3);         
                 
                 table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
                 PdfPCell c1 = new PdfPCell(new Phrase("Order ID"));
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c1);
 
-                PdfPCell c2 = new PdfPCell(new Phrase("Order ID"));
-		c2 = new PdfPCell(new Phrase("Ordered"));
+                PdfPCell c2 = new PdfPCell(new Phrase("Product ID"));
 		c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c2);
 
-                PdfPCell c3 = new PdfPCell(new Phrase("Order ID"));
-		c3 = new PdfPCell(new Phrase("Amount (£)"));
+                PdfPCell c3 = new PdfPCell(new Phrase("Total"));
 		c3.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c3);
                 
-                PdfPCell c4 = new PdfPCell(new Phrase("Order ID"));
-                c4 = new PdfPCell(new Phrase("Dispatched"));
-		c4.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(c4);
-                
-                 PdfPCell c5 = new PdfPCell(new Phrase("Order ID"));
-                c5 = new PdfPCell(new Phrase("Delivered"));
-		c5.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(c5);
-                
-                PdfPCell c6 = new PdfPCell(new Phrase("Order ID"));
-                c6 = new PdfPCell(new Phrase("Paid"));
-		c6.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(c6);
                 
                 
                 table.setHeaderRows(1);
 
                 
-                int ordered = 0;
-                double amount = 0;
-                int dispatched = 0;
-                int delivered = 0;
-                int paid = 0;
+                double total = 0;
                 
-		ArrayList<ArrayList<String>> orders = rprtDBAccess.getMerchantOrders(accountNumber, startDate, endDate);
+		ArrayList<ArrayList<String>> orders = rprtDBAccess.getActivityOrder(accountNumber, startDate, endDate);
                 
                 for(int i=0; i < orders.size(); i++)
                 {
@@ -145,38 +128,18 @@ public class ReportMerchantOrders extends GeneralReport
                                         
                     table.addCell(singleOrder.get(0)); // order id
                     
-                    table.addCell(singleOrder.get(1)); // ordered
-                    ordered += 1;
+                    table.addCell(singleOrder.get(1)); // product id
+
                     
-                    table.addCell(singleOrder.get(2)); // amount
-                    amount += Double.parseDouble(singleOrder.get(2));
-                    
-                    table.addCell(singleOrder.get(3)); // dispatched
-                    if(!singleOrder.get(3).equals("No"))
-                    {
-                        dispatched += 1;
-                    }
-                    
-                    table.addCell(singleOrder.get(4)); // delivered
-                    if(!singleOrder.get(4).equals("Pending"))
-                    {
-                        delivered += 1;
-                    }
-                    
-                    table.addCell(singleOrder.get(5)); // paid
-                    if(!singleOrder.get(5).equals("No"))
-                    {
-                        paid += 1;
-                    }                 
+                    table.addCell(singleOrder.get(2)); // total/amoutn/price
+                    total += Double.parseDouble(singleOrder.get(2));
+       
                     table.completeRow();
                 }
                 
                 table.addCell("Totals");
-                table.addCell(""+ordered); // ordered
-                table.addCell(""+amount); //amount
-                table.addCell(""+dispatched); //dispatched
-                table.addCell(""+delivered); //delivered
-                table.addCell(""+paid); //paid
+                table.addCell(""); // ordered
+                table.addCell(""+total); //amount
 		document.add(table);		
 	}
 
