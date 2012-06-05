@@ -10,18 +10,21 @@ package infopharma.data;
  */
 public class UserAccount {
     
-    private String role;
+    private static String role;
 
-    public UserAccount(String role) {
+    public UserAccount(String role) 
+    {
         this.role = role;
     }
     
-    public String getRole(){
+    public static String getRole()
+    {
         return role;
     }
     
-    public void setRole(String role){
-        this.role = role;
+    public static void setRole(String role)
+    {
+        UserAccount.role = role;
     }
     
 }
