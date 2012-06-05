@@ -7,6 +7,8 @@ package infopharma.acc;
 import infopharma.cat.*;
 import infopharma.misc.ViewLatePayment;
 import infopharma.misc.ViewLowStockNotification;
+import infopharma.order.JButtonTableExample;
+import infopharma.order.ViewPlaceOrder;
 import infopharma.rprt.ReportActivity;
 import infopharma.rprt.ReportLowStock;
 import infopharma.rprt.ReportMerchantOrders;
@@ -28,13 +30,13 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
      */
 	public InfoPharmaFrame() {
             initComponents();
-            this.setPanel(new ViewLowStockNotification(this));
-
+            this.setPanel(new ViewPlaceOrder(this));
+            JButtonTableExample x = new JButtonTableExample();
             
             //will generate a pdf on the desktop - im just using this for testing.
             //ReportMerchantOrders x = new ReportMerchantOrders("4", "2011-08-07", "2011-08-07");
             //ReportActivity x = new ReportActivity("4", "2011-08-07", "2011-08-07");
-            ReportLowStock x = new ReportLowStock();
+            //ReportLowStock x = new ReportLowStock();
 
             this.setVisible(true);
             setTitle("InfoPharma");
