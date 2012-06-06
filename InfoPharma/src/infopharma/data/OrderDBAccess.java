@@ -94,6 +94,72 @@ public class OrderDBAccess extends DBAccess {
         return ordersArray;
     }
     
+    public ArrayList<Product> getAllProductsInOrder(int orderId) {
+        ArrayList<Product> productsInOrderArray = new ArrayList<Product>();
+        
+        Connection connection = null;
+        Statement statementProductIds = null;
+        ResultSet resultSetProductIds = null;
+        Statement statementProduct = null;
+        ResultSet resultSetProduct = null;
+        String sqlProductIds = "SELECT * FROM OrderDetails_Products WHERE orderDetailsID = '" + orderId + "'";
+        
+        try {
+            connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
+            statementProductIds = (Statement) connection.createStatement();
+            resultSetProductIds = statementProductIds.executeQuery(sqlProductIds);
+            while(resultSetProductIds.next()) {
+                int productId = resultSetProductIds.getInt("productID");
+                String sqlProduct = "SELECT * FROM Products WHERE productID = '" + productId + "'";
+                statementProduct = (Statement) connection.createStatement();
+                resultSetProduct = statementProduct.executeQuery(sqlProduct);
+                while(resultSetProduct.next()) {
+                    int id = resultSetProduct.getInt("productID");
+                    String catName = resultSetProduct.getString("catalogueName");
+                    String name = resultSetProduct.getString("name");
+                    String description = resultSetProduct.getString("description");
+                    double unitPrice = resultSetProduct.getDouble("unitPrice");
+                    int minStockLimit = resultSetProduct.getInt("minimumStockLimit");
+                    String packageType = resultSetProduct.getString("packageType");
+                    String unit = resultSetProduct.getString("unit");
+                    int unitsInPack = resultSetProduct.getInt("unitsInAPack");
+                    int currentStock = resultSetProduct.getInt("currentStock");
+                    String dateReceived = resultSetProduct.getString("dateRecieved");
+                    Product product = new Product(id, 
+                                                catName, 
+                                                name, 
+                                                description, 
+                                                unitPrice, 
+                                                minStockLimit, 
+                                                packageType,
+                                                unit,
+                                                unitsInPack,
+                                                currentStock,
+                                                dateReceived);
+                    productsInOrderArray.add(product);
+                }
+            }
+        }catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(statementProductIds != null) {
+                    statementProductIds.close();
+                }
+                if(statementProduct != null) {
+                    statementProduct.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getAllProductsInORder");
+            }
+        }
+        return productsInOrderArray;
+    }
+
     public void updateOrderStatus(int orderID, int statusID) throws SQLException {
         
         Connection connection = null;
