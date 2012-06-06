@@ -190,6 +190,45 @@ public class OrderDBAccess extends DBAccess {
         }
     }
     
+    public ArrayList<Order> getAllUndispatchedOrders() {
+        ArrayList<Order> ordersArray = new ArrayList<Order>();
+        Connection connection = null;
+        Statement statementOrders = null;
+        ResultSet resultSetOrders = null;
+        String sqlOrders = "SELECT * FROM OrderDetails WHERE dispatchID IS NULL";
+        try {
+            connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
+            statementOrders = (Statement) connection.createStatement();
+            resultSetOrders = statementOrders.executeQuery(sqlOrders);
+            while(resultSetOrders.next()) {
+                int orderID = resultSetOrders.getInt("orderDetailsID");
+                double total = resultSetOrders.getDouble("total");
+                String date = resultSetOrders.getString("orderDate");
+                int statusID = resultSetOrders.getInt("statusID");
+                int paymentID = resultSetOrders.getInt("paymentID");
+                int dispatchID = resultSetOrders.getInt("dispatchID");
+                int accountNumber = resultSetOrders.getInt("accountNumber");
+                Order order = new Order(orderID, total, date, statusID, paymentID, dispatchID, accountNumber);
+                ordersArray.add(order);
+            }
+        }catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(statementOrders != null) {
+                    statementOrders.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getAllUndispatchedOrders");
+            }
+        }
+        return ordersArray;
+    }
+    
     
     
     
