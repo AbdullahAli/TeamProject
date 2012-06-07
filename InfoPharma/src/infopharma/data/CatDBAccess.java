@@ -580,5 +580,117 @@ public class CatDBAccess extends DBAccess{
         }
     }
     
+
+     public HashMap<Integer, Product> getProductsInformation()
+     {
+         HashMap<Integer, Product> products = new HashMap<Integer, Product>();
+         Connection con = null;
+         Statement stat = null;
+         ResultSet rs = null;
+         String sql = "SELECT * FROM Products";
+         
+         try
+         {
+            con = makeConnection();
+            stat = (Statement) con.createStatement();
+            rs = stat.executeQuery(sql);
+            while(rs.next())
+            {
+                int productID = rs.getInt("productID");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                double unitPrice = rs.getDouble("unitPrice");
+                int quantity = rs.getInt("currentStock");
+                Product product = new Product();
+                product.setId(productID);
+                product.setName(name);
+                product.setDescription(description);
+                product.setUnitPrice(unitPrice);
+                product.setCurrentStock(quantity);
+                
+                products.put(productID, product);
+            }
+            return products;
+         }
+         catch(SQLException ex)
+        {
+            System.out.println("Error: "+ex.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(rs != null)
+                {
+                    rs.close();
+                }
+
+                if(stat != null)
+                {
+                    stat.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getSaleableProducts");
+            }
+        }
+        return null;
+     }
+     public HashMap<Integer, String> getSaleableProducts()
+     {
+        HashMap<Integer, String> products = new HashMap<Integer, String>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM Products WHERE currentStock > 0";
+        try
+        {
+            connection = makeConnection();
+            statement = (Statement) connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while(resultSet.next())
+            {
+                int productID = resultSet.getInt("productID");
+                String productName = resultSet.getString("productID");
+                products.put(productID, productName);
+            }
+            return products;
+        }
+        catch(SQLException ex)
+        {
+            System.out.println("Error: "+ex.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                {
+                    connection.close();
+                }
+
+                if(resultSet != null)
+                {
+                    resultSet.close();
+                }
+
+                if(statement != null)
+                {
+                    statement.close();
+                }
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess getSaleableProducts");
+            }
+        }
+        return null;
+    }
     
 }

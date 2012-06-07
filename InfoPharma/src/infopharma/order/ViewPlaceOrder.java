@@ -8,30 +8,34 @@ import infopharma.Validator;
 import infopharma.acc.InfoPharmaFrame;
 import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
-import infopharma.data.UserAccount;
-import infopharma.data.MiscDBAccess;
+import infopharma.data.*;
+import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.TableView.TableRow;
 
 /**
  *
  * @author Abdullah
  */
 public class ViewPlaceOrder extends InfoPharmaPanel{
-    private static InfoPharmaFrame frame;
+    private CatDBAccess catDBAccess;
+    private HashMap<Integer, String> productIDs;
+    private HashMap<Integer, Product> products;
 	
     public ViewPlaceOrder(InfoPharmaFrame mainMenuFrame)
     {
+        catDBAccess = new CatDBAccess();
+        products = catDBAccess.getProductsInformation();
         initComponents();
         setFrame(mainMenuFrame);
+        populateComboProducts();
         lblError.setVisible(false);
-        defineColumnNames();
-        DefaultTableModel model = (DefaultTableModel)tblOrder.getModel();
-        addRow();
+
         this.setVisible(true);
     }
 
@@ -44,26 +48,18 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     {
         InfoPharmaPanel.setFrame(frame);
     }
+    
 
-    public void defineColumnNames()
+    public void populateComboProducts()
     {
-        DefaultTableModel model = (DefaultTableModel)tblOrder.getModel();
-        model.addColumn("Button");
-        model.addColumn("Product ID");
-        model.addColumn("Description");
-        model.addColumn("Cost");
-        model.addColumn("Quantity");
-        model.addColumn("");
-        model.addColumn("Total");
+        ddlProducts.removeAllItems();
+        productIDs = catDBAccess.getSaleableProducts();
+        for(String product : productIDs.values())
+        {
+            ddlProducts.addItem(product);
+        }
+        ddlProducts.updateUI();
     }
-    
-    public void addRow()
-    {
-        DefaultTableModel model = (DefaultTableModel)tblOrder.getModel();
-        
-        
-    }
-    
     
 
     /**
@@ -76,24 +72,103 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
+        txtName = new javax.swing.JTextField();
+        ddlProducts = new javax.swing.JComboBox();
+        txtTotal = new javax.swing.JFormattedTextField();
+        jButton1 = new javax.swing.JButton();
+        more = new javax.swing.JButton();
+        txtQuantity = new javax.swing.JFormattedTextField();
+        txtCost = new javax.swing.JFormattedTextField();
+        txtDescription = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblOrder = new javax.swing.JTable();
+        tblOrder = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false;   //Disallow the editing of any cell
+            }
+        };
+        add = new javax.swing.JButton();
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
+        remove = new javax.swing.JButton();
+
+        txtName.setEditable(false);
+        txtName.setBounds(130, 170, 84, 28);
+        layeredPanel.add(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        ddlProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ddlProductsActionPerformed(evt);
+            }
+        });
+        ddlProducts.setBounds(30, 170, 90, 27);
+        layeredPanel.add(ddlProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtTotal.setEditable(false);
+        txtTotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        txtTotal.setBounds(660, 170, 80, 28);
+        layeredPanel.add(txtTotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jButton1.setText("less");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
+            }
+        });
+        jButton1.setBounds(600, 170, 50, 29);
+        layeredPanel.add(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        more.setText("more");
+        more.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                moreMousePressed(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                moreMouseClicked(evt);
+            }
+        });
+        more.setBounds(540, 170, 60, 29);
+        layeredPanel.add(more, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtQuantity.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
+        txtQuantity.setBounds(480, 170, 50, 28);
+        layeredPanel.add(txtQuantity, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtCost.setEditable(false);
+        txtCost.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
+        txtCost.setBounds(400, 170, 70, 28);
+        layeredPanel.add(txtCost, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtDescription.setEditable(false);
+        txtDescription.setBounds(230, 170, 160, 30);
+        layeredPanel.add(txtDescription, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         tblOrder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-
+                "Product ID", "Name", "Unit Price", "Quantity", "Total"
             }
         ));
+        tblOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblOrderMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblOrder);
 
-        jScrollPane1.setBounds(260, 330, 620, 140);
+        jScrollPane1.setBounds(30, 330, 660, 80);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        add.setText("UPDATE");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        add.setBounds(740, 170, 94, 29);
+        layeredPanel.add(add, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -101,7 +176,6 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/orderplacing.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -113,6 +187,15 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         });
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        remove.setText("REMOVE");
+        remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeActionPerformed(evt);
+            }
+        });
+        remove.setBounds(760, 230, 95, 29);
+        layeredPanel.add(remove, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -131,12 +214,157 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        addProductToOrder();
+    }//GEN-LAST:event_addActionPerformed
+
+    public void addProductToOrder()
+    {
+        if(txtQuantity.getValue().toString().equals("0"))
+        {
+            System.out.println("it is 0");
+        }
+        else
+        {
+            if(checkIfAlreadyAdded(ddlProducts.getSelectedItem().toString()))
+            {
+               DefaultTableModel model =(DefaultTableModel) tblOrder.getModel();
+                Vector row = new Vector(5);
+                row.add(ddlProducts.getSelectedItem().toString());
+                row.add(txtName.getText());
+                row.add(txtCost.getValue());
+                row.add(txtQuantity.getValue());
+                row.add(txtTotal.getValue());
+                model.addRow(row); 
+            }
+            else
+            {
+                System.out.println("Already added the product");
+            }
+        }        
+    }
+    
+    public boolean checkIfAlreadyAdded(String productID)
+    {
+        for(int i = 0; i < tblOrder.getRowCount(); i++)
+        {
+            if(productID == tblOrder.getValueAt(i, 0))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private void ddlProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddlProductsActionPerformed
+        clearFields();
+        int productID = Integer.parseInt(ddlProducts.getSelectedItem().toString());
+        System.out.println("id is "+ productID);
+        setFieldValues(productID);
+    }//GEN-LAST:event_ddlProductsActionPerformed
+
+    public void clearFields()
+    {
+        txtCost.setText("");
+        txtDescription.setText("");
+        txtName.setText("");
+        txtQuantity.setText("");
+        txtTotal.setText("");
+    }
+    private void moreMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moreMousePressed
+        increaseQuantity();
+    }//GEN-LAST:event_moreMousePressed
+
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        decreaseQuantity();
+    }//GEN-LAST:event_jButton1MousePressed
+
+    private void moreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moreMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_moreMouseClicked
+
+    
+    private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
+        int row = tblOrder.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) tblOrder.getModel();
+        
+        System.out.println(model.getValueAt(row, 0));
+        model.removeRow(row);
+    }//GEN-LAST:event_removeActionPerformed
+
+    private void tblOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrderMouseClicked
+        if (evt.getClickCount() == 2) 
+        {
+            int row = tblOrder.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) tblOrder.getModel();
+        int id = Integer.parseInt(model.getValueAt(row, 0).toString());
+        System.out.println("will edit id: " +id);
+        Product product = products.get(id);
+            setProductValues(product);
+        }
+    }//GEN-LAST:event_tblOrderMouseClicked
+
+    public void setProductValues(Product product)
+    {
+        txtCost.setValue(product.getUnitPrice());
+        txtDescription.setText(product.getDescription());
+        txtName.setText(product.getName());
+        txtQuantity.setValue(product.getCurrentStock());
+        txtTotal.setValue(recalculculateTotal(Integer.parseInt(txtQuantity.getValue().toString()), product.getUnitPrice()));
+    }
+    
+    public double recalculculateTotal(int quantity, Object unitPrice)
+    {
+        double unitPriceDouble = (Double)unitPrice;
+        double total = quantity * unitPriceDouble;
+        return total;
+    }
+    
+    public void increaseQuantity()
+    {
+        int quantity = Integer.parseInt(txtQuantity.getValue().toString());
+        quantity += 1;
+        txtQuantity.setValue(quantity);
+        txtTotal.setValue(recalculculateTotal(quantity, txtCost.getValue()));
+    }
+    
+    public void decreaseQuantity()
+    {
+        int quantity = Integer.parseInt(txtQuantity.getValue().toString());
+        if(quantity > 0)
+        {
+            quantity -= 1;
+            txtQuantity.setValue(quantity);
+        }
+        txtTotal.setValue(recalculculateTotal(quantity, txtCost.getValue()));
+    }
+    
+    
+    public void setFieldValues(int id)
+    {
+        Product selectedProduct = products.get(id);
+        txtName.setText(selectedProduct.getName());
+        txtDescription.setText(selectedProduct.getDescription());
+        txtCost.setValue(selectedProduct.getUnitPrice());
+        txtQuantity.setValue(0);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JComboBox ddlProducts;
     private javax.swing.JLabel imageLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JButton more;
+    private javax.swing.JButton remove;
     private javax.swing.JTable tblOrder;
+    private javax.swing.JFormattedTextField txtCost;
+    private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JFormattedTextField txtQuantity;
+    private javax.swing.JFormattedTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 }

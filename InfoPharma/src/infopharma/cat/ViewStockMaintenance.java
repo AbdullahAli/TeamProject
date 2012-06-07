@@ -22,7 +22,7 @@ import javax.swing.JLayeredPane;
 public class ViewStockMaintenance extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
     private CatDBAccess catDBAccess;
-    HashMap<Integer, String> products;
+    private HashMap<Integer, String> products;
 	
     public ViewStockMaintenance(InfoPharmaFrame mainMenuFrame)
     {

@@ -120,6 +120,7 @@ class ButtonEditor extends DefaultCellEditor {
       // 
       // 
       JOptionPane.showMessageDialog(button, label + ": Ouch!");
+      
       // System.out.println(label + ": Ouch!");
     }
     isPushed = false;

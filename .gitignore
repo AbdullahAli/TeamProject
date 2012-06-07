@@ -7,3 +7,5 @@
 *.war
 *.ear
 /.metadata/
+/JavaApplication3/nbproject/private/
+/JavaApplication3/build/
