@@ -10,6 +10,7 @@ import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -68,6 +69,27 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         }
         return null;
     }
+    
+    public void dispatchOrder() {
+        if(validateFields()) {
+            System.out.println("Good to go");
+        } else {
+            System.err.println("Bad");
+        }
+    }
+    
+    public boolean validateFields() {
+        boolean isFilledIn = false;
+        Date dispatchDate = dateDispatch.getDate();
+        Date deliveryDate = dateDelivery.getDate();
+        String courier = textCourier.getText();
+        String courierRef = textCourierRef.getText();
+        Object[] fields = {dispatchDate, deliveryDate, courier, courierRef};
+        if(Validator.isFilledIn(fields)) {
+            isFilledIn = true;
+        }
+        return isFilledIn;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -87,9 +109,10 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         dateDelivery = new com.toedter.calendar.JDateChooser();
         dateDispatch = new com.toedter.calendar.JDateChooser();
         textCompany = new javax.swing.JTextField();
+        btnGo = new javax.swing.JButton();
+        btnMainMenu = new javax.swing.JButton();
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
-        btnMainMenu = new javax.swing.JButton();
 
         comboOrders.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,6 +125,8 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         textStatus.setEditable(false);
         textStatus.setBounds(370, 200, 270, 40);
         layeredPanel.add(textStatus, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textDispatcher.setEditable(false);
         textDispatcher.setBounds(30, 200, 270, 40);
         layeredPanel.add(textDispatcher, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textCourier.setBounds(30, 360, 270, 40);
@@ -112,8 +137,28 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         layeredPanel.add(dateDelivery, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dateDispatch.setBounds(30, 280, 270, 40);
         layeredPanel.add(dateDispatch, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textCompany.setEditable(false);
         textCompany.setBounds(370, 120, 270, 40);
         layeredPanel.add(textCompany, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnGo.setText("OK");
+        btnGo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoActionPerformed(evt);
+            }
+        });
+        btnGo.setBounds(1020, 70, 80, 470);
+        layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnMainMenu.setText("main menu");
+        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenuActionPerformed(evt);
+            }
+        });
+        btnMainMenu.setBounds(1010, 10, 80, 50);
+        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -124,15 +169,6 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/dispatchorders.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        btnMainMenu.setText("main menu");
-        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMainMenuActionPerformed(evt);
-            }
-        });
-        btnMainMenu.setBounds(1010, 10, 80, 50);
-        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -155,7 +191,12 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         displayDetails();
     }//GEN-LAST:event_comboOrdersActionPerformed
 
+    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        dispatchOrder();
+    }//GEN-LAST:event_btnGoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JComboBox comboOrders;
     private com.toedter.calendar.JDateChooser dateDelivery;
