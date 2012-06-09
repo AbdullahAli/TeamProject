@@ -15,9 +15,99 @@ import java.util.HashMap;
  *
  * @author dfernandez
  */
-public class OrderDBAccess extends DBAccess {
+public class OrderDBAccess extends DBAccess 
+{
+    public void insertOrder(ArrayList<OrderedProduct> orderedProducts, int accountNumber)
+    {
+        Connection con = null;
+        Statement stat = null;
+        String insertIntoOrderDetailsSql;
+        ResultSet rs1 = null;
+        
+        
+        //for testing
+        accountNumber = 4;
+        
+        try
+        {
+            con = makeConnection();
+            con.setTransactionIsolation(con.TRANSACTION_SERIALIZABLE);
+            con.setAutoCommit(false);
+            
+            stat = (Statement) con.createStatement();
+            
+            String getMaxOrderDetailsID = "SELECT MAX(orderDetailsID) FROM OrderDetails";
+            rs1 = stat.executeQuery(getMaxOrderDetailsID);
+            rs1.next();
+            int orderID = rs1.getInt("MAX(orderDetailsID)") + 1;
+            System.out.println("max id is: "+rs1.getString("MAX(orderDetailsID)"));
+            
+            for(OrderedProduct product : orderedProducts)
+            {
+                String insertIntoOrderDetailsSQL = "INSERT INTO OrderDetails VALUES (";
+                insertIntoOrderDetailsSQL += "'"+orderID+"', ";
+                insertIntoOrderDetailsSQL += "'"+product.getTotal()+"', ";
+                insertIntoOrderDetailsSQL += "NOW(), ";
+                insertIntoOrderDetailsSQL += "'1', ";
+                insertIntoOrderDetailsSQL += "NULL, ";
+                insertIntoOrderDetailsSQL += "NULL, ";
+                insertIntoOrderDetailsSQL += "'"+accountNumber+"')"; 
+
+                String insertIntoOrderDetails_Products = "INSERT INTO OrderDetails_Products VALUES (";
+                insertIntoOrderDetails_Products += "NULL, ";
+                insertIntoOrderDetails_Products += "'"+product.getid()+"', ";
+                insertIntoOrderDetails_Products += "'"+product.getQuantity()+"', ";
+                insertIntoOrderDetails_Products += "'"+orderID+"')";
+
+                String updateProductQuantitySQL = "UPDATE Products set currentStock = currentStock - '"+product.getQuantity()+"' "
+                        + "WHERE productID = '"+product.getid()+"'";
+                
+
+                //insert into database
+                stat.executeUpdate(insertIntoOrderDetailsSQL);
+                stat.executeUpdate(insertIntoOrderDetails_Products);
+                stat.executeUpdate(updateProductQuantitySQL);
+                
+                System.out.println("Done...");
+                con.commit();
+            }
+        }
+        catch(SQLException ex) 
+        {
+            System.err.println("Error: " + ex.getMessage());
+            try
+            {
+                con.rollback();
+            }
+            catch(Exception error)
+            {
+                System.err.println("Error: " + error.getMessage());
+            }
+        }
+        finally 
+        {
+            try 
+            {
+                if(con != null) 
+                {
+                    con.close();
+                }
+                if(stat != null) 
+                {
+                    stat.close();
+                }
+            }
+            catch(Exception e) 
+            {
+                System.err.println("Could not close the resources in OrderDBAccess insertOrder");
+            }
+        }
+        
+    } 
     
-    public HashMap<Integer, String> getOrderStatuses() {
+    
+    public HashMap<Integer, String> getOrderStatuses() 
+    {
         HashMap<Integer, String> orderStatuses = new HashMap<Integer, String>();
         
         Connection connection = null;

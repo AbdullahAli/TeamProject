@@ -9,8 +9,14 @@ import infopharma.acc.InfoPharmaFrame;
 import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -24,18 +30,21 @@ import javax.swing.text.TableView.TableRow;
  */
 public class ViewPlaceOrder extends InfoPharmaPanel{
     private CatDBAccess catDBAccess;
+    private OrderDBAccess ordDBAccess;
     private HashMap<Integer, String> productIDs;
     private HashMap<Integer, Product> products;
+    private int selectedID = 0;
 	
     public ViewPlaceOrder(InfoPharmaFrame mainMenuFrame)
     {
         catDBAccess = new CatDBAccess();
+        ordDBAccess = new OrderDBAccess();
         products = catDBAccess.getProductsInformation();
         initComponents();
         setFrame(mainMenuFrame);
         populateComboProducts();
         lblError.setVisible(false);
-
+        isEditButtonsVisibleAndEnabled(false);
         this.setVisible(true);
     }
 
@@ -73,10 +82,11 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
 
         layeredPanel = new javax.swing.JLayeredPane();
         txtName = new javax.swing.JTextField();
+        btnGo = new javax.swing.JButton();
         ddlProducts = new javax.swing.JComboBox();
         txtTotal = new javax.swing.JFormattedTextField();
-        jButton1 = new javax.swing.JButton();
-        more = new javax.swing.JButton();
+        btnLess = new javax.swing.JButton();
+        btnMore = new javax.swing.JButton();
         txtQuantity = new javax.swing.JFormattedTextField();
         txtCost = new javax.swing.JFormattedTextField();
         txtDescription = new javax.swing.JTextField();
@@ -86,15 +96,26 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
                 return false;   //Disallow the editing of any cell
             }
         };
-        add = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
-        remove = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
 
         txtName.setEditable(false);
         txtName.setBounds(130, 170, 84, 28);
         layeredPanel.add(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnGo.setText("GO");
+        btnGo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoActionPerformed(evt);
+            }
+        });
+        btnGo.setBounds(1000, 180, 75, 350);
+        layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         ddlProducts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,26 +130,36 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         txtTotal.setBounds(660, 170, 80, 28);
         layeredPanel.add(txtTotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jButton1.setText("less");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnLess.setText("less");
+        btnLess.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jButton1MousePressed(evt);
+                btnLessMousePressed(evt);
             }
         });
-        jButton1.setBounds(600, 170, 50, 29);
-        layeredPanel.add(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        btnLess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLessActionPerformed(evt);
+            }
+        });
+        btnLess.setBounds(600, 170, 50, 29);
+        layeredPanel.add(btnLess, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        more.setText("more");
-        more.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnMore.setText("more");
+        btnMore.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                moreMousePressed(evt);
+                btnMoreMousePressed(evt);
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                moreMouseClicked(evt);
+                btnMoreMouseClicked(evt);
             }
         });
-        more.setBounds(540, 170, 60, 29);
-        layeredPanel.add(more, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        btnMore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoreActionPerformed(evt);
+            }
+        });
+        btnMore.setBounds(540, 170, 60, 29);
+        layeredPanel.add(btnMore, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtQuantity.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
         txtQuantity.setBounds(480, 170, 50, 28);
@@ -161,14 +192,14 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         jScrollPane1.setBounds(30, 330, 660, 80);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        add.setText("UPDATE");
-        add.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setText("ADD");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
-        add.setBounds(740, 170, 94, 29);
-        layeredPanel.add(add, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        btnAdd.setBounds(740, 170, 75, 29);
+        layeredPanel.add(btnAdd, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -188,14 +219,32 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        remove.setText("REMOVE");
-        remove.addActionListener(new java.awt.event.ActionListener() {
+        btnRemove.setText("REMOVE");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeActionPerformed(evt);
+                btnRemoveActionPerformed(evt);
             }
         });
-        remove.setBounds(760, 230, 95, 29);
-        layeredPanel.add(remove, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        btnRemove.setBounds(760, 230, 95, 29);
+        layeredPanel.add(btnRemove, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnCancel.setText("CANCEL");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+        btnCancel.setBounds(850, 300, 95, 29);
+        layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnUpdate.setText("UPDATE");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        btnUpdate.setBounds(730, 330, 94, 29);
+        layeredPanel.add(btnUpdate, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -214,56 +263,121 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
-    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        setErrorMessage(false, "");
+        updateTotalField();   
         addProductToOrder();
-    }//GEN-LAST:event_addActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
+    public String convertToDoubleWithoutPrecisionLose(String e)
+    {
+        java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");  
+        if (!e.isEmpty())
+        {
+            try
+            {
+                double d = Double.parseDouble(e);
+                return df.format(d);  
+            }
+            catch(Exception err){}             
+        }
+        return "0.00";
+    }
+    
+    public void setErrorMessage(boolean isVisible, String message)
+    {
+        lblError.setText(message);
+        lblError.setVisible(isVisible);
+    }
+    
+    public boolean isQuantityAvilable()
+    {
+        int quantityWanted = Integer.parseInt(txtQuantity.getText());
+        int productID = Integer.parseInt(getSelectedProductID());
+        Product productWanted = products.get(productID);
+        int quantityAvilable = productWanted.getCurrentStock();
+        System.out.println("product is: " +productWanted + " and id is: "+getSelectedProductID());
+        
+        if(quantityWanted <= quantityAvilable)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isQuantityZero()
+    {
+        if(Integer.parseInt(txtQuantity.getText()) == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    public String getSelectedProductID()
+    {
+        return ddlProducts.getSelectedItem().toString();
+    }
+    
     public void addProductToOrder()
     {
-        if(txtQuantity.getValue().toString().equals("0"))
+        if(!isQuantityZero() && !isAlreadyAdded(getSelectedProductID()) && isQuantityAvilable())
         {
-            System.out.println("it is 0");
+            DefaultTableModel model =(DefaultTableModel) tblOrder.getModel();
+            Vector row = new Vector(5);
+            row.add(ddlProducts.getSelectedItem().toString());
+            row.add(txtName.getText());
+            row.add(txtCost.getValue());
+            row.add(txtQuantity.getValue());
+            row.add(convertToDoubleWithoutPrecisionLose(txtTotal.getValue().toString()));
+            model.addRow(row); 
         }
         else
         {
-            if(checkIfAlreadyAdded(ddlProducts.getSelectedItem().toString()))
+            if(isQuantityZero())
             {
-               DefaultTableModel model =(DefaultTableModel) tblOrder.getModel();
-                Vector row = new Vector(5);
-                row.add(ddlProducts.getSelectedItem().toString());
-                row.add(txtName.getText());
-                row.add(txtCost.getValue());
-                row.add(txtQuantity.getValue());
-                row.add(txtTotal.getValue());
-                model.addRow(row); 
+                System.out.println("The quantity is zero");
+                setErrorMessage(true, "Please select a quantity more than zero");
             }
-            else
+            else if(isAlreadyAdded(getSelectedProductID()))
             {
                 System.out.println("Already added the product");
+                setErrorMessage(true, "You have already added this product to your order");
             }
-        }        
+            else if(!isQuantityAvilable())
+            {
+                System.out.println("The quantity is not avilable");
+                setErrorMessage(true, "The selected quantity is not available");
+            }
+        }       
     }
     
-    public boolean checkIfAlreadyAdded(String productID)
+    public boolean isAlreadyAdded(String productID)
     {
         for(int i = 0; i < tblOrder.getRowCount(); i++)
         {
             if(productID == tblOrder.getValueAt(i, 0))
             {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
     
-    private void ddlProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddlProductsActionPerformed
-        clearFields();
+    public void changeProductSelection()
+    {
+        clearProductFields();
         int productID = Integer.parseInt(ddlProducts.getSelectedItem().toString());
         System.out.println("id is "+ productID);
         setFieldValues(productID);
+    }
+    
+    private void ddlProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddlProductsActionPerformed
+        setErrorMessage(false, "");
+        changeProductSelection();
     }//GEN-LAST:event_ddlProductsActionPerformed
 
-    public void clearFields()
+    public void clearProductFields()
     {
         txtCost.setText("");
         txtDescription.setText("");
@@ -271,53 +385,188 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         txtQuantity.setText("");
         txtTotal.setText("");
     }
-    private void moreMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moreMousePressed
+    
+    private void btnMoreMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMoreMousePressed
+        setErrorMessage(false, "");
         increaseQuantity();
-    }//GEN-LAST:event_moreMousePressed
+        
+    }//GEN-LAST:event_btnMoreMousePressed
 
-    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+    private void btnLessMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLessMousePressed
+        setErrorMessage(false, "");
         decreaseQuantity();
-    }//GEN-LAST:event_jButton1MousePressed
+    }//GEN-LAST:event_btnLessMousePressed
 
-    private void moreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moreMouseClicked
+    private void btnMoreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMoreMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_moreMouseClicked
+    }//GEN-LAST:event_btnMoreMouseClicked
+
+    public void removeSelectedProduct()
+    {
+        try
+        {
+           int row = tblOrder.getSelectedRow(); 
+           DefaultTableModel model = (DefaultTableModel) tblOrder.getModel();
+           System.out.println(model.getValueAt(row, 0));
+           model.removeRow(row);
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error: "+e.getMessage());
+        } 
+    }
+    
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        setErrorMessage(false, "");
+        removeSelectedProduct();
+        isEditButtonsVisibleAndEnabled(false);
+        btnAdd.setVisible(true);
+        btnAdd.setEnabled(true);
+        ddlProducts.setVisible(true);
+        restProductFields();
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     
-    private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
-        int row = tblOrder.getSelectedRow();
-        DefaultTableModel model = (DefaultTableModel) tblOrder.getModel();
+    public void restProductFields()
+    {
+        int id = Integer.parseInt(getSelectedProductID());
+        Product product = products.get(id);
         
-        System.out.println(model.getValueAt(row, 0));
-        model.removeRow(row);
-    }//GEN-LAST:event_removeActionPerformed
-
-    private void tblOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrderMouseClicked
+        txtCost.setText(""+product.getUnitPrice());
+        txtDescription.setText(""+product.getDescription());
+        txtName.setText(""+product.getName());
+        txtQuantity.setText(""+0);
+        txtTotal.setText(""+0);
+        txtTotal.setValue(convertToDoubleWithoutPrecisionLose(txtTotal.getText()));
+    }
+    
+    private void setOrderInEditMode(java.awt.event.MouseEvent evt)
+    {
         if (evt.getClickCount() == 2) 
         {
             int row = tblOrder.getSelectedRow();
-        DefaultTableModel model = (DefaultTableModel) tblOrder.getModel();
-        int id = Integer.parseInt(model.getValueAt(row, 0).toString());
-        System.out.println("will edit id: " +id);
-        Product product = products.get(id);
+            DefaultTableModel model = (DefaultTableModel) tblOrder.getModel();
+            int id = Integer.parseInt(model.getValueAt(row, 0).toString());
+            selectedID = id;
+            System.out.println("will edit id: " +id);
+            Product product = products.get(id);
             setProductValues(product);
+            isEditButtonsVisibleAndEnabled(true);
+            btnAdd.setVisible(false);
+            btnAdd.setEnabled(false);
+            ddlProducts.setVisible(false);
+            txtQuantity.setText(tblOrder.getValueAt(row, 3).toString());
+            txtTotal.setText(convertToDoubleWithoutPrecisionLose(tblOrder.getValueAt(row, 4).toString()));
         }
+    }
+    
+    public void isEditButtonsVisibleAndEnabled(boolean e)
+    {
+        btnRemove.setVisible(e);
+        btnCancel.setVisible(e);
+        btnUpdate.setVisible(e);
+        
+        btnRemove.setEnabled(e);
+        btnCancel.setEnabled(e);
+        btnUpdate.setEnabled(e);
+    }
+    
+    private void tblOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrderMouseClicked
+        setOrderInEditMode(evt);
     }//GEN-LAST:event_tblOrderMouseClicked
 
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        isEditButtonsVisibleAndEnabled(false);
+        btnAdd.setVisible(true);
+        btnAdd.setEnabled(true);
+        ddlProducts.setVisible(true);
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        setErrorMessage(false, "");
+        ddlProducts.setVisible(true);
+        isEditButtonsVisibleAndEnabled(false);
+        updateSelectedProduct();
+        
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnMoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMoreActionPerformed
+
+    private void btnLessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLessActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLessActionPerformed
+
+    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        if(!isOrderEmpty())
+        {
+           insertOrder(); 
+        }
+        else
+        {
+            System.out.println("the order is empty");
+        }        
+    }//GEN-LAST:event_btnGoActionPerformed
+
+    
+    
+    public void updateSelectedProduct()
+    {
+        int id = selectedID;
+        System.out.println("The product with id as the following will be updated: " +id);
+        
+        for(int i = 0; i < tblOrder.getRowCount(); i++)
+        {
+            if(id == Integer.parseInt(tblOrder.getValueAt(i, 0).toString()))
+            {
+                if(isQuantityAvilable())
+                {
+                    tblOrder.setValueAt(txtQuantity.getText(), i, 3);
+                    tblOrder.setValueAt(txtTotal.getText(), i, 4);
+                    btnAdd.setVisible(true);
+                    btnAdd.setEnabled(true);
+                }
+                else
+                {
+                    System.out.println("quantity not avilable");
+                    setErrorMessage(true, "The selected quantity is not available");
+                }
+            }
+        }
+    }
+    
+    
     public void setProductValues(Product product)
     {
         txtCost.setValue(product.getUnitPrice());
         txtDescription.setText(product.getDescription());
         txtName.setText(product.getName());
-        txtQuantity.setValue(product.getCurrentStock());
-        txtTotal.setValue(recalculculateTotal(Integer.parseInt(txtQuantity.getValue().toString()), product.getUnitPrice()));
+        
+        try
+        {
+            txtQuantity.setValue(tblOrder.getValueAt(tblOrder.getSelectedRow(), 3));
+        }
+        catch(Exception e)
+        {
+            
+        }
+        
+        
+        updateTotalField();
     }
     
-    public double recalculculateTotal(int quantity, Object unitPrice)
+    public double calculateTotal(int quantity, double unitPrice)
     {
-        double unitPriceDouble = (Double)unitPrice;
-        double total = quantity * unitPriceDouble;
-        return total;
+        return (quantity * unitPrice);
+    }
+
+    public void updateTotalField()
+    {
+        int quantity = Integer.parseInt(txtQuantity.getText());
+        double unitPrice = Double.parseDouble(txtCost.getText());
+        txtTotal.setValue(calculateTotal(quantity, unitPrice));
+        
     }
     
     public void increaseQuantity()
@@ -325,7 +574,8 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         int quantity = Integer.parseInt(txtQuantity.getValue().toString());
         quantity += 1;
         txtQuantity.setValue(quantity);
-        txtTotal.setValue(recalculculateTotal(quantity, txtCost.getValue()));
+        
+        updateTotalField();
     }
     
     public void decreaseQuantity()
@@ -336,7 +586,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
             quantity -= 1;
             txtQuantity.setValue(quantity);
         }
-        txtTotal.setValue(recalculculateTotal(quantity, txtCost.getValue()));
+        updateTotalField();
     }
     
     
@@ -349,17 +599,46 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         txtQuantity.setValue(0);
     }
     
+   public boolean isOrderEmpty()
+   {
+       if(tblOrder.getRowCount() == 0)
+       {
+           return true;
+       }
+       return false;
+   }
+    
+    public void insertOrder()
+    {
+        ArrayList<OrderedProduct> orderedProducts = new ArrayList<OrderedProduct>();
+        for(int i = 0; i < tblOrder.getRowCount(); i++)
+        {
+            OrderedProduct product = new OrderedProduct();
+            product.setID(Integer.parseInt(tblOrder.getValueAt(i, 0).toString()));
+            product.setQuantity(Double.parseDouble(tblOrder.getValueAt(i, 3).toString()));
+            product.setTotal(Double.parseDouble(tblOrder.getValueAt(i, 4).toString()));
+            
+            orderedProducts.add(product);
+        }
+        ordDBAccess.insertOrder(orderedProducts, 4);
+    }
+    
+   
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton add;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnGo;
+    private javax.swing.JButton btnLess;
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnMore;
+    private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox ddlProducts;
     private javax.swing.JLabel imageLabel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
-    private javax.swing.JButton more;
-    private javax.swing.JButton remove;
     private javax.swing.JTable tblOrder;
     private javax.swing.JFormattedTextField txtCost;
     private javax.swing.JTextField txtDescription;
