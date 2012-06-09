@@ -254,6 +254,55 @@ public class RprtDBAccess extends DBAccess
     }
     
     
+    public ArrayList<ArrayList<String>> getTurnAroundReport()
+    {
+        ArrayList<ArrayList<String>> products = new ArrayList<ArrayList<String>>();
+        Connection con = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Products";
+        
+        try
+        {
+            con = makeConnection();
+            stat = (Statement) con.createStatement();
+            rs = stat.executeQuery(sql);
+            
+            while(rs.next())
+            {
+                ArrayList<String> product = new ArrayList<String>();
+                int id = rs.getInt("productID");
+                product.add(rs.getString("productID"));
+                product.add(rs.getString("name"));
+                
+                rs = stat.executeQuery("SELECT SUM(quantity) FROM OrderDetails_Products WHERE productID = '"+id+"'");
+                rs.next();
+                product.add(rs.getString("SUM(quantity)"));
+                
+                products.add(product);
+                
+            }
+            System.out.println("returned turnaround");
+            return products;
+        }
+        catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(stat != null) {
+                    stat.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in getlowstockprodcts");
+            }
+        }
+        return null;
+    }
+    
+    
     public ArrayList<String> getLowStockedProducts()
     {
         ArrayList<String> products = new ArrayList<String>();
@@ -294,4 +343,49 @@ public class RprtDBAccess extends DBAccess
         return null;
     }
     
+    
+    public ArrayList<ArrayList<String>> getStockTurnAroundReport()
+    {
+        ArrayList<ArrayList<String>> products = new ArrayList<ArrayList<String>>();
+        Connection con = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Products";
+        
+        try
+        {
+            con = makeConnection();
+            stat = (Statement) con.createStatement();
+            rs = stat.executeQuery(sql);
+            
+            while(rs.next())
+            {
+                ArrayList<String> product = new ArrayList<String>();
+                int id = rs.getInt("productID");
+                product.add(rs.getString("productID"));
+                product.add(rs.getString("name"));
+                product.add(rs.getString("currentStock"));
+                
+                products.add(product);
+                
+            }
+            System.out.println("returned turnaround");
+            return products;
+        }
+        catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(stat != null) {
+                    stat.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in getlowstockprodcts");
+            }
+        }
+        return null;
+    }
 }
