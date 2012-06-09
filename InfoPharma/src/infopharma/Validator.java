@@ -53,4 +53,15 @@ public class Validator {
         }
         return true;
     }
+    
+    public static boolean isFilledIn(Object[] fields) {
+        for(Object field : fields) {
+            if(field == null || field.equals("")) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
 }
