@@ -330,4 +330,66 @@ public class AccountDBAccess extends DBAccess{
         }
     }
     
+        public MerchantAccount getMerchantByOrder(int orderId) {
+        MerchantAccount merchant = null;
+        
+        Connection connection = null;
+        Statement statementMerchantNo = null;
+        ResultSet resultSetMerchantNo = null;
+        Statement statementMerchantAcc = null;
+        ResultSet resultSetMerchantAcc = null;
+        String sqlMerchantNo = "SELECT accountNumber FROM OrderDetails WHERE orderDetailsID = '" + orderId + "'";
+        try {
+            connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
+            statementMerchantNo = (Statement) connection.createStatement();
+            resultSetMerchantNo = statementMerchantNo.executeQuery(sqlMerchantNo);
+            if(resultSetMerchantNo.next()) {
+                int accountNumber = resultSetMerchantNo.getInt("accountNumber");
+                String sqlMerchantAcc = "SELECT * FROM MerchantDetails WHERE accountNumber = '" + accountNumber + "'";
+                statementMerchantAcc = (Statement) connection.createStatement();
+                resultSetMerchantAcc = statementMerchantAcc.executeQuery(sqlMerchantAcc);
+                if(resultSetMerchantAcc.next()) {
+                    int accountStatusID = resultSetMerchantAcc.getInt("accountStatusID");
+                    String company = resultSetMerchantAcc.getString("company");
+                    String address = resultSetMerchantAcc.getString("address");
+                    String postcode = resultSetMerchantAcc.getString("postcode");
+                    String phone = resultSetMerchantAcc.getString("phone");
+                    Double credit = resultSetMerchantAcc.getDouble("credit");
+                    Double balance = resultSetMerchantAcc.getDouble("balance");
+                    int discountPlanID = resultSetMerchantAcc.getInt("discountPlanID");
+                    merchant = 
+                            new MerchantAccount(accountNumber, 
+                                                accountStatusID,
+                                                company,
+                                                address,
+                                                postcode,
+                                                phone,
+                                                credit,
+                                                balance,
+                                                discountPlanID);
+                }
+            }
+            
+        } catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(statementMerchantNo != null) {
+                    statementMerchantNo.close();
+                }
+                
+                if(statementMerchantAcc != null) {
+                    statementMerchantAcc.close();
+                }
+            } catch(Exception e) {
+                System.err.println("Could not close the resources in AccountDBAccess getMerchantByOrder");
+            }
+        }
+        return merchant;
+    }
+    
 }

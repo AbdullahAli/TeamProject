@@ -8,10 +8,7 @@ import infopharma.Validator;
 import infopharma.acc.InfoPharmaFrame;
 import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
-import infopharma.data.UserAccount;
-import infopharma.data.MiscDBAccess;
-import infopharma.data.Order;
-import infopharma.data.OrderDBAccess;
+import infopharma.data.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JFrame;
@@ -24,11 +21,13 @@ import javax.swing.JLayeredPane;
 public class ViewDispatchOrder extends InfoPharmaPanel {
     private static InfoPharmaFrame frame;
     private OrderDBAccess dbOrder;
+    private AccountDBAccess dbAccount;
     private ArrayList<Order> ordersArray;
     private HashMap<Integer, String> orderStatuses;
 	
     public ViewDispatchOrder(InfoPharmaFrame mainMenuFrame) {
         dbOrder = new OrderDBAccess();
+        dbAccount = new AccountDBAccess();
         ordersArray = dbOrder.getAllUndispatchedOrders();
         orderStatuses = dbOrder.getOrderStatuses();
         initComponents();
@@ -56,7 +55,9 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
         Order order = getOrder(orderId);
         String status = orderStatuses.get(order.getStatusID());
+        MerchantAccount merchant = dbAccount.getMerchantByOrder(orderId);
         textStatus.setText(status);
+        textCompany.setText(merchant.getCompany());
     }
     
     public Order getOrder(int orderId) {
