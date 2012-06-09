@@ -17,6 +17,49 @@ import java.util.HashMap;
  */
 public class OrderDBAccess extends DBAccess 
 {
+    public ArrayList<Order> getMerchantOrders(int accountNumber)
+    {
+        ArrayList<Order> orders = new ArrayList<Order>();
+        Connection con = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM OrderDetails WHERE accountNumber = '"+accountNumber+"'";
+        
+        try
+        {
+            con = makeConnection();
+            stat = (Statement) con.createStatement();
+            
+            rs = stat.executeQuery(sql);
+            
+            while(rs.next())
+            {
+                Order order = new Order();
+                order.setID(rs.getInt("orderDetailsID"));
+                order.setDate(rs.getString("orderDate"));
+                order.setTotal(rs.getDouble("total"));
+                
+                orders.add(order);
+            }
+            return orders;
+        }
+        catch(Exception ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(stat != null) {
+                    stat.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getMerchantOrders");
+            }
+        }
+        return null;
+    }
+    
     public void insertOrder(ArrayList<OrderedProduct> orderedProducts, int accountNumber)
     {
         Connection con = null;
@@ -320,6 +363,42 @@ public class OrderDBAccess extends DBAccess
     }
     
     
-    
+    public double getCredit(int accountNumber)
+    {
+        Connection con = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sql = "SELECT credit, balance FROM MerchantDetails WHERE accountNumber = '"+accountNumber+"'";
+        
+        try
+        {
+            con = makeConnection();
+            stat = (Statement) con.createStatement();
+            
+            rs = stat.executeQuery(sql);
+            rs.next();
+            
+            double credit = rs.getDouble("credit");
+            double balance = rs.getDouble("balance");
+            
+            double canSpend = credit - balance;
+            return canSpend;
+        }
+        catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(stat != null) {
+                    stat.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess");
+            }
+        }
+        return new Double(0);
+    }
     
 }

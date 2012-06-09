@@ -34,6 +34,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     private HashMap<Integer, String> productIDs;
     private HashMap<Integer, Product> products;
     private int selectedID = 0;
+    private double credit;
 	
     public ViewPlaceOrder(InfoPharmaFrame mainMenuFrame)
     {
@@ -46,6 +47,15 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         lblError.setVisible(false);
         isEditButtonsVisibleAndEnabled(false);
         this.setVisible(true);
+        updateCredit();
+        
+    }
+    
+    public void updateCredit()
+    {
+        //for testing
+        credit = ordDBAccess.getCredit(6);
+        txtCredit.setValue(credit);
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -81,6 +91,11 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
+        txtCredit = new javax.swing.JFormattedTextField();
+        lblError = new javax.swing.JLabel();
+        txtOrderTotal = new javax.swing.JFormattedTextField();
+        txtVAT = new javax.swing.JFormattedTextField();
+        txtSubtotal = new javax.swing.JFormattedTextField();
         txtName = new javax.swing.JTextField();
         btnGo = new javax.swing.JButton();
         ddlProducts = new javax.swing.JComboBox();
@@ -97,12 +112,35 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
             }
         };
         btnAdd = new javax.swing.JButton();
-        lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
+
+        txtCredit.setBounds(490, 90, 230, 28);
+        layeredPanel.add(txtCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
+        lblError.setBounds(10, 520, 820, 40);
+        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtOrderTotal.setEditable(false);
+        txtOrderTotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        txtOrderTotal.setBounds(40, 470, 250, 40);
+        layeredPanel.add(txtOrderTotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtVAT.setEditable(false);
+        txtVAT.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        txtVAT.setText("17.5");
+        txtVAT.setBounds(30, 418, 260, 40);
+        layeredPanel.add(txtVAT, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtSubtotal.setEditable(false);
+        txtSubtotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        txtSubtotal.setBounds(30, 338, 260, 40);
+        layeredPanel.add(txtSubtotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtName.setEditable(false);
         txtName.setBounds(130, 170, 84, 28);
@@ -189,7 +227,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         });
         jScrollPane1.setViewportView(tblOrder);
 
-        jScrollPane1.setBounds(30, 330, 660, 80);
+        jScrollPane1.setBounds(20, 230, 660, 80);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnAdd.setText("ADD");
@@ -200,11 +238,6 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         });
         btnAdd.setBounds(740, 170, 75, 29);
         layeredPanel.add(btnAdd, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        lblError.setForeground(new java.awt.Color(255, 0, 0));
-        lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 520, 820, 40);
-        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setBounds(0, 0, 1100, 570);
@@ -264,11 +297,32 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        setErrorMessage(false, "");
-        updateTotalField();   
-        addProductToOrder();
+        tryToAddProductToOrder();
     }//GEN-LAST:event_btnAddActionPerformed
 
+    public void tryToAddProductToOrder()
+    {
+        setErrorMessage(false, "");
+        updateTotalField();   
+        
+        if(hasEnoughCredit())
+        {
+            addProductToOrder();
+            updateTotals(); 
+        }
+    }
+    
+    public boolean hasEnoughCredit()
+    {
+        double newProductTotal = Double.parseDouble(txtTotal.getValue().toString());
+        if(credit >= (calculateOrderTotal() + newProductTotal))
+        {
+            return true;
+        }
+        setErrorMessage(true, "You are trying to add a product which exceeds your credit");
+        return false;
+    }
+    
     public String convertToDoubleWithoutPrecisionLose(String e)
     {
         java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");  
@@ -424,6 +478,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         btnAdd.setEnabled(true);
         ddlProducts.setVisible(true);
         restProductFields();
+        updateTotals();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     
@@ -487,7 +542,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         ddlProducts.setVisible(true);
         isEditButtonsVisibleAndEnabled(false);
         updateSelectedProduct();
-        
+        updateTotals();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnMoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoreActionPerformed
@@ -623,7 +678,29 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         ordDBAccess.insertOrder(orderedProducts, 4);
     }
     
+   public double calculateSubtotal()
+   {
+       double subtotal = 0;
+       for(int i = 0; i < tblOrder.getRowCount(); i++)
+       {
+           subtotal += Double.parseDouble(tblOrder.getValueAt(i, 4).toString());
+       }
+       return subtotal;
+   }
    
+   public double calculateOrderTotal()
+   {
+       double subtotal = calculateSubtotal();;
+       double vat = subtotal * (Double.parseDouble(txtVAT.getText().toString())/100);
+       double total = vat + subtotal;
+       return total;
+   }
+   
+   public void updateTotals()
+   {
+       txtSubtotal.setValue(calculateSubtotal());
+       txtOrderTotal.setValue(calculateOrderTotal());
+   }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -641,9 +718,13 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     private javax.swing.JLabel lblError;
     private javax.swing.JTable tblOrder;
     private javax.swing.JFormattedTextField txtCost;
+    private javax.swing.JFormattedTextField txtCredit;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtName;
+    private javax.swing.JFormattedTextField txtOrderTotal;
     private javax.swing.JFormattedTextField txtQuantity;
+    private javax.swing.JFormattedTextField txtSubtotal;
     private javax.swing.JFormattedTextField txtTotal;
+    private javax.swing.JFormattedTextField txtVAT;
     // End of variables declaration//GEN-END:variables
 }

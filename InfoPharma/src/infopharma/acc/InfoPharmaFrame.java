@@ -8,9 +8,7 @@ import infopharma.cat.*;
 import infopharma.misc.ViewLatePayment;
 import infopharma.misc.ViewLowStockNotification;
 import infopharma.order.*;
-import infopharma.rprt.ReportActivity;
-import infopharma.rprt.ReportLowStock;
-import infopharma.rprt.ReportMerchantOrders;
+import infopharma.rprt.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -37,7 +35,7 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
             //ReportMerchantOrders x = new ReportMerchantOrders("4", "2011-08-07", "2011-08-07");
             //ReportActivity x = new ReportActivity("4", "2011-08-07", "2011-08-07");
             //ReportLowStock x = new ReportLowStock();
-
+            
             this.setVisible(true);
             setTitle("InfoPharma");
 	}
