@@ -82,10 +82,10 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         comboOrders = new javax.swing.JComboBox();
         textStatus = new javax.swing.JTextField();
         textDispatcher = new javax.swing.JTextField();
-        textDispatchDate = new javax.swing.JTextField();
         textCourier = new javax.swing.JTextField();
         textCourierRef = new javax.swing.JTextField();
-        textDeliveryDate = new javax.swing.JTextField();
+        dateDelivery = new com.toedter.calendar.JDateChooser();
+        dateDispatch = new com.toedter.calendar.JDateChooser();
         textCompany = new javax.swing.JTextField();
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
@@ -104,14 +104,14 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         layeredPanel.add(textStatus, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textDispatcher.setBounds(30, 200, 270, 40);
         layeredPanel.add(textDispatcher, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textDispatchDate.setBounds(30, 280, 270, 40);
-        layeredPanel.add(textDispatchDate, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textCourier.setBounds(30, 360, 270, 40);
         layeredPanel.add(textCourier, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textCourierRef.setBounds(30, 440, 270, 40);
         layeredPanel.add(textCourierRef, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textDeliveryDate.setBounds(30, 520, 270, 40);
-        layeredPanel.add(textDeliveryDate, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dateDelivery.setBounds(30, 520, 270, 40);
+        layeredPanel.add(dateDelivery, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dateDispatch.setBounds(30, 280, 270, 40);
+        layeredPanel.add(dateDispatch, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textCompany.setBounds(370, 120, 270, 40);
         layeredPanel.add(textCompany, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -158,14 +158,14 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JComboBox comboOrders;
+    private com.toedter.calendar.JDateChooser dateDelivery;
+    private com.toedter.calendar.JDateChooser dateDispatch;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
     private javax.swing.JTextField textCompany;
     private javax.swing.JTextField textCourier;
     private javax.swing.JTextField textCourierRef;
-    private javax.swing.JTextField textDeliveryDate;
-    private javax.swing.JTextField textDispatchDate;
     private javax.swing.JTextField textDispatcher;
     private javax.swing.JTextField textStatus;
     // End of variables declaration//GEN-END:variables
