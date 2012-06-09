@@ -1,4 +1,0 @@
-infopharma.order.ButtonRenderer
-infopharma.order.JButtonTableExample
-infopharma.order.ButtonEditor
-infopharma.order.ButtonEditor$1
