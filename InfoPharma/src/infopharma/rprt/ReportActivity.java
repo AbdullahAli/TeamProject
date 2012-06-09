@@ -27,6 +27,7 @@ public class ReportActivity extends GeneralReport
         private static String endDate;
         private RprtDBAccess rprtDBAccess;
         private OrderDBAccess orderDBAccess;
+        public String documentName;
 
         
 	private static String FILE = "_activity.pdf";
@@ -47,7 +48,7 @@ public class ReportActivity extends GeneralReport
                     long timeStamp = date.getTime();
 
 
-                    String documentName = desktoppath + timeStamp + "_" +accountNumber + FILE;
+                    documentName = desktoppath + timeStamp + "_" +accountNumber + FILE;
                     PdfWriter.getInstance(document, new FileOutputStream(documentName));
                     document.open();
                     addTitle(document, "Merchants Activity Report");
@@ -124,6 +125,7 @@ public class ReportActivity extends GeneralReport
                 {
                     ArrayList<String> singleOrder = new ArrayList<String>();
                     singleOrder = orders.get(i);
+                    
                     
                                         
                     table.addCell(singleOrder.get(0)); // order id

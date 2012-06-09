@@ -10,6 +10,11 @@ import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
@@ -26,6 +31,12 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         this.setVisible(true);
+        btnOpen.setVisible(false);
+    }
+    
+    public String convertToShortDateString(Date date)
+    {
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -48,9 +59,35 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
+        btnGenerate = new javax.swing.JButton();
+        btnOpen = new javax.swing.JButton();
+        calFrom = new com.toedter.calendar.JDateChooser();
+        calTo = new com.toedter.calendar.JDateChooser();
+        ddlReportType = new javax.swing.JComboBox();
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
+
+        btnGenerate.setText("GENERATE");
+        btnGenerate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateActionPerformed(evt);
+            }
+        });
+        btnGenerate.setBounds(490, 190, 109, 29);
+        layeredPanel.add(btnGenerate, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnOpen.setText("open report");
+        btnOpen.setBounds(40, 320, 470, 29);
+        layeredPanel.add(btnOpen, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        calFrom.setBounds(40, 220, 123, 28);
+        layeredPanel.add(calFrom, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        calTo.setBounds(170, 220, 123, 28);
+        layeredPanel.add(calTo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        ddlReportType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Activity Report", "Low Stock Report", "Merchant Orders Report", "Stock Turnaround Report", "Product Turnaround Report" }));
+        ddlReportType.setBounds(50, 150, 250, 27);
+        layeredPanel.add(ddlReportType, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -58,6 +95,7 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/rprt/images/reports.png"))); // NOI18N
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -87,8 +125,85 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
+    private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
+        generateNewReport();
+    }//GEN-LAST:event_btnGenerateActionPerformed
+
+    public void generateNewReport()
+    {
+        String reportType = ddlReportType.getSelectedItem().toString();
+        System.out.println("Selected: "+reportType);
+        
+        String from = convertToShortDateString(calFrom.getDate());
+        String to = convertToShortDateString(calTo.getDate());
+        
+        String accountNumber = "6";
+
+        if(reportType.equals("Activity Report"))
+        {
+            ReportActivity report = new ReportActivity(accountNumber, from, to);
+            //System.out.println(report.documentName);
+        }
+        else if(reportType.equals("Low Stock Report"))
+        {
+            ReportLowStock report = new ReportLowStock();
+        }
+        else if(reportType.equals("Merchant Orders Report"))
+        {   
+            ReportMerchantOrders report = new ReportMerchantOrders(accountNumber, from, to);
+        }
+        else if(reportType.equals("Stock Turnaround Report"))
+        {
+            ReportStockTurnaround report = new ReportStockTurnaround();
+        }
+        else if(reportType.equals("Product Turnaround Report"))
+        {
+            ReportTurnAround report = new ReportTurnAround();
+        }
+    }
+    
+    public void openReport()
+    {
+        try 
+        {
+            String filePath = System.getProperty("user.home") + "/Desktop/";
+            File pdfFile = new File("c:\\Java-Interview.pdf");
+            if (pdfFile.exists()) 
+            {
+
+                if (Desktop.isDesktopSupported()) 
+                {
+                    Desktop.getDesktop().open(pdfFile);
+                } 
+                else 
+                {
+
+                    System.out.println("Awt Desktop is not supported!");
+                }
+
+            } 
+            else 
+            {
+                System.out.println("File is not exists!");
+            }
+
+            System.out.println("Done");
+ 
+        } 
+        catch (Exception ex) 
+        {
+            ex.printStackTrace();
+	}
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGenerate;
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnOpen;
+    private com.toedter.calendar.JDateChooser calFrom;
+    private com.toedter.calendar.JDateChooser calTo;
+    private javax.swing.JComboBox ddlReportType;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;

@@ -212,7 +212,6 @@ public class RprtDBAccess extends DBAccess
         
         try {
             connection = makeConnection();
-            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
             stat = (Statement) connection.createStatement();
             rs = stat.executeQuery(sqlOrders);
             while(rs.next()) 
@@ -227,9 +226,11 @@ public class RprtDBAccess extends DBAccess
                 {
                     String productID = productIDs.get(i);
                     orderDetails.add(productID);
+                    System.out.println("id: "+productID);
                     
                     String price = getProductPrice(productID);
                     orderDetails.add(price);
+                    System.out.println("price: "+price);
                 }
                 
                 allOrders.add(orderDetails);

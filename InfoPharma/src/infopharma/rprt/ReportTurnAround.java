@@ -25,6 +25,7 @@ public class ReportTurnAround extends GeneralReport
 {
         private RprtDBAccess rprtDBAccess;
         private OrderDBAccess orderDBAccess;
+        public String documentName;
 
         
 	private static String FILE = "_turnaround.pdf";
@@ -42,7 +43,7 @@ public class ReportTurnAround extends GeneralReport
                     long timeStamp = date.getTime();
 
 
-                    String documentName = desktoppath + timeStamp + "_" + FILE;
+                    documentName = desktoppath + timeStamp + "_" + FILE;
                     PdfWriter.getInstance(document, new FileOutputStream(documentName));
                     document.open();
                     addTitle(document, "Turnaround Report");

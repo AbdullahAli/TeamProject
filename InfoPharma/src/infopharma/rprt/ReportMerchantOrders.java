@@ -26,6 +26,7 @@ public class ReportMerchantOrders extends GeneralReport
         private static String startDate;
         private static String endDate;
         private RprtDBAccess rprtDBAccess;
+        public String documentName;
 
         
 	private static String FILE = "_orders.pdf";
@@ -45,7 +46,7 @@ public class ReportMerchantOrders extends GeneralReport
                     long timeStamp = date.getTime();
 
 
-                    String documentName = desktoppath + timeStamp + "_" +accountNumber + FILE;
+                    documentName = desktoppath + timeStamp + "_" +accountNumber + FILE;
                     PdfWriter.getInstance(document, new FileOutputStream(documentName));
                     document.open();
                     addTitle(document, "Merchants Orders Report");
