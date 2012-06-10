@@ -459,4 +459,43 @@ public class OrderDBAccess extends DBAccess
         
     }
     
+    public ArrayList<Order> getUnpaidMerchantOrders(int accountNumber) {
+        ArrayList<Order> unpaidOrders = new ArrayList<Order>();
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM OrderDetails WHERE accountNumber = '" + accountNumber + "' AND paymentID is NULL";
+        try {
+            con = makeConnection();
+            con.setTransactionIsolation(con.TRANSACTION_READ_COMMITTED);
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery(sql);
+            while(rs.next()) {
+                int orderID = rs.getInt("orderDetailsID");
+                double total = rs.getDouble("total");
+                String date = rs.getString("orderDate");
+                int statusID = rs.getInt("statusID");
+                int paymentID = rs.getInt("paymentID");
+                int dispatchID = rs.getInt("dispatchID");
+                Order order = new Order(orderID, total, date, statusID, paymentID, dispatchID, accountNumber);
+                unpaidOrders.add(order);
+            }
+        } catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(st != null) {
+                    st.close();
+                }
+            } catch (Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getUnpaidMerchantOrders");
+            }
+        }
+                
+        return unpaidOrders;
+    }
+    
 }
