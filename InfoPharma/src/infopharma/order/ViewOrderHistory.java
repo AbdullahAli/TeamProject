@@ -93,7 +93,7 @@ public class ViewOrderHistory extends InfoPharmaPanel{
         ));
         jScrollPane1.setViewportView(tblOrders);
 
-        jScrollPane1.setBounds(40, 150, 580, 370);
+        jScrollPane1.setBounds(30, 150, 590, 370);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

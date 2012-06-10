@@ -24,6 +24,7 @@ import javax.swing.JLayeredPane;
  */
 public class ViewGenerateReport extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
+    String documentPath = "";
 	
     public ViewGenerateReport(InfoPharmaFrame mainMenuFrame)
     {
@@ -59,7 +60,6 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        btnGenerate = new javax.swing.JButton();
         btnOpen = new javax.swing.JButton();
         calFrom = new com.toedter.calendar.JDateChooser();
         calTo = new com.toedter.calendar.JDateChooser();
@@ -67,26 +67,24 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
-
-        btnGenerate.setText("GENERATE");
-        btnGenerate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateActionPerformed(evt);
-            }
-        });
-        btnGenerate.setBounds(490, 190, 109, 29);
-        layeredPanel.add(btnGenerate, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        btnGenerate = new javax.swing.JButton();
+        btnClose = new javax.swing.JButton();
 
         btnOpen.setText("open report");
-        btnOpen.setBounds(40, 320, 470, 29);
+        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
+        btnOpen.setBounds(30, 300, 470, 29);
         layeredPanel.add(btnOpen, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        calFrom.setBounds(40, 220, 123, 28);
+        calFrom.setBounds(40, 230, 120, 20);
         layeredPanel.add(calFrom, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        calTo.setBounds(170, 220, 123, 28);
+        calTo.setBounds(170, 230, 123, 20);
         layeredPanel.add(calTo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         ddlReportType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Activity Report", "Low Stock Report", "Merchant Orders Report", "Stock Turnaround Report", "Product Turnaround Report" }));
-        ddlReportType.setBounds(50, 150, 250, 27);
+        ddlReportType.setBounds(30, 150, 270, 27);
         layeredPanel.add(ddlReportType, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -108,6 +106,24 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnGenerate.setText("GENERATE");
+        btnGenerate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateActionPerformed(evt);
+            }
+        });
+        btnGenerate.setBounds(1019, 70, 80, 470);
+        layeredPanel.add(btnGenerate, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnClose.setText("jButton1");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
+        btnClose.setBounds(1010, 540, 97, 29);
+        layeredPanel.add(btnClose, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -126,8 +142,27 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
-        generateNewReport();
+        lblError.setVisible(false);
+        if(calFrom.getDate() == null || calTo.getDate() == null)
+        {
+            lblError.setText("Please select a date range");
+            lblError.setVisible(true);
+        }
+        else
+        {
+            generateNewReport();
+            btnOpen.setVisible(true);
+        }
     }//GEN-LAST:event_btnGenerateActionPerformed
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        openReport(documentPath);
+    }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        // TODO add your handling code here:
+        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     public void generateNewReport()
     {
@@ -137,37 +172,44 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         String from = convertToShortDateString(calFrom.getDate());
         String to = convertToShortDateString(calTo.getDate());
         
-        String accountNumber = "6";
-
+        String accountNumber = "1";
+        
+        
         if(reportType.equals("Activity Report"))
         {
             ReportActivity report = new ReportActivity(accountNumber, from, to);
-            //System.out.println(report.documentName);
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Low Stock Report"))
         {
             ReportLowStock report = new ReportLowStock();
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Merchant Orders Report"))
         {   
             ReportMerchantOrders report = new ReportMerchantOrders(accountNumber, from, to);
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Stock Turnaround Report"))
         {
             ReportStockTurnaround report = new ReportStockTurnaround();
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Product Turnaround Report"))
         {
             ReportTurnAround report = new ReportTurnAround();
+            documentPath = report.documentName;
         }
+        
+        
     }
     
-    public void openReport()
+    public void openReport(String documentPath)
     {
         try 
         {
-            String filePath = System.getProperty("user.home") + "/Desktop/";
-            File pdfFile = new File("c:\\Java-Interview.pdf");
+            String filePath = documentPath;
+            File pdfFile = new File(filePath);
             if (pdfFile.exists()) 
             {
 
@@ -198,6 +240,7 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnGenerate;
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JButton btnOpen;

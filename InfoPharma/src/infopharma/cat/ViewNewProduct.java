@@ -34,6 +34,12 @@ public class ViewNewProduct extends InfoPharmaPanel{
         lblError.setVisible(false);
         populateFieldsArray();
         this.setVisible(true);
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {txtCost, txtInitialStock, txtName, txtStockLimit, txtType, txtUnitsInAPack};
+        setFieldsOpaque(fields);
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -71,12 +77,12 @@ public class ViewNewProduct extends InfoPharmaPanel{
         btnCancel = new javax.swing.JButton();
 
         txtStockLimit.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
-        txtStockLimit.setBounds(370, 220, 260, 28);
+        txtStockLimit.setBounds(380, 220, 250, 28);
         layeredPanel.add(txtStockLimit, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 520, 990, 40);
+        lblError.setBounds(10, 530, 990, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtInitialStock.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
@@ -88,11 +94,14 @@ public class ViewNewProduct extends InfoPharmaPanel{
         layeredPanel.add(txtUnitsInAPack, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtCost.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
-        txtCost.setBounds(50, 430, 240, 28);
+        txtCost.setBounds(40, 430, 250, 28);
         layeredPanel.add(txtCost, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jScrollPane1.setBorder(null);
 
         txtDescription.setColumns(20);
         txtDescription.setRows(5);
+        txtDescription.setBorder(null);
         jScrollPane1.setViewportView(txtDescription);
 
         jScrollPane1.setBounds(40, 300, 250, 70);

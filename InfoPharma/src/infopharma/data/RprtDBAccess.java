@@ -201,7 +201,7 @@ public class RprtDBAccess extends DBAccess
     
     public ArrayList<ArrayList<String>> getActivityOrder(String accountNumber, String startDate, String endDate) 
     {
-        ArrayList<ArrayList<String>> allOrders = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> orders = new ArrayList<ArrayList<String>>();
         Connection connection = null;
         Statement stat = null;
         ResultSet rs = null;
@@ -214,29 +214,18 @@ public class RprtDBAccess extends DBAccess
             connection = makeConnection();
             stat = (Statement) connection.createStatement();
             rs = stat.executeQuery(sqlOrders);
+            String orderID = "";
             while(rs.next()) 
             {
-                ArrayList<String> orderDetails = new ArrayList<String>();
-                String orderID = rs.getString("orderDetailsID");
-                orderDetails.add(orderID);
+                ArrayList<String> order = new ArrayList<String>();
+                order.add(rs.getString("orderDetailsID"));
+                order.add(rs.getString("total"));
+                order.add(rs.getString("orderDate"));
                 
-                ArrayList<String> productIDs = getOrderProductIDs(orderID);
-                
-                for(int i = 0; i < productIDs.size(); i++)
-                {
-                    String productID = productIDs.get(i);
-                    orderDetails.add(productID);
-                    System.out.println("id: "+productID);
-                    
-                    String price = getProductPrice(productID);
-                    orderDetails.add(price);
-                    System.out.println("price: "+price);
-                }
-                
-                allOrders.add(orderDetails);
+                orders.add(order);
             }
             
-            return allOrders;
+            return orders;
         }catch(SQLException ex) {
             System.err.println("Error: " + ex.getMessage());
         }finally {
@@ -248,7 +237,7 @@ public class RprtDBAccess extends DBAccess
                     stat.close();
                 }
             }catch(Exception e) {
-                System.err.println("Could not close the resources in OrderDBAccess getMerchantOrders");
+                System.err.println("Could not close the resources");
             }
         }
         return null;
@@ -304,9 +293,9 @@ public class RprtDBAccess extends DBAccess
     }
     
     
-    public ArrayList<String> getLowStockedProducts()
+    public ArrayList<ArrayList<String>> getLowStockedProducts()
     {
-        ArrayList<String> products = new ArrayList<String>();
+        ArrayList<ArrayList<String>> products = new ArrayList<ArrayList<String>>();
         Connection con = null;
         Statement stat = null;
         ResultSet rs = null;
@@ -320,9 +309,12 @@ public class RprtDBAccess extends DBAccess
             
             while(rs.next())
             {
-                products.add(rs.getString("productID"));
-                products.add(rs.getString("currentStock"));
-                products.add(rs.getString("minimumStockLimit"));
+                ArrayList<String> product = new ArrayList<String>();
+                product.add(rs.getString("productID"));
+                product.add(rs.getString("currentStock"));
+                product.add(rs.getString("minimumStockLimit"));
+                
+                products.add(product);
             }
             System.out.println("returned low stock");
             return products;

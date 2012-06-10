@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -42,6 +43,12 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         lblError.setVisible(false);
         popualateComboOrderID();
         this.setVisible(true);
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {textOrderStatus};
+        setFieldsOpaque(fields);
     }
 
     public static InfoPharmaFrame getFrame() {
@@ -137,8 +144,8 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         radioBtnProcessed = new javax.swing.JRadioButton();
         radioBtnAccepted = new javax.swing.JRadioButton();
         radioBtnDispatched = new javax.swing.JRadioButton();
-        btnOk = new javax.swing.JButton();
         imageLabel = new javax.swing.JLabel();
+        btnOk = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -170,6 +177,11 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         radioBtnDispatched.setBounds(30, 350, 30, 23);
         layeredPanel.add(radioBtnDispatched, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/updateorderstatus.png"))); // NOI18N
+        imageLabel.setBounds(0, 0, 1100, 570);
+        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         btnOk.setText("OK");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,11 +190,6 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         });
         btnOk.setBounds(1020, 70, 80, 470);
         layeredPanel.add(btnOk, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/updateorderstatus.png"))); // NOI18N
-        imageLabel.setBounds(0, 0, 1100, 570);
-        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {

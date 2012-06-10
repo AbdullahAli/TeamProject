@@ -54,8 +54,9 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     public void updateCredit()
     {
         //for testing
-        credit = ordDBAccess.getCredit(6);
-        txtCredit.setValue(credit);
+        credit = ordDBAccess.getCredit(1);
+        txtCredit.setValue(convertToDoubleWithoutPrecisionLose(credit+""));
+        
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -675,7 +676,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
             
             orderedProducts.add(product);
         }
-        ordDBAccess.insertOrder(orderedProducts, 4);
+        ordDBAccess.insertOrder(orderedProducts, 1, Double.parseDouble(txtOrderTotal.getText()));
     }
     
    public double calculateSubtotal()

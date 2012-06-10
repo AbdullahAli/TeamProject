@@ -76,7 +76,7 @@ public class ViewLatePayment extends InfoPharmaPanel{
         ));
         jScrollPane1.setViewportView(tblLatePayments);
 
-        jScrollPane1.setBounds(40, 220, 570, 300);
+        jScrollPane1.setBounds(30, 220, 580, 300);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

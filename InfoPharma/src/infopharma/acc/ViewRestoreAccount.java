@@ -106,9 +106,9 @@ public class ViewRestoreAccount extends InfoPharmaPanel {
         radioBtnSuspended = new javax.swing.JRadioButton();
         radioBtnDefault = new javax.swing.JRadioButton();
         radioBtnActive = new javax.swing.JRadioButton();
+        imageLabel = new javax.swing.JLabel();
         btnGo = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
-        imageLabel = new javax.swing.JLabel();
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -120,14 +120,19 @@ public class ViewRestoreAccount extends InfoPharmaPanel {
                 comboMerchantsActionPerformed(evt);
             }
         });
-        comboMerchants.setBounds(30, 140, 270, 27);
+        comboMerchants.setBounds(30, 130, 270, 27);
         layeredPanel.add(comboMerchants, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        radioBtnSuspended.setBounds(30, 240, 30, 23);
+        radioBtnSuspended.setBounds(30, 233, 30, 30);
         layeredPanel.add(radioBtnSuspended, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        radioBtnDefault.setBounds(30, 270, 30, 23);
+        radioBtnDefault.setBounds(30, 263, 30, 30);
         layeredPanel.add(radioBtnDefault, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        radioBtnActive.setBounds(30, 210, 30, 23);
+        radioBtnActive.setBounds(30, 203, 30, 30);
         layeredPanel.add(radioBtnActive, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/restoreaccount.png"))); // NOI18N
+        imageLabel.setBounds(0, 0, 1100, 570);
+        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnGo.setText("Go");
         btnGo.addActionListener(new java.awt.event.ActionListener() {
@@ -146,11 +151,6 @@ public class ViewRestoreAccount extends InfoPharmaPanel {
         });
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/restoreaccount.png"))); // NOI18N
-        imageLabel.setBounds(0, 0, 1100, 570);
-        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);

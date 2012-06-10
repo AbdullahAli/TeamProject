@@ -149,7 +149,7 @@ public class ReportMerchantOrders extends GeneralReport
                     table.addCell(singleOrder.get(1)); // ordered
                     ordered += 1;
                     
-                    table.addCell(singleOrder.get(2)); // amount
+                    table.addCell(convertToDoubleWithoutPrecisionLose(singleOrder.get(2))); // amount
                     amount += Double.parseDouble(singleOrder.get(2));
                     
                     table.addCell(singleOrder.get(3)); // dispatched
@@ -174,7 +174,7 @@ public class ReportMerchantOrders extends GeneralReport
                 
                 table.addCell("Totals");
                 table.addCell(""+ordered); // ordered
-                table.addCell(""+amount); //amount
+                table.addCell(convertToDoubleWithoutPrecisionLose(""+amount)); //amount
                 table.addCell(""+dispatched); //dispatched
                 table.addCell(""+delivered); //delivered
                 table.addCell(""+paid); //paid

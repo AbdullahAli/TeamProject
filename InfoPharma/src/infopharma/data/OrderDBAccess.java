@@ -61,7 +61,7 @@ public class OrderDBAccess extends DBAccess
         return null;
     }
     
-    public void insertOrder(ArrayList<OrderedProduct> orderedProducts, int accountNumber)
+    public void insertOrder(ArrayList<OrderedProduct> orderedProducts, int accountNumber, double orderTotal)
     {
         Connection con = null;
         Statement stat = null;
@@ -70,7 +70,7 @@ public class OrderDBAccess extends DBAccess
         
         
         //for testing
-        accountNumber = 6;
+        accountNumber = 1;
         
         try
         {
@@ -86,16 +86,26 @@ public class OrderDBAccess extends DBAccess
             int orderID = rs1.getInt("MAX(orderDetailsID)") + 1;
             System.out.println("max id is: "+rs1.getString("MAX(orderDetailsID)"));
             
+            
+            String insertIntoOrderDetailsSQL = "INSERT INTO OrderDetails VALUES (";
+            insertIntoOrderDetailsSQL += "'"+orderID+"', ";
+            insertIntoOrderDetailsSQL += "'"+orderTotal+"', ";
+            insertIntoOrderDetailsSQL += "NOW(), ";
+            insertIntoOrderDetailsSQL += "'1', ";
+            insertIntoOrderDetailsSQL += "NULL, ";
+            insertIntoOrderDetailsSQL += "NULL, ";
+            insertIntoOrderDetailsSQL += "'"+accountNumber+"')"; 
+
+
+            //insert into database
+            System.out.println("Inserting into orders");
+            stat.executeUpdate(insertIntoOrderDetailsSQL);
+            System.out.println("inserted into orders");
+            
+            
             for(OrderedProduct product : orderedProducts)
             {
-                String insertIntoOrderDetailsSQL = "INSERT INTO OrderDetails VALUES (";
-                insertIntoOrderDetailsSQL += "'"+orderID+"', ";
-                insertIntoOrderDetailsSQL += "'"+product.getTotal()+"', ";
-                insertIntoOrderDetailsSQL += "NOW(), ";
-                insertIntoOrderDetailsSQL += "'1', ";
-                insertIntoOrderDetailsSQL += "NULL, ";
-                insertIntoOrderDetailsSQL += "NULL, ";
-                insertIntoOrderDetailsSQL += "'"+accountNumber+"')"; 
+
 
                 String insertIntoOrderDetails_Products = "INSERT INTO OrderDetails_Products VALUES (";
                 insertIntoOrderDetails_Products += "NULL, ";
@@ -106,15 +116,24 @@ public class OrderDBAccess extends DBAccess
                 String updateProductQuantitySQL = "UPDATE Products set currentStock = currentStock - '"+product.getQuantity()+"' "
                         + "WHERE productID = '"+product.getid()+"'";
                 
-
-                //insert into database
-                stat.executeUpdate(insertIntoOrderDetailsSQL);
-                stat.executeUpdate(insertIntoOrderDetails_Products);
-                stat.executeUpdate(updateProductQuantitySQL);
                 
-                System.out.println("Done...");
-                con.commit();
+                System.out.println("Inserting into orders_products");
+                stat.executeUpdate(insertIntoOrderDetails_Products);
+                System.out.println("Inserting into orders_products");
+                
+                System.out.println("updating product quantity");
+                stat.executeUpdate(updateProductQuantitySQL);
+                System.out.println("updated product quantity");
+
             }
+            String updateCreditSQL = "UPDATE MerchantDetails set balance = balance + '"+orderTotal+"'";
+            
+            System.out.println("udpating credit");
+            stat.executeUpdate(updateCreditSQL);
+            System.out.println("updated credit");
+
+            System.out.println("Done...");
+            con.commit();
         }
         catch(SQLException ex) 
         {

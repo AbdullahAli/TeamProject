@@ -20,6 +20,7 @@ import java.security.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ReportActivity extends GeneralReport
 {
@@ -104,11 +105,11 @@ public class ReportActivity extends GeneralReport
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c1);
 
-                PdfPCell c2 = new PdfPCell(new Phrase("Product ID"));
+                PdfPCell c2 = new PdfPCell(new Phrase("Total"));
 		c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c2);
 
-                PdfPCell c3 = new PdfPCell(new Phrase("Total"));
+                PdfPCell c3 = new PdfPCell(new Phrase("Date"));
 		c3.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c3);
                 
@@ -121,27 +122,16 @@ public class ReportActivity extends GeneralReport
                 
 		ArrayList<ArrayList<String>> orders = rprtDBAccess.getActivityOrder(accountNumber, startDate, endDate);
                 
-                for(int i=0; i < orders.size(); i++)
+                
+                for(int i =0; i <orders.size(); i++)
                 {
-                    ArrayList<String> singleOrder = new ArrayList<String>();
-                    singleOrder = orders.get(i);
+                    ArrayList<String> order = orders.get(i);
                     
-                    
-                                        
-                    table.addCell(singleOrder.get(0)); // order id
-                    
-                    table.addCell(singleOrder.get(1)); // product id
-
-                    
-                    table.addCell(singleOrder.get(2)); // total/amoutn/price
-                    total += Double.parseDouble(singleOrder.get(2));
-       
+                    table.addCell(order.get(0));
+                    table.addCell(convertToDoubleWithoutPrecisionLose(order.get(1)));
+                    table.addCell(order.get(2));
                     table.completeRow();
                 }
-                
-                table.addCell("Totals");
-                table.addCell(""); // ordered
-                table.addCell(""+total); //amount
 		document.add(table);		
 	}
 

@@ -14,6 +14,7 @@ import infopharma.data.MiscDBAccess;
 import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -32,6 +33,12 @@ public class ViewStockMaintenance extends InfoPharmaPanel{
         lblError.setVisible(false);
         populateComboProducts();
         this.setVisible(true);
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {txtAdditionalStock, txtCurrentStock};
+        setFieldsOpaque(fields);
     }
     
     public void populateComboProducts()
@@ -79,7 +86,7 @@ public class ViewStockMaintenance extends InfoPharmaPanel{
                 ddlProductsActionPerformed(evt);
             }
         });
-        ddlProducts.setBounds(40, 140, 250, 27);
+        ddlProducts.setBounds(30, 130, 270, 27);
         layeredPanel.add(ddlProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtAdditionalStock.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0"))));
@@ -87,7 +94,7 @@ public class ViewStockMaintenance extends InfoPharmaPanel{
         layeredPanel.add(txtAdditionalStock, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtCurrentStock.setEditable(false);
-        txtCurrentStock.setBounds(30, 218, 260, 30);
+        txtCurrentStock.setBounds(40, 218, 250, 30);
         layeredPanel.add(txtCurrentStock, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));

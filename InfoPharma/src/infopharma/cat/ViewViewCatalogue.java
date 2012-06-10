@@ -82,12 +82,12 @@ public class ViewViewCatalogue extends InfoPharmaPanel{
         tblCatalogue.setEnabled(false);
         jScrollPane1.setViewportView(tblCatalogue);
 
-        jScrollPane1.setBounds(40, 134, 570, 390);
+        jScrollPane1.setBounds(30, 134, 580, 390);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 520, 820, 40);
+        lblError.setBounds(10, 530, 820, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import infopharma.acc.*;
 import infopharma.data.CatDBAccess;
+import javax.swing.JTextField;
 
 /**
  *
@@ -25,6 +26,12 @@ public class ViewNewCatalogue extends InfoPharmaPanel{
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         this.setVisible(true);
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {txtCatalogueName};
+        setFieldsOpaque(fields);
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -48,26 +55,17 @@ public class ViewNewCatalogue extends InfoPharmaPanel{
 
         layeredPanel = new javax.swing.JLayeredPane();
         lblError = new javax.swing.JLabel();
-        btnMainMenu = new javax.swing.JButton();
         txtCatalogueName = new javax.swing.JTextField();
         imageLabel = new javax.swing.JLabel();
         btnCancel = new javax.swing.JButton();
         btnGo = new javax.swing.JButton();
+        btnMainMenu = new javax.swing.JButton();
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
         lblError.setBounds(10, 520, 990, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        btnMainMenu.setText("main menu");
-        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMainMenuActionPerformed(evt);
-            }
-        });
-        btnMainMenu.setBounds(1010, 10, 80, 50);
-        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        txtCatalogueName.setBounds(30, 138, 270, 40);
+        txtCatalogueName.setBounds(40, 148, 250, 20);
         layeredPanel.add(txtCatalogueName, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -92,6 +90,15 @@ public class ViewNewCatalogue extends InfoPharmaPanel{
         });
         btnGo.setBounds(1020, 70, 80, 470);
         layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnMainMenu.setText("main menu");
+        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenuActionPerformed(evt);
+            }
+        });
+        btnMainMenu.setBounds(1010, 10, 80, 50);
+        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
