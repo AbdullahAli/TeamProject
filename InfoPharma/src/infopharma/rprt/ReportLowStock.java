@@ -88,13 +88,14 @@ public class ReportLowStock extends GeneralReport
 
 
                 
-		ArrayList<String> products = rprtDBAccess.getLowStockedProducts();
+		ArrayList<ArrayList<String>> products = rprtDBAccess.getLowStockedProducts();
                 
-                for(String ele : products)
+                for(int i = 0; i < products.size(); i++)
                 {
-                    table.addCell(products.get(0)); // product id                 
-                    table.addCell(products.get(1)); // currentstock
-                    table.addCell(products.get(2)); // minimumstock
+                    ArrayList<String> product = products.get(i);
+                    table.addCell(product.get(0)); // product id                 
+                    table.addCell(product.get(1)); // currentstock
+                    table.addCell(product.get(2)); // minimumstock
                     
                     table.completeRow();
                 }

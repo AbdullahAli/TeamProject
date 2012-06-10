@@ -32,6 +32,21 @@ public class GeneralReport
         {
             
 	}
+        
+        public String convertToDoubleWithoutPrecisionLose(String e)
+        {
+            java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");  
+            if (!e.isEmpty())
+            {
+                try
+                {
+                    double d = Double.parseDouble(e);
+                    return df.format(d);  
+                }
+                catch(Exception err){}             
+            }
+            return "0.00";
+        }
 
         public  void addTitle(Document document, String reportName) throws DocumentException 
         {

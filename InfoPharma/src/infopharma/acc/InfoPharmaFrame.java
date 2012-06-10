@@ -27,8 +27,8 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
      */
 	public InfoPharmaFrame() {
             initComponents();
-            this.setPanel(new ViewDispatchOrder(this));
-            
+            //this.setPanel(new ViewPlaceOrder(this));
+            this.setPanel(new ViewGenerateReport(this));
 //            JButtonTableExample x = new JButtonTableExample();
             
             //will generate a pdf on the desktop - im just using this for testing.

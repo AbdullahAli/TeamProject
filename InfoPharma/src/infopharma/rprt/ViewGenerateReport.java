@@ -24,6 +24,7 @@ import javax.swing.JLayeredPane;
  */
 public class ViewGenerateReport extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
+    String documentPath = "";
 	
     public ViewGenerateReport(InfoPharmaFrame mainMenuFrame)
     {
@@ -78,6 +79,11 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         layeredPanel.add(btnGenerate, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnOpen.setText("open report");
+        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
         btnOpen.setBounds(40, 320, 470, 29);
         layeredPanel.add(btnOpen, javax.swing.JLayeredPane.DEFAULT_LAYER);
         calFrom.setBounds(40, 220, 123, 28);
@@ -126,8 +132,22 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
-        generateNewReport();
+        lblError.setVisible(false);
+        if(calFrom.getDate() == null || calTo.getDate() == null)
+        {
+            lblError.setText("Please select a date range");
+            lblError.setVisible(true);
+        }
+        else
+        {
+            generateNewReport();
+            btnOpen.setVisible(true);
+        }
     }//GEN-LAST:event_btnGenerateActionPerformed
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        openReport(documentPath);
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     public void generateNewReport()
     {
@@ -137,37 +157,44 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         String from = convertToShortDateString(calFrom.getDate());
         String to = convertToShortDateString(calTo.getDate());
         
-        String accountNumber = "6";
-
+        String accountNumber = "1";
+        
+        
         if(reportType.equals("Activity Report"))
         {
             ReportActivity report = new ReportActivity(accountNumber, from, to);
-            //System.out.println(report.documentName);
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Low Stock Report"))
         {
             ReportLowStock report = new ReportLowStock();
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Merchant Orders Report"))
         {   
             ReportMerchantOrders report = new ReportMerchantOrders(accountNumber, from, to);
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Stock Turnaround Report"))
         {
             ReportStockTurnaround report = new ReportStockTurnaround();
+            documentPath = report.documentName;
         }
         else if(reportType.equals("Product Turnaround Report"))
         {
             ReportTurnAround report = new ReportTurnAround();
+            documentPath = report.documentName;
         }
+        
+        
     }
     
-    public void openReport()
+    public void openReport(String documentPath)
     {
         try 
         {
-            String filePath = System.getProperty("user.home") + "/Desktop/";
-            File pdfFile = new File("c:\\Java-Interview.pdf");
+            String filePath = documentPath;
+            File pdfFile = new File(filePath);
             if (pdfFile.exists()) 
             {
 
