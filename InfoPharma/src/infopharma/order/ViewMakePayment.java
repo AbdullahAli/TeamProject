@@ -54,7 +54,16 @@ public class ViewMakePayment extends InfoPharmaPanel {
     }
     
     public void setFieldsOpaque() {
-        JTextField[] fields = {textDateOrdered, textCard, textSecurity, textAmount, textCard};
+        JTextField[] fields = {textDateOrdered, 
+                               textCard, 
+                               textSecurity, 
+                               textAmount, 
+                               textCard,
+                               textHolder,
+                               textChequeNumber,
+                               textChequeName,
+                               textAccountNumber,
+                               textSortCode};
         setFieldsOpaque(fields);
     }
     
@@ -185,31 +194,79 @@ public class ViewMakePayment extends InfoPharmaPanel {
 
         radioBtnGroup = new javax.swing.ButtonGroup();
         layeredPanel = new javax.swing.JLayeredPane();
-        textSecurity = new javax.swing.JFormattedTextField();
         lblError = new javax.swing.JLabel();
+        paneCard = new javax.swing.JLayeredPane();
+        textHolder = new javax.swing.JTextField();
+        dateExpiry = new com.toedter.calendar.JDateChooser();
+        dateStart = new com.toedter.calendar.JDateChooser();
+        comboCards = new javax.swing.JComboBox();
+        textCard = new javax.swing.JFormattedTextField();
+        textSecurity = new javax.swing.JFormattedTextField();
+        jLabel2 = new javax.swing.JLabel();
+        paneCheque = new javax.swing.JLayeredPane();
+        textChequeName = new javax.swing.JTextField();
+        textChequeNumber = new javax.swing.JFormattedTextField();
+        textAccountNumber = new javax.swing.JFormattedTextField();
+        textSortCode = new javax.swing.JFormattedTextField();
+        jLabel3 = new javax.swing.JLabel();
         radioBtnCheque = new javax.swing.JRadioButton();
         radioBtnCard = new javax.swing.JRadioButton();
         comboOrders = new javax.swing.JComboBox();
         textAmount = new javax.swing.JTextField();
         textDateOrdered = new javax.swing.JTextField();
         btnOk = new javax.swing.JButton();
-        textCard = new javax.swing.JFormattedTextField();
-        textHolder = new javax.swing.JTextField();
-        comboCards = new javax.swing.JComboBox();
-        dateExpiry = new com.toedter.calendar.JDateChooser();
-        dateStart = new com.toedter.calendar.JDateChooser();
-        jLabel1 = new javax.swing.JLabel();
         imgBackground = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
-
-        textSecurity.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        textSecurity.setBounds(40, 520, 250, 30);
-        layeredPanel.add(textSecurity, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
         lblError.setBounds(10, 520, 820, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textHolder.setBounds(370, 40, 260, 30);
+        paneCard.add(textHolder, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dateExpiry.setBounds(160, 200, 140, 40);
+        paneCard.add(dateExpiry, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dateStart.setBounds(30, 198, 130, 40);
+        paneCard.add(dateStart, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        comboCards.setBounds(30, 30, 260, 50);
+        paneCard.add(comboCards, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        textCard.setBounds(30, 120, 260, 30);
+        paneCard.add(textCard, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textSecurity.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        textSecurity.setBounds(30, 280, 250, 30);
+        paneCard.add(textSecurity, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment_card.png"))); // NOI18N
+        jLabel2.setBounds(10, -10, 750, 340);
+        paneCard.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        paneCard.setBounds(0, 240, 750, 320);
+        layeredPanel.add(paneCard, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textChequeName.setBounds(30, 40, 250, 28);
+        paneCheque.add(textChequeName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textChequeNumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        textChequeNumber.setBounds(30, 270, 260, 40);
+        paneCheque.add(textChequeNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textAccountNumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        textAccountNumber.setBounds(30, 210, 250, 28);
+        paneCheque.add(textAccountNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textSortCode.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        textSortCode.setBounds(30, 120, 250, 28);
+        paneCheque.add(textSortCode, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment_cheque.png"))); // NOI18N
+        jLabel3.setBounds(10, -10, 750, 340);
+        paneCheque.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        paneCheque.setBounds(0, 240, 750, 320);
+        layeredPanel.add(paneCheque, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         radioBtnGroup.add(radioBtnCheque);
         radioBtnCheque.addActionListener(new java.awt.event.ActionListener() {
@@ -255,33 +312,8 @@ public class ViewMakePayment extends InfoPharmaPanel {
         btnOk.setBounds(1020, 70, 80, 470);
         layeredPanel.add(btnOk, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        textCard.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        textCard.setBounds(40, 360, 250, 30);
-        layeredPanel.add(textCard, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textHolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textHolderActionPerformed(evt);
-            }
-        });
-        textHolder.setBounds(370, 360, 270, 40);
-        layeredPanel.add(textHolder, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        comboCards.setBounds(30, 280, 270, 40);
-        layeredPanel.add(comboCards, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dateExpiry.setBounds(170, 440, 130, 40);
-        layeredPanel.add(dateExpiry, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dateStart.setBounds(33, 440, 130, 40);
-        layeredPanel.add(dateStart, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel1.setText("Card Holder's Name");
-        jLabel1.setBounds(370, 340, 160, 16);
-        layeredPanel.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
         imgBackground.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imgBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment.png"))); // NOI18N
+        imgBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment_background.png"))); // NOI18N
         imgBackground.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imgBackground, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -312,11 +344,13 @@ public class ViewMakePayment extends InfoPharmaPanel {
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void radioBtnCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBtnCardActionPerformed
-        
+        paneCheque.setVisible(false);
+        paneCard.setVisible(true);
     }//GEN-LAST:event_radioBtnCardActionPerformed
 
     private void radioBtnChequeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBtnChequeActionPerformed
-        // TODO add your handling code here:
+        paneCard.setVisible(false);
+        paneCheque.setVisible(true);
     }//GEN-LAST:event_radioBtnChequeActionPerformed
 
     private void comboOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdersActionPerformed
@@ -327,10 +361,6 @@ public class ViewMakePayment extends InfoPharmaPanel {
         validatePayment();
     }//GEN-LAST:event_btnOkActionPerformed
 
-    private void textHolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textHolderActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textHolderActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JButton btnOk;
@@ -339,16 +369,23 @@ public class ViewMakePayment extends InfoPharmaPanel {
     private com.toedter.calendar.JDateChooser dateExpiry;
     private com.toedter.calendar.JDateChooser dateStart;
     private javax.swing.JLabel imgBackground;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JLayeredPane paneCard;
+    private javax.swing.JLayeredPane paneCheque;
     private javax.swing.JRadioButton radioBtnCard;
     private javax.swing.JRadioButton radioBtnCheque;
     private javax.swing.ButtonGroup radioBtnGroup;
+    private javax.swing.JFormattedTextField textAccountNumber;
     private javax.swing.JTextField textAmount;
     private javax.swing.JFormattedTextField textCard;
+    private javax.swing.JTextField textChequeName;
+    private javax.swing.JFormattedTextField textChequeNumber;
     private javax.swing.JTextField textDateOrdered;
     private javax.swing.JTextField textHolder;
     private javax.swing.JFormattedTextField textSecurity;
+    private javax.swing.JFormattedTextField textSortCode;
     // End of variables declaration//GEN-END:variables
 }
