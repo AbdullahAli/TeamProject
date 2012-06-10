@@ -4,8 +4,11 @@
  */
 package infopharma.acc;
 
+import java.awt.Color;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -35,6 +38,14 @@ public class InfoPharmaPanel extends javax.swing.JPanel {
     public static void setFrame(InfoPharmaFrame frame) 
     {
         InfoPharmaPanel.frame = frame;
+    }
+    
+    public void setFieldsOpaque(JTextField[] fields) {
+        for(JTextField field : fields) {
+            field.setOpaque(false); // added by OP
+            field.setBorder(BorderFactory.createEmptyBorder());
+            field.setBackground(new Color(0,0,0,0));
+        }
     }
 
     /**
