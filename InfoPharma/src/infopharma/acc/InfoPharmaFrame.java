@@ -27,7 +27,7 @@ public class InfoPharmaFrame extends javax.swing.JFrame {
      */
 	public InfoPharmaFrame() {
             initComponents();
-            this.setPanel(new ViewDispatchOrder(this));
+            this.setPanel(new ViewMakePayment(this));
             
 //            JButtonTableExample x = new JButtonTableExample();
             
