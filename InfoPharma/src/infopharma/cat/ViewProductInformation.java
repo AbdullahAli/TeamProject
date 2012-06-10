@@ -35,6 +35,12 @@ public class ViewProductInformation extends InfoPharmaPanel{
         lblError.setVisible(false);
         populateFieldsArray();
         this.setVisible(true);
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {txtCost, txtInitialStock, txtName, txtType, txtUnitsInAPack};
+        setFieldsOpaque(fields);
     }
     
     public void populateFields(String productName)
@@ -87,7 +93,7 @@ public class ViewProductInformation extends InfoPharmaPanel{
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 520, 990, 40);
+        lblError.setBounds(10, 530, 990, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtInitialStock.setEditable(false);
@@ -102,12 +108,15 @@ public class ViewProductInformation extends InfoPharmaPanel{
 
         txtCost.setEditable(false);
         txtCost.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
-        txtCost.setBounds(50, 430, 240, 28);
+        txtCost.setBounds(40, 430, 250, 28);
         layeredPanel.add(txtCost, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jScrollPane1.setBorder(null);
 
         txtDescription.setColumns(20);
         txtDescription.setEditable(false);
         txtDescription.setRows(5);
+        txtDescription.setBorder(null);
         jScrollPane1.setViewportView(txtDescription);
 
         jScrollPane1.setBounds(40, 300, 250, 70);

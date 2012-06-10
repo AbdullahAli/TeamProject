@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -32,7 +33,14 @@ public class ViewRegister extends InfoPharmaPanel{
         initComponents();
         setFrame(mainMenuFrame);
         this.setVisible(true);
+        lblError.setVisible(false);
         populateCombos();
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {textCompany, textCredit, textNumber, textPostcode};
+        setFieldsOpaque(fields);
     }
 
     public static InfoPharmaFrame getFrame() {
@@ -82,6 +90,7 @@ public class ViewRegister extends InfoPharmaPanel{
     }
     
     public void validateMerchant(){
+        lblError.setVisible(false);
         String company = textCompany.getText();
         String address = textAreaAddress.getText();
         String contact = textNumber.getText();
@@ -99,6 +108,9 @@ public class ViewRegister extends InfoPharmaPanel{
             registerMerchantUser(merchantAccount);
         }else{
             System.out.println("Fill in all details");
+            lblError.setText("Please fill in all the details");
+            lblError.setVisible(true);
+            
         }
     }
     
@@ -145,8 +157,7 @@ public class ViewRegister extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        btnMainMenu = new javax.swing.JButton();
-        btnGo = new javax.swing.JButton();
+        lblError = new javax.swing.JLabel();
         paneMerchant = new javax.swing.JLayeredPane();
         textCredit = new javax.swing.JFormattedTextField();
         paneAddress = new javax.swing.JScrollPane();
@@ -158,24 +169,13 @@ public class ViewRegister extends InfoPharmaPanel{
         jLabel1 = new javax.swing.JLabel();
         comboUserType = new javax.swing.JComboBox();
         image = new javax.swing.JLabel();
+        btnGo = new javax.swing.JButton();
+        btnMainMenu = new javax.swing.JButton();
 
-        btnMainMenu.setText("main menu");
-        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMainMenuActionPerformed(evt);
-            }
-        });
-        btnMainMenu.setBounds(990, 10, 100, 50);
-        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        btnGo.setText("jButton1");
-        btnGo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoActionPerformed(evt);
-            }
-        });
-        btnGo.setBounds(1022, 70, 70, 470);
-        layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
+        lblError.setBounds(10, 520, 820, 40);
+        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textCredit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -189,12 +189,15 @@ public class ViewRegister extends InfoPharmaPanel{
 
         textAreaAddress.setColumns(20);
         textAreaAddress.setRows(5);
+        textAreaAddress.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         textAreaAddress.setMinimumSize(new java.awt.Dimension(0, 0));
         paneAddress.setViewportView(textAreaAddress);
 
-        paneAddress.setBounds(40, 120, 260, 70);
+        paneAddress.setBounds(40, 130, 250, 70);
         paneMerchant.add(paneAddress, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textCompany.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        textCompany.setOpaque(true);
         textCompany.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textCompanyActionPerformed(evt);
@@ -208,9 +211,10 @@ public class ViewRegister extends InfoPharmaPanel{
                 comboDiscountPlanActionPerformed(evt);
             }
         });
-        comboDiscountPlan.setBounds(380, 40, 270, 27);
+        comboDiscountPlan.setBounds(370, 30, 280, 27);
         paneMerchant.add(comboDiscountPlan, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textPostcode.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         textPostcode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textPostcodeActionPerformed(evt);
@@ -219,6 +223,7 @@ public class ViewRegister extends InfoPharmaPanel{
         textPostcode.setBounds(40, 250, 250, 25);
         paneMerchant.add(textPostcode, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textNumber.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         textNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textNumberActionPerformed(evt);
@@ -228,7 +233,7 @@ public class ViewRegister extends InfoPharmaPanel{
         paneMerchant.add(textNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register_merchantpanel.png"))); // NOI18N
-        jLabel1.setBounds(10, 0, 990, 360);
+        jLabel1.setBounds(20, 10, 990, 360);
         paneMerchant.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         paneMerchant.setBounds(0, 180, 1020, 380);
@@ -239,13 +244,31 @@ public class ViewRegister extends InfoPharmaPanel{
                 comboUserTypeActionPerformed(evt);
             }
         });
-        comboUserType.setBounds(30, 140, 270, 27);
+        comboUserType.setBounds(30, 130, 270, 30);
         layeredPanel.add(comboUserType, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/register_background.png"))); // NOI18N
         image.setBounds(0, 0, 1100, 570);
         layeredPanel.add(image, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnGo.setText("jButton1");
+        btnGo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoActionPerformed(evt);
+            }
+        });
+        btnGo.setBounds(1022, 70, 70, 470);
+        layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnMainMenu.setText("main menu");
+        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenuActionPerformed(evt);
+            }
+        });
+        btnMainMenu.setBounds(1030, 10, 60, 50);
+        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -260,7 +283,7 @@ public class ViewRegister extends InfoPharmaPanel{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
-        // TODO add your handling code here:
+         // TODO add your handling code here:
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
@@ -300,6 +323,7 @@ public class ViewRegister extends InfoPharmaPanel{
     private javax.swing.JLabel image;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane layeredPanel;
+    private javax.swing.JLabel lblError;
     private javax.swing.JScrollPane paneAddress;
     private javax.swing.JLayeredPane paneMerchant;
     private javax.swing.JTextArea textAreaAddress;

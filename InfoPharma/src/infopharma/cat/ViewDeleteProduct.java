@@ -75,7 +75,7 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
         btnCancel = new javax.swing.JButton();
 
         boxConfirm.setText("I confirm that I would like this product to be deleted permanetly.");
-        boxConfirm.setBounds(30, 240, 450, 23);
+        boxConfirm.setBounds(30, 220, 450, 23);
         layeredPanel.add(boxConfirm, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         ddlProducts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -84,7 +84,7 @@ public class ViewDeleteProduct extends InfoPharmaPanel{
                 ddlProductsActionPerformed(evt);
             }
         });
-        ddlProducts.setBounds(30, 140, 270, 27);
+        ddlProducts.setBounds(30, 130, 270, 27);
         layeredPanel.add(ddlProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));

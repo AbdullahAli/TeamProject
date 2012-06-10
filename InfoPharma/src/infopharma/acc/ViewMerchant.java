@@ -14,6 +14,7 @@ import java.util.HashMap;
 import javax.swing.ButtonModel;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -37,6 +38,12 @@ public class ViewMerchant extends InfoPharmaPanel{
         radioBtnGroup.add(radioBtnActive);
         radioBtnGroup.add(radioBtnSuspended);
         radioBtnGroup.add(radioBtnDefault);
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {textAccountNumber, textBalance, textCredit, textDiscount, textPostcode, textTelNumber};
+        setFieldsOpaque(fields);
     }
 
     public static InfoPharmaFrame getFrame() {
@@ -96,7 +103,6 @@ public class ViewMerchant extends InfoPharmaPanel{
         radioBtnGroup = new javax.swing.ButtonGroup();
         layeredPanel = new javax.swing.JLayeredPane();
         comboMerchants = new javax.swing.JComboBox();
-        btnMainMenu = new javax.swing.JButton();
         textDiscount = new javax.swing.JTextField();
         textCredit = new javax.swing.JTextField();
         textBalance = new javax.swing.JTextField();
@@ -110,14 +116,79 @@ public class ViewMerchant extends InfoPharmaPanel{
         radioBtnActive = new javax.swing.JRadioButton();
         radioBtnSuspended = new javax.swing.JRadioButton();
         imageLabel = new javax.swing.JLabel();
+        btnMainMenu = new javax.swing.JButton();
 
         comboMerchants.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboMerchantsActionPerformed(evt);
             }
         });
-        comboMerchants.setBounds(30, 140, 260, 27);
+        comboMerchants.setBounds(30, 140, 270, 27);
         layeredPanel.add(comboMerchants, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textDiscount.setEditable(false);
+        textDiscount.setBounds(380, 140, 250, 30);
+        layeredPanel.add(textDiscount, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textCredit.setEditable(false);
+        textCredit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textCreditActionPerformed(evt);
+            }
+        });
+        textCredit.setBounds(380, 220, 250, 30);
+        layeredPanel.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textBalance.setEditable(false);
+        textBalance.setBounds(380, 300, 250, 30);
+        layeredPanel.add(textBalance, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textPostcode.setEditable(false);
+        textPostcode.setBounds(40, 430, 250, 30);
+        layeredPanel.add(textPostcode, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textTelNumber.setEditable(false);
+        textTelNumber.setBounds(40, 510, 250, 30);
+        layeredPanel.add(textTelNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textAccountNumber.setEditable(false);
+        textAccountNumber.setBorder(null);
+        textAccountNumber.setOpaque(true);
+        textAccountNumber.setBounds(40, 220, 250, 20);
+        layeredPanel.add(textAccountNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jScrollPane1.setBorder(null);
+
+        areaAddress.setColumns(20);
+        areaAddress.setEditable(false);
+        areaAddress.setRows(5);
+        areaAddress.setBorder(null);
+        jScrollPane1.setViewportView(areaAddress);
+
+        jScrollPane1.setBounds(40, 304, 250, 70);
+        layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
+        lblError.setBounds(10, 530, 820, 40);
+        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        radioBtnDefault.setEnabled(false);
+        radioBtnDefault.setBounds(370, 480, 40, 23);
+        layeredPanel.add(radioBtnDefault, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        radioBtnActive.setEnabled(false);
+        radioBtnActive.setBounds(370, 420, 40, 23);
+        layeredPanel.add(radioBtnActive, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        radioBtnSuspended.setEnabled(false);
+        radioBtnSuspended.setBounds(370, 450, 40, 23);
+        layeredPanel.add(radioBtnSuspended, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/viewmerchantaccount.png"))); // NOI18N
+        imageLabel.setBounds(0, 0, 1100, 570);
+        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -127,47 +198,6 @@ public class ViewMerchant extends InfoPharmaPanel{
         });
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textDiscount.setBounds(380, 140, 250, 30);
-        layeredPanel.add(textDiscount, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textCredit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textCreditActionPerformed(evt);
-            }
-        });
-        textCredit.setBounds(380, 220, 250, 30);
-        layeredPanel.add(textCredit, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textBalance.setBounds(380, 300, 250, 30);
-        layeredPanel.add(textBalance, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textPostcode.setBounds(40, 430, 250, 30);
-        layeredPanel.add(textPostcode, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textTelNumber.setBounds(40, 510, 250, 30);
-        layeredPanel.add(textTelNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textAccountNumber.setBounds(40, 220, 250, 30);
-        layeredPanel.add(textAccountNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        areaAddress.setColumns(20);
-        areaAddress.setRows(5);
-        jScrollPane1.setViewportView(areaAddress);
-
-        jScrollPane1.setBounds(30, 294, 270, 90);
-        layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        lblError.setForeground(new java.awt.Color(255, 0, 0));
-        lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 520, 820, 40);
-        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        radioBtnDefault.setBounds(370, 480, 40, 23);
-        layeredPanel.add(radioBtnDefault, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        radioBtnActive.setBounds(370, 420, 40, 23);
-        layeredPanel.add(radioBtnActive, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        radioBtnSuspended.setBounds(370, 450, 40, 23);
-        layeredPanel.add(radioBtnSuspended, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/viewmerchantaccount.png"))); // NOI18N
-        imageLabel.setBounds(0, 0, 1100, 570);
-        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);

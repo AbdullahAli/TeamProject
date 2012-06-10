@@ -12,6 +12,7 @@ import infopharma.data.*;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,6 +36,12 @@ public class ViewFindOrder extends InfoPharmaPanel{
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         this.setVisible(true);
+        setFieldsOpaque();
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {textSubtotal, textTotal, textVAT};
+        setFieldsOpaque(fields);
     }
 
     public static InfoPharmaFrame getFrame() {
@@ -120,7 +127,7 @@ public class ViewFindOrder extends InfoPharmaPanel{
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 520, 820, 40);
+        lblError.setBounds(10, 530, 820, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         comboOrders.addActionListener(new java.awt.event.ActionListener() {
@@ -128,19 +135,19 @@ public class ViewFindOrder extends InfoPharmaPanel{
                 comboOrdersActionPerformed(evt);
             }
         });
-        comboOrders.setBounds(30, 130, 270, 27);
+        comboOrders.setBounds(30, 120, 270, 27);
         layeredPanel.add(comboOrders, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textVAT.setEditable(false);
-        textVAT.setBounds(30, 440, 270, 40);
+        textVAT.setBounds(40, 450, 260, 20);
         layeredPanel.add(textVAT, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textTotal.setEditable(false);
-        textTotal.setBounds(30, 510, 270, 40);
+        textTotal.setBounds(40, 520, 260, 20);
         layeredPanel.add(textTotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textSubtotal.setEditable(false);
-        textSubtotal.setBounds(30, 370, 270, 40);
+        textSubtotal.setBounds(40, 380, 260, 20);
         layeredPanel.add(textSubtotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         tableProducts.setModel(new javax.swing.table.DefaultTableModel(

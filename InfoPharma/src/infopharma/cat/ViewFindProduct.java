@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -34,6 +35,14 @@ public class ViewFindProduct extends InfoPharmaPanel{
         populateComboProducts();
         lblError.setVisible(false);
         this.setVisible(true);
+        setFieldsOpaque();
+        xx.setVisible(false);
+        xxx.setVisible(false);
+    }
+    
+    public void setFieldsOpaque()  {
+        JTextField[] fields = {txtID, txtName};
+        setFieldsOpaque(fields);
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -68,18 +77,19 @@ public class ViewFindProduct extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        ddlFoundProducts = new javax.swing.JComboBox();
+        xxx = new javax.swing.JComboBox();
         txtName = new javax.swing.JTextField();
         txtID = new javax.swing.JFormattedTextField();
         ddlProducts = new javax.swing.JComboBox();
         lblError = new javax.swing.JLabel();
+        xx = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
         btnGo = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
-        ddlFoundProducts.setBounds(30, 460, 280, 27);
-        layeredPanel.add(ddlFoundProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        xxx.setBounds(30, 410, 270, 27);
+        layeredPanel.add(xxx, javax.swing.JLayeredPane.DEFAULT_LAYER);
         txtName.setBounds(40, 340, 240, 28);
         layeredPanel.add(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -88,13 +98,19 @@ public class ViewFindProduct extends InfoPharmaPanel{
         layeredPanel.add(txtID, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         ddlProducts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        ddlProducts.setBounds(30, 180, 270, 27);
+        ddlProducts.setBounds(30, 170, 270, 27);
         layeredPanel.add(ddlProducts, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
         lblError.setBounds(10, 520, 820, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        xx.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        xx.setForeground(new java.awt.Color(102, 102, 102));
+        xx.setText("Found");
+        xx.setBounds(30, 390, 44, 17);
+        layeredPanel.add(xx, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/cat/images/findproduct.png"))); // NOI18N
@@ -146,15 +162,21 @@ public class ViewFindProduct extends InfoPharmaPanel{
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        xx.setVisible(false);
+        xxx.setVisible(false);
+        
         System.out.println("clicked GO");
         setErrorParameters(false, "");
         
         
         
-        if(ddlFoundProducts.getItemCount() == 0 && validateSearchInformation())
+        if(xxx.getItemCount() == 0 && validateSearchInformation())
         {
             System.out.println("Valid infomraotion");
             populateFoundProducts();
+            xx.setVisible(true);
+            xxx.setVisible(true);
+            
         }
         else if (!validateSearchInformation())
         {
@@ -162,16 +184,16 @@ public class ViewFindProduct extends InfoPharmaPanel{
         }
         
         
-        if(ddlFoundProducts.getItemCount() > 1 && ddlFoundProducts.getSelectedIndex() == 0)
+        if(xxx.getItemCount() > 1 && xxx.getSelectedIndex() == 0)
         {
-            System.out.println(": "+ddlFoundProducts.getSelectedIndex());
+            System.out.println(": "+xxx.getSelectedIndex());
             setErrorParameters(true, "Please select a product to view from the found products");
         }
-        else if (ddlFoundProducts.getSelectedIndex() != 0)
+        else if (xxx.getSelectedIndex() != 0)
         {
-            System.out.println("Product is: "+ddlFoundProducts.getSelectedItem().toString());
+            System.out.println("Product is: "+xxx.getSelectedItem().toString());
             this.
-            getFrame().setPanel(new ViewProductInformation(getFrame(), ddlFoundProducts.getSelectedItem().toString()));
+            getFrame().setPanel(new ViewProductInformation(getFrame(), xxx.getSelectedItem().toString()));
         }
         
     }//GEN-LAST:event_btnGoActionPerformed
@@ -201,13 +223,13 @@ public class ViewFindProduct extends InfoPharmaPanel{
                 
                 
                 
-                ddlFoundProducts.removeAllItems();
-                ddlFoundProducts.addItem("");
+                xxx.removeAllItems();
+                xxx.addItem("");
                 for(String product : foundProducts.values())
                 {
-                    ddlFoundProducts.addItem(product);
+                    xxx.addItem(product);
                 }
-                    ddlFoundProducts.updateUI();
+                    xxx.updateUI();
             }
             it.remove(); // avoids a ConcurrentModificationException
         }
@@ -250,12 +272,13 @@ public class ViewFindProduct extends InfoPharmaPanel{
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
-    private javax.swing.JComboBox ddlFoundProducts;
     private javax.swing.JComboBox ddlProducts;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
     private javax.swing.JFormattedTextField txtID;
     private javax.swing.JTextField txtName;
+    private javax.swing.JLabel xx;
+    private javax.swing.JComboBox xxx;
     // End of variables declaration//GEN-END:variables
 }

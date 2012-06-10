@@ -22,6 +22,7 @@ public class ViewLogin extends InfoPharmaPanel{
         initComponents();
         setFrame(mainMenuFrame);
         this.setVisible(true);
+        lblError.setVisible(false);
     }
 
     public static InfoPharmaFrame getFrame() 
@@ -44,16 +45,32 @@ public class ViewLogin extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
-        txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
-        btnMainMenu = new javax.swing.JButton();
+        txtUsername = new javax.swing.JTextField();
+        lblError = new javax.swing.JLabel();
         imageLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
-        txtUsername.setBounds(250, 290, 130, 28);
-        layeredPanel.add(txtUsername, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        txtPassword.setBounds(440, 290, 130, 28);
+        txtPassword.setBackground(new java.awt.Color(241, 241, 241));
+        txtPassword.setBorder(null);
+        txtPassword.setOpaque(true);
+        txtPassword.setBounds(440, 290, 130, 20);
         layeredPanel.add(txtPassword, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtUsername.setBackground(new java.awt.Color(241, 241, 241));
+        txtUsername.setBorder(null);
+        txtUsername.setBounds(250, 290, 130, 20);
+        layeredPanel.add(txtUsername, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
+        lblError.setBounds(10, 520, 820, 40);
+        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/misc/images/login.png"))); // NOI18N
+        imageLabel.setBounds(0, 0, 1100, 570);
+        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -61,22 +78,8 @@ public class ViewLogin extends InfoPharmaPanel{
                 jButton1ActionPerformed(evt);
             }
         });
-        jButton1.setBounds(610, 260, 97, 150);
+        jButton1.setBounds(620, 170, 97, 230);
         layeredPanel.add(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        btnMainMenu.setText("main menu");
-        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMainMenuActionPerformed(evt);
-            }
-        });
-        btnMainMenu.setBounds(990, 10, 100, 50);
-        layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/misc/images/login.png"))); // NOI18N
-        imageLabel.setBounds(0, 0, 1100, 570);
-        layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -89,11 +92,6 @@ public class ViewLogin extends InfoPharmaPanel{
             .add(layeredPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 570, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
-        // TODO add your handling code here:
-        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
-    }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         loginValidator();
@@ -111,6 +109,8 @@ public class ViewLogin extends InfoPharmaPanel{
         else
         {
             System.out.println("Fill in the username and password");
+            lblError.setText("Plese enter your username and password");
+            lblError.setVisible(true);
         }
     }
     
@@ -122,12 +122,17 @@ public class ViewLogin extends InfoPharmaPanel{
             {
                 this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
             }
+            else
+            {
+                lblError.setText("Your username and password do not match anything in the database");
+                lblError.setVisible(true);
+            }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnMainMenu;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane layeredPanel;
+    private javax.swing.JLabel lblError;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
