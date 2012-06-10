@@ -498,4 +498,70 @@ public class OrderDBAccess extends DBAccess
         return unpaidOrders;
     }
     
+    public HashMap<Integer, String> getCardTypes() {
+        HashMap<Integer, String> cardTypes = new HashMap<Integer, String>();
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM CardTypes";
+        try {
+            con = makeConnection();
+            con.setTransactionIsolation(con.TRANSACTION_READ_COMMITTED);
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery(sql);
+            while(rs.next()) {
+                int id = rs.getInt("cardTypeID");
+                String type = rs.getString("cardType");
+                cardTypes.put(id, type);
+            }
+        } catch(SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+        } finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(st != null) {
+                    st.close();
+                }
+            } catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getCardTypes");
+            }
+        }
+        return cardTypes;
+    }
+
+    public HashMap<Integer, String> getPaymentTypes() {
+        HashMap<Integer, String> paymentTypes = new HashMap<Integer, String>();
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM PaymentTypes";
+        try {
+            con = makeConnection();
+            con.setTransactionIsolation(con.TRANSACTION_READ_COMMITTED);
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery(sql);
+            while(rs.next()) {
+                int id = rs.getInt("paymentTypeID");
+                String type = rs.getString("paymentType");
+                paymentTypes.put(id, type);
+            }
+        } catch(SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+        } finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(st != null) {
+                    st.close();
+                }
+            } catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getPaymentTypes");
+            }
+        }
+        return paymentTypes;
+    }
+
 }
