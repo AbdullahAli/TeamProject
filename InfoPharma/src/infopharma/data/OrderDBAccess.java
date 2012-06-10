@@ -9,6 +9,7 @@ import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -399,6 +400,63 @@ public class OrderDBAccess extends DBAccess
             }
         }
         return new Double(0);
+    }
+    
+    public void dispatchOrder(int orderId, int statusId, Dispatch dispatch) {
+        String courierRef = dispatch.getCourierRef();
+        String courier = dispatch.getCourier();
+        String estDeliveryDate = dispatch.getEstDeliveryDate();
+        String dispatchDate = dispatch.getDispatchDate();
+        Connection connection = null;
+        Statement statementDispatch = null;
+        Statement statementOrder = null;
+        Statement statementDispatchId = null;
+        ResultSet rsDispatchId = null;
+        String sqlDispatchId = "SELECT MAX(dispatchID) FROM DispatchDetails";
+        try {
+            connection = makeConnection();
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(connection.TRANSACTION_SERIALIZABLE);
+            statementDispatchId = (Statement) connection.createStatement();
+            rsDispatchId = statementDispatchId.executeQuery(sqlDispatchId);
+            if(rsDispatchId.next()) {
+                int dispatchId = rsDispatchId.getInt("MAX(dispatchID)") + 1;
+                String sqlDispatch = "INSERT INTO DispatchDetails VALUES ('" + dispatchId + "', '" + courierRef + "', '" + courier + "', '" + estDeliveryDate + "', '" + dispatchDate + "')";
+                statementDispatch = (Statement) connection.createStatement();
+                
+                String sqlOrderUpdate = "UPDATE OrderDetails SET statusID='" + statusId + "', dispatchID = '" + dispatchId + "' WHERE orderDetailsID = '" + orderId + "'";
+                statementOrder = (Statement) connection.createStatement();
+                statementDispatch.executeUpdate(sqlDispatch);
+                statementOrder.executeUpdate(sqlOrderUpdate);
+                connection.commit();
+            }
+
+        } catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+            try {
+                connection.rollback();
+            } catch(Exception error) {
+                System.err.println("Error: " + error.getMessage());
+            }
+        }finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(statementOrder != null) {
+                    statementOrder.close();
+                }
+                if(statementDispatch != null) {
+                    statementDispatch.close();
+                }
+                if(statementDispatchId != null) {
+                    statementDispatchId.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess dispatchOrder");
+            }
+        }
+        
     }
     
 }

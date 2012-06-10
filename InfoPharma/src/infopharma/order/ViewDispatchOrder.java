@@ -9,9 +9,8 @@ import infopharma.acc.InfoPharmaFrame;
 import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
@@ -47,18 +46,26 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
     }
     
     public void populateComboOrders() {
+        comboOrders.removeAllItems();
         for(Order order : ordersArray) {
             comboOrders.addItem(order.getID());
         }
     }
     
     public void displayDetails() {
-        int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
-        Order order = getOrder(orderId);
-        String status = orderStatuses.get(order.getStatusID());
-        MerchantAccount merchant = dbAccount.getMerchantByOrder(orderId);
-        textStatus.setText(status);
-        textCompany.setText(merchant.getCompany());
+        clearFields();
+        if(!ordersArray.isEmpty()) {
+            int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
+            Order order = getOrder(orderId);
+            String status = orderStatuses.get(order.getStatusID());
+            MerchantAccount merchant = dbAccount.getMerchantByOrder(orderId);
+            textStatus.setText(status);
+            textCompany.setText(merchant.getCompany());
+        } 
+    }
+    
+    public void clearFields() {
+        //Need to add code to reset the fields
     }
     
     public Order getOrder(int orderId) {
@@ -70,25 +77,44 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         return null;
     }
     
-    public void dispatchOrder() {
-        if(validateFields()) {
-            System.out.println("Good to go");
+    public int getOrderStatusId(String status) {
+        Iterator it = orderStatuses.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            if(pairs.getValue().toString().toLowerCase().contains(status)) {
+                int orderStatusId = (Integer) pairs.getKey();
+                return orderStatusId;
+            }
+        }
+        return 0;
+    }
+    
+    public void dispatchOrder(Dispatch dispatch) {
+        //Possibly add code if no items in combo
+        int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
+        int orderStatus = getOrderStatusId("dispatch");
+        dbOrder.dispatchOrder(orderId, orderStatus, dispatch);
+        ordersArray.remove(getOrder(orderId));
+        populateComboOrders();
+        displayDetails();
+    }
+    
+    public void validateDispatch() {
+        String dispatchDate = convertToShortDateString(dateDispatch.getDate());
+        String deliveryDate = convertToShortDateString(dateDelivery.getDate());
+        String courier = textCourier.getText();
+        String courierRef = textCourierRef.getText();
+        Object[] fields = {dispatchDate, deliveryDate, courier, courierRef};
+        if(Validator.isFilledIn(fields)) {
+            Dispatch dispatch = new Dispatch(courierRef, courier, deliveryDate, dispatchDate);
+            dispatchOrder(dispatch);
         } else {
             System.err.println("Bad");
         }
     }
     
-    public boolean validateFields() {
-        boolean isFilledIn = false;
-        Date dispatchDate = dateDispatch.getDate();
-        Date deliveryDate = dateDelivery.getDate();
-        String courier = textCourier.getText();
-        String courierRef = textCourierRef.getText();
-        Object[] fields = {dispatchDate, deliveryDate, courier, courierRef};
-        if(Validator.isFilledIn(fields)) {
-            isFilledIn = true;
-        }
-        return isFilledIn;
+    public String convertToShortDateString(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     /**
@@ -192,7 +218,7 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
     }//GEN-LAST:event_comboOrdersActionPerformed
 
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
-        dispatchOrder();
+        validateDispatch();
     }//GEN-LAST:event_btnGoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
