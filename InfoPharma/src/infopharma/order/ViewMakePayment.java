@@ -165,13 +165,33 @@ public class ViewMakePayment extends InfoPharmaPanel {
     }
     
     public void validateChequePayment() {
-        
+        Object chequeNumber = textChequeNumber.getValue();
+        Object chequeAccNumber = textAccountNumber.getValue();
+        Object sortcode = textSortCode.getValue();
+        String payerName = textChequeName.getText();
+        Object[] fields = {chequeNumber, chequeAccNumber, sortcode, payerName};
+        if(Validator.isFilledIn(fields)) {
+            int paymentTypeId = getPaymentTypeId("cheque");
+            String dateNow = convertToShortDateString(new Date());
+            double amount = Double.parseDouble(textAmount.getText());
+            ChequePayment payment = new ChequePayment(0, 
+                                                      paymentTypeId, 
+                                                      dateNow,
+                                                      amount,
+                                                      payerName,
+                                                      Integer.parseInt(sortcode.toString()),
+                                                      chequeAccNumber.toString(),
+                                                      chequeNumber.toString());
+            makeChequePayment(payment);
+        } else {
+            System.err.println("Fill the shit in");
+        }
     }
     
     public void makeCardPayment(CardPayment payment) {
         Order order = getOrder(Integer.parseInt(comboOrders.getSelectedItem().toString()));
         int orderId = order.getID();
-//        dbOrder.makeCardPayment(dummyAccount, orderId, payment);
+        dbOrder.makeCardPayment(dummyAccount, orderId, payment);
         unpaidOrders.remove(order);
         populateComboOrders();
     }
@@ -181,6 +201,14 @@ public class ViewMakePayment extends InfoPharmaPanel {
             return new SimpleDateFormat("yyyy-MM-dd").format(date);
         }
         return null;
+    }
+    
+    public void makeChequePayment(ChequePayment payment) {
+        Order order = getOrder(Integer.parseInt(comboOrders.getSelectedItem().toString()));
+        int orderId = order.getID();
+        dbOrder.makeChequePayment(dummyAccount, orderId, payment);
+        unpaidOrders.remove(order);
+        populateComboOrders();
     }
 
     /**
@@ -223,7 +251,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
         lblError.setBounds(10, 520, 820, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        textHolder.setBounds(370, 40, 260, 30);
+        textHolder.setBounds(380, 40, 250, 30);
         paneCard.add(textHolder, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dateExpiry.setBounds(160, 200, 140, 40);
         paneCard.add(dateExpiry, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -232,11 +260,11 @@ public class ViewMakePayment extends InfoPharmaPanel {
 
         comboCards.setBounds(30, 30, 260, 50);
         paneCard.add(comboCards, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        textCard.setBounds(30, 120, 260, 30);
+        textCard.setBounds(40, 120, 250, 30);
         paneCard.add(textCard, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textSecurity.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        textSecurity.setBounds(30, 280, 250, 30);
+        textSecurity.setBounds(40, 280, 240, 30);
         paneCard.add(textSecurity, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment_card.png"))); // NOI18N
@@ -246,19 +274,19 @@ public class ViewMakePayment extends InfoPharmaPanel {
         paneCard.setBounds(0, 240, 750, 320);
         layeredPanel.add(paneCard, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        textChequeName.setBounds(30, 40, 250, 28);
+        textChequeName.setBounds(40, 40, 240, 28);
         paneCheque.add(textChequeName, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textChequeNumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        textChequeNumber.setBounds(30, 270, 260, 40);
+        textChequeNumber.setBounds(40, 270, 250, 40);
         paneCheque.add(textChequeNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textAccountNumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        textAccountNumber.setBounds(30, 210, 250, 28);
+        textAccountNumber.setBounds(40, 210, 240, 28);
         paneCheque.add(textAccountNumber, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textSortCode.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        textSortCode.setBounds(30, 120, 250, 28);
+        textSortCode.setBounds(40, 120, 240, 28);
         paneCheque.add(textSortCode, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment_cheque.png"))); // NOI18N

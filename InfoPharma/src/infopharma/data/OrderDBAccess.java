@@ -649,4 +649,70 @@ public class OrderDBAccess extends DBAccess
         }
         
     }
+    
+    public void makeChequePayment(int accountNumber, int orderId, ChequePayment payment) {
+        int paymentId;
+        int typeId = payment.getTypeId();
+        String date = payment.getDate();
+        double amount = payment.getAmount();
+        String payerName = payment.getPayerName();
+        int sortcode = payment.getSortcode();
+        String chequeAccNumber = payment.getAccountNumber();
+        String chequeNumber = payment.getChequeNumber();
+        Connection con = null;
+        Statement st = null;
+        ResultSet rsPaymentId = null;
+        ResultSet rsBalance = null;
+        String sqlPaymentId = "SELECT MAX(paymentID) FROM Payments";
+        try {
+            con = makeConnection();
+            con.setAutoCommit(false);
+            con.setTransactionIsolation(con.TRANSACTION_SERIALIZABLE);
+            st = (Statement) con.createStatement();
+            rsPaymentId = st.executeQuery(sqlPaymentId);
+            rsPaymentId.next();
+            paymentId = rsPaymentId.getInt("MAX(paymentID)") + 1;
+            System.out.println(paymentId);
+            String sqlPayment = 
+                    "INSERT INTO Payments VALUES('" + paymentId + "', '" + typeId + "', '" + date + "', '" + amount + "')";
+            
+            String sqlChequePayment =
+                    "INSERT INTO ChequePayments VALUES('" + paymentId + "', '" + payerName + "', '" + sortcode + "', '" + chequeAccNumber + "', '" + chequeNumber + "')";
+            st.executeUpdate(sqlPayment);
+            st.executeUpdate(sqlChequePayment);
+            String sqlGetBalance = 
+                    "SELECT * FROM MerchantDetails WHERE accountNumber = '" + accountNumber + "'";
+            rsBalance = st.executeQuery(sqlGetBalance);
+            rsBalance.next();
+            double balance = rsBalance.getDouble("balance");
+            double newBalance = balance - payment.getAmount();
+            String sqlSetBalance = 
+                    "UPDATE MerchantDetails SET balance = '" + newBalance + "' WHERE accountNumber = '" + accountNumber + "'";
+            st.executeUpdate(sqlSetBalance);
+            String sqlSetOrder = 
+                    "UPDATE OrderDetails SET paymentID = '" + paymentId + "' WHERE orderDetailsID = '" + orderId + "'";
+            st.executeUpdate(sqlSetOrder);
+            con.commit();
+            
+        } catch(SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+            try {
+                con.rollback();
+            } catch(Exception error) {
+                System.err.println("Error: " + error.getMessage());
+            }
+        } finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(st != null) {
+                    st.close();
+                }
+            } catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess makeCardPayment");
+            }
+        }
+        
+    }
 }
