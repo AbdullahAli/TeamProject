@@ -97,17 +97,13 @@ public class ViewRegister extends InfoPharmaPanel{
         String postcode = textPostcode.getText();
         String telNumber = textNumber.getText();
         int discountPlanID = Integer.parseInt(comboDiscountPlan.getSelectedItem().toString());
-        Double creditLimit = Double.parseDouble(comboDiscountPlan.getSelectedItem().toString());
-        ArrayList<String> fields = new ArrayList<String>(Arrays.asList(company, 
-                                                                       address, 
-                                                                       contact, 
-                                                                       postcode,
-                                                                       telNumber));
+        Object creditLimitObj = textCredit.getValue();
+        Object[] fields = {company, address, contact, postcode, telNumber, creditLimitObj};
         if(Validator.isFilledIn(fields)){
+            double creditLimit = Double.parseDouble(creditLimitObj.toString());
             MerchantAccount merchantAccount = new MerchantAccount(company, address, postcode, telNumber, creditLimit, discountPlanID, "default");
             registerMerchantUser(merchantAccount);
         }else{
-            System.out.println("Fill in all details");
             lblError.setText("Please fill in all the details");
             lblError.setVisible(true);
             
@@ -119,6 +115,8 @@ public class ViewRegister extends InfoPharmaPanel{
         String password = generatePassword();
         try{
             accountDB.registerMerchantUser(username, password, merchantAccount);
+            System.out.println("Username: " + username + "\nPassword: " + password + "");
+            mainMenu();
         }catch(Exception e){
             System.out.println("Could not create user: " + e.getMessage());
         }
@@ -130,6 +128,7 @@ public class ViewRegister extends InfoPharmaPanel{
         try{
             accountDB.registerStaffUser(username, password, role);
             System.out.println("Username: " + username + "\nPassword: " + password + "");
+            mainMenu();
         }catch(Exception e){
             System.out.println("Could not create user.");
         }
@@ -169,6 +168,7 @@ public class ViewRegister extends InfoPharmaPanel{
         jLabel1 = new javax.swing.JLabel();
         comboUserType = new javax.swing.JComboBox();
         image = new javax.swing.JLabel();
+        btnMainMenu1 = new javax.swing.JButton();
         btnGo = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
 
@@ -177,6 +177,7 @@ public class ViewRegister extends InfoPharmaPanel{
         lblError.setBounds(10, 520, 820, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textCredit.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         textCredit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textCreditActionPerformed(evt);
@@ -252,6 +253,15 @@ public class ViewRegister extends InfoPharmaPanel{
         image.setBounds(0, 0, 1100, 570);
         layeredPanel.add(image, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnMainMenu1.setText("cancel");
+        btnMainMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenu1ActionPerformed(evt);
+            }
+        });
+        btnMainMenu1.setBounds(1010, 540, 100, 30);
+        layeredPanel.add(btnMainMenu1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         btnGo.setText("jButton1");
         btnGo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -315,9 +325,14 @@ public class ViewRegister extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_textNumberActionPerformed
 
+    private void btnMainMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenu1ActionPerformed
+        mainMenu();
+    }//GEN-LAST:event_btnMainMenu1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnMainMenu1;
     private javax.swing.JComboBox comboDiscountPlan;
     private javax.swing.JComboBox comboUserType;
     private javax.swing.JLabel image;
