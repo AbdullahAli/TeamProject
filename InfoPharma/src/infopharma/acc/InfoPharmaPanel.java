@@ -17,15 +17,14 @@ import javax.swing.JTextField;
 public class InfoPharmaPanel extends javax.swing.JPanel {
     private static InfoPharmaFrame frame;
 	
-    public InfoPharmaPanel(InfoPharmaFrame mainMenuFrame)
-    {
+    public InfoPharmaPanel(InfoPharmaFrame mainMenuFrame) {
+        frame = mainMenuFrame;
         initComponents();
         setFrame(mainMenuFrame);
         this.setVisible(true);
     }
     
-    public InfoPharmaPanel()
-    {
+    public InfoPharmaPanel() {
         initComponents();
         this.setVisible(true);
     }
@@ -38,14 +37,16 @@ public class InfoPharmaPanel extends javax.swing.JPanel {
         }
         } 
 
-    public static InfoPharmaFrame getFrame() 
-    {
+    public static InfoPharmaFrame getFrame() {
         return frame;
     }
 
-    public static void setFrame(InfoPharmaFrame frame) 
-    {
+    public static void setFrame(InfoPharmaFrame frame) {
         InfoPharmaPanel.frame = frame;
+    }
+    
+    public void mainMenu() {
+        frame.setPanel(new ViewMainMenu(this.getFrame()));
     }
 
     /**
