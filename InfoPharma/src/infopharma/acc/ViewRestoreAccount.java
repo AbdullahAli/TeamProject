@@ -10,6 +10,9 @@ import infopharma.data.MerchantAccount;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
@@ -22,9 +25,11 @@ public class ViewRestoreAccount extends InfoPharmaPanel {
     private static InfoPharmaFrame frame;
     private AccountDBAccess accountDB;
     private ArrayList<MerchantAccount> merchants;
+    private HashMap<Integer, String> accountStatuses;
 	
     public ViewRestoreAccount(InfoPharmaFrame mainMenuFrame) {
         accountDB = new AccountDBAccess();
+        accountStatuses = accountDB.getAccountStatuses();
         initComponents();
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
@@ -50,22 +55,50 @@ public class ViewRestoreAccount extends InfoPharmaPanel {
         }
     }
     
-    public void populateMerchantDetails(){
+    public void populateMerchantDetails() {
         MerchantAccount merchant = getSelectedMerchant();
-        if(merchant.getAccountStatusID() == 1){
+        String status = getAccountStatus(merchant).toLowerCase();
+        if(status.contains("default")) {
             radioBtnDefault.setSelected(true);
-        }else if(merchant.getAccountStatusID() == 2){
+        } else if(status.contains("active")) {
             radioBtnActive.setSelected(true);
-        }else if(merchant.getAccountStatusID() == 3){
+        } else if(status.contains("suspend")) {
             radioBtnSuspended.setSelected(true);
         }
     }
     
-    public MerchantAccount getSelectedMerchant(){
+    public String getAccountStatus(MerchantAccount merchant) {
+        return accountStatuses.get(merchant.getAccountStatusID());
+    }
+    
+    public int getAccountStatusID(String status) {
+        Iterator it = accountStatuses.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            if(pairs.getValue().toString().toLowerCase().contains(status)) {
+                return (Integer) pairs.getKey();
+            }
+        }
+        return -1;
+    }
+    
+    public int getSelectedAccountStatus() {
+        int statusID = -1;
+        if(radioBtnActive.isSelected()) {
+            statusID = getAccountStatusID("active");
+        } else if(radioBtnSuspended.isSelected()) {
+            statusID = getAccountStatusID("suspend");
+        } else if(radioBtnDefault.isSelected()) {
+            statusID = getAccountStatusID("default");
+        }
+        return statusID;
+    }
+    
+    public MerchantAccount getSelectedMerchant() {
         String company = comboMerchants.getSelectedItem().toString();
         MerchantAccount merchant = null;
-        for(int i=0; i<merchants.size(); i++){
-            if(merchants.get(i).getCompany().equals(company)){
+        for(int i=0; i<merchants.size(); i++) {
+            if(merchants.get(i).getCompany().equals(company)) {
                 merchant = merchants.get(i);
                 break;
             }
