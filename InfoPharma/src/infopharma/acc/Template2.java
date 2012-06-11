@@ -81,7 +81,7 @@ public class Template2 extends InfoPharmaPanel{
 
     private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
         // TODO add your handling code here:
-        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
+        mainMenu();
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
