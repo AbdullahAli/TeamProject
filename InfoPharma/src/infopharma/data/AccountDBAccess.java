@@ -301,7 +301,8 @@ public class AccountDBAccess extends DBAccess{
         return statuses;
     }
     
-    public void updateMerchantStatus(MerchantAccount merchant, int statusID) throws SQLException {
+    public boolean updateMerchantStatus(MerchantAccount merchant, int statusID) {
+        boolean successful = false;
         int accountNumber = merchant.getAccountNumber();
         Connection connection = null;
         Statement statementUpdate = null;
@@ -313,8 +314,13 @@ public class AccountDBAccess extends DBAccess{
             statementUpdate = (Statement) connection.createStatement();
             statementUpdate.executeUpdate(sqlUpdate);
             connection.commit();
+            successful = true;
         }catch(SQLException ex) {
-            connection.rollback();
+            try { 
+                connection.rollback();
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            }
             System.err.println("Error: " + ex.getMessage());
         }finally {
             try {
@@ -328,6 +334,7 @@ public class AccountDBAccess extends DBAccess{
                 System.err.println("Could not close the resources in AccountDBAccess updateMerchantStatus");
             }
         }
+        return successful;
     }
     
         public MerchantAccount getMerchantByOrder(int orderId) {

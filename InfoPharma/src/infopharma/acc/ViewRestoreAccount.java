@@ -106,21 +106,15 @@ public class ViewRestoreAccount extends InfoPharmaPanel {
         return merchant;
     }
     
-    public void updateMerchantStatus(){
+    public void updateMerchantStatus() {
         MerchantAccount merchant = getSelectedMerchant();
-        int statusID = 0;
-        if(radioBtnActive.isSelected()){
-            statusID = 2;
-        }else if(radioBtnSuspended.isSelected()){
-            statusID = 3;
-        }else if(radioBtnDefault.isSelected()){
-            statusID = 1;
+        int statusID = getSelectedAccountStatus();
+        if(accountDB.updateMerchantStatus(merchant, statusID)) {
+            mainMenu();
+        } else {
+            System.err.println("Shit fucked up.");
         }
-        try{
-            accountDB.updateMerchantStatus(merchant, statusID);
-        }catch(Exception e){
-            System.out.println("Could not update Merchant's Account Status: " + e.getMessage());
-        }
+            
     }
 
     /**
