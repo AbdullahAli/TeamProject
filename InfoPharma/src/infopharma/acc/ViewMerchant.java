@@ -11,6 +11,8 @@ import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.ButtonModel;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -29,9 +31,9 @@ public class ViewMerchant extends InfoPharmaPanel{
 	
     public ViewMerchant(InfoPharmaFrame mainMenuFrame){
         accountDB = new AccountDBAccess();
+        accountStatuses = accountDB.getAccountStatuses();
         initComponents();
         populateComboMerchants();
-        accountStatuses = accountDB.getAccountStatuses();
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         this.setVisible(true);
@@ -41,7 +43,7 @@ public class ViewMerchant extends InfoPharmaPanel{
         setFieldsOpaque();
     }
     
-    public void setFieldsOpaque()  {
+    public void setFieldsOpaque() {
         JTextField[] fields = {textAccountNumber, textBalance, textCredit, textDiscount, textPostcode, textTelNumber};
         setFieldsOpaque(fields);
     }
@@ -54,15 +56,20 @@ public class ViewMerchant extends InfoPharmaPanel{
         InfoPharmaPanel.setFrame(frame);
     }
     
-    public void populateComboMerchants(){
+    public void populateComboMerchants() {
         merchants = accountDB.getAllMerchants();
-        for(MerchantAccount merchant : merchants){
+        for(MerchantAccount merchant : merchants) {
             comboMerchants.addItem(merchant.getCompany());
         }
     }
     
-    public void populateMerchantDetails(){
+    public void populateMerchantDetails() {
         MerchantAccount merchant = getSelectedMerchant();
+        populateFields(merchant);
+        selectRadioBtn(merchant);
+    }
+    
+    public void populateFields(MerchantAccount merchant) {
         textAccountNumber.setText(Integer.toString(merchant.getAccountNumber()));
         areaAddress.setText(merchant.getAddress());
         textPostcode.setText(merchant.getPostcode());
@@ -70,25 +77,39 @@ public class ViewMerchant extends InfoPharmaPanel{
         textCredit.setText(Double.toString(merchant.getCreditLimit()));
         textBalance.setText(Double.toString(merchant.getBalance()));
         textDiscount.setText(Integer.toString(merchant.getDiscountPlan()));
-        if(merchant.getAccountStatusID() == 1){
+    }
+    
+    public void selectRadioBtn(MerchantAccount merchant) {
+        String status = getAccountStatus(merchant).toLowerCase();
+        System.out.println(status);
+        if(status.contains("default")) {
             radioBtnDefault.setSelected(true);
-        }else if(merchant.getAccountStatusID() == 2){
+        } else if(status.contains("active")) {
             radioBtnActive.setSelected(true);
-        }else if(merchant.getAccountStatusID() == 3){
+        } else if(status.contains("suspend")) {
             radioBtnSuspended.setSelected(true);
         }
     }
     
-    public MerchantAccount getSelectedMerchant(){
+    public String getAccountStatus(MerchantAccount merchant) {
+        return accountStatuses.get(merchant.getAccountStatusID());
+    }
+    
+    public MerchantAccount getSelectedMerchant() {
         String company = comboMerchants.getSelectedItem().toString();
         MerchantAccount merchant = null;
-        for(int i=0; i<merchants.size(); i++){
-            if(merchants.get(i).getCompany().equals(company)){
+        for(int i=0; i<merchants.size(); i++) {
+            if(merchants.get(i).getCompany().equals(company)) {
                 merchant = merchants.get(i);
                 break;
             }
         }
         return merchant;
+    }
+    
+    public void updateMerchantDetails() {
+        //DO WE NEED TO UPDATE DETAILS?
+        mainMenu();
     }
 
     /**
@@ -116,6 +137,8 @@ public class ViewMerchant extends InfoPharmaPanel{
         radioBtnActive = new javax.swing.JRadioButton();
         radioBtnSuspended = new javax.swing.JRadioButton();
         imageLabel = new javax.swing.JLabel();
+        btnGo = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
 
         comboMerchants.addActionListener(new java.awt.event.ActionListener() {
@@ -190,6 +213,24 @@ public class ViewMerchant extends InfoPharmaPanel{
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnGo.setText("OK");
+        btnGo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoActionPerformed(evt);
+            }
+        });
+        btnGo.setBounds(1020, 70, 80, 470);
+        layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnCancel.setText("canel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+        btnCancel.setBounds(1010, 540, 100, 30);
+        layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,8 +253,7 @@ public class ViewMerchant extends InfoPharmaPanel{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
-        // TODO add your handling code here:
-        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
+        mainMenu();
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void comboMerchantsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMerchantsActionPerformed
@@ -224,8 +264,18 @@ public class ViewMerchant extends InfoPharmaPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_textCreditActionPerformed
 
+    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        updateMerchantDetails();
+    }//GEN-LAST:event_btnGoActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        mainMenu();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaAddress;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JComboBox comboMerchants;
     private javax.swing.JLabel imageLabel;
