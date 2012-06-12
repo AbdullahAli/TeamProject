@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/Users/Abdullah/Desktop/TeamProject/InfoPharma/src/infopharma/acc/InfoPharmaFrame.java</file>
+        <file>file:/Users/Abdullah/Desktop/TeamProject/InfoPharma/src/infopharma/cat/ViewNewCatalogue.java</file>
+        <file>file:/Users/Abdullah/Desktop/TeamProject/InfoPharma/src/infopharma/order/ViewPlaceOrder.java</file>
+        <file>file:/Users/Abdullah/Desktop/TeamProject/InfoPharma/src/infopharma/data/OrderDBAccess.java</file>
+        <file>file:/Users/Abdullah/Desktop/TeamProject/InfoPharma/src/infopharma/cat/ViewFindProduct.java</file>
+    </open-files>
 </project-private>
