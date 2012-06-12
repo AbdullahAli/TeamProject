@@ -14,7 +14,8 @@ public class InfoPharma {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new InfoPharmaFrame();
+        //new LoadingScreen();
+        LoadingScreen.main(new String[0]);
         
     }
 }
