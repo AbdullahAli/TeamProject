@@ -18,6 +18,44 @@ import java.util.HashMap;
  */
 public class OrderDBAccess extends DBAccess 
 {
+    
+    public int getDiscountID(int accountNumber)
+    {
+        Connection con = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sql = "SELECT discountPlanID FROM MerchantDetails WHERE accountNumber = '"+accountNumber+"'";
+        
+        try
+        {
+            con = makeConnection();
+            stat = (Statement)con.createStatement();
+            rs = stat.executeQuery(sql);
+            
+            int discountID = 0;
+            while(rs.next())
+            {
+                discountID = rs.getInt("discountPlanID");
+            }
+            return discountID;
+        }
+        catch(Exception ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(stat != null) {
+                    stat.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getMerchantOrders");
+            }
+        }
+        return 0;
+    }
+    
     public ArrayList<Order> getMerchantOrders(int accountNumber)
     {
         ArrayList<Order> orders = new ArrayList<Order>();
