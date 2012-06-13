@@ -148,7 +148,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
                                                   Integer.parseInt(secCode.toString()));
             makeCardPayment(payment);
         } else {
-            System.err.println("Fill the shit in");
+            displayError("Please fill in all the details.");
         }
         
     }
@@ -184,7 +184,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
                                                       chequeNumber.toString());
             makeChequePayment(payment);
         } else {
-            System.err.println("Fill the shit in");
+            displayError("Please fill in all the details.");
         }
     }
     
@@ -209,6 +209,11 @@ public class ViewMakePayment extends InfoPharmaPanel {
         dbOrder.makeChequePayment(dummyAccount, orderId, payment);
         unpaidOrders.remove(order);
         populateComboOrders();
+    }
+    
+    public void displayError(String error) {
+        lblError.setText(error);
+        lblError.setVisible(true);
     }
 
     /**
@@ -242,8 +247,9 @@ public class ViewMakePayment extends InfoPharmaPanel {
         comboOrders = new javax.swing.JComboBox();
         textAmount = new javax.swing.JTextField();
         textDateOrdered = new javax.swing.JTextField();
-        btnOk = new javax.swing.JButton();
         imgBackground = new javax.swing.JLabel();
+        btnCancel = new javax.swing.JButton();
+        btnOk = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -331,6 +337,20 @@ public class ViewMakePayment extends InfoPharmaPanel {
         textDateOrdered.setBounds(380, 120, 250, 30);
         layeredPanel.add(textDateOrdered, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        imgBackground.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imgBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment_background.png"))); // NOI18N
+        imgBackground.setBounds(0, 0, 1100, 570);
+        layeredPanel.add(imgBackground, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnCancel.setText("main menu");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+        btnCancel.setBounds(1010, 540, 90, 30);
+        layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         btnOk.setText("OK");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -339,11 +359,6 @@ public class ViewMakePayment extends InfoPharmaPanel {
         });
         btnOk.setBounds(1020, 70, 80, 470);
         layeredPanel.add(btnOk, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        imgBackground.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imgBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/order/images/makepayment_background.png"))); // NOI18N
-        imgBackground.setBounds(0, 0, 1100, 570);
-        layeredPanel.add(imgBackground, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -389,7 +404,12 @@ public class ViewMakePayment extends InfoPharmaPanel {
         validatePayment();
     }//GEN-LAST:event_btnOkActionPerformed
 
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        mainMenu();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnMainMenu;
     private javax.swing.JButton btnOk;
     private javax.swing.JComboBox comboCards;
