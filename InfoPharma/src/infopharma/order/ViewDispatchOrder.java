@@ -102,9 +102,13 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
         int orderStatus = getOrderStatusId("dispatch");
         dbOrder.dispatchOrder(orderId, orderStatus, dispatch);
-        ordersArray.remove(getOrder(orderId));
-        populateComboOrders();
-        displayDetails();
+        if(ordersArray.remove(getOrder(orderId))) {
+            populateComboOrders();
+            displayDetails();
+            mainMenu();
+        } else {
+            displayError("Ooops. Something went wrong.");
+        }
     }
     
     public void validateDispatch() {

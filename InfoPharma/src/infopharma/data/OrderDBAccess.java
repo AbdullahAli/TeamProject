@@ -459,7 +459,7 @@ public class OrderDBAccess extends DBAccess
         return new Double(0);
     }
     
-    public void dispatchOrder(int orderId, int statusId, Dispatch dispatch) {
+    public boolean dispatchOrder(int orderId, int statusId, Dispatch dispatch) {
         String courierRef = dispatch.getCourierRef();
         String courier = dispatch.getCourier();
         String estDeliveryDate = dispatch.getEstDeliveryDate();
@@ -486,6 +486,7 @@ public class OrderDBAccess extends DBAccess
                 statementDispatch.executeUpdate(sqlDispatch);
                 statementOrder.executeUpdate(sqlOrderUpdate);
                 connection.commit();
+                return true;
             }
 
         } catch(SQLException ex) {
@@ -513,7 +514,7 @@ public class OrderDBAccess extends DBAccess
                 System.err.println("Could not close the resources in OrderDBAccess dispatchOrder");
             }
         }
-        
+        return false;
     }
     
     public ArrayList<Order> getUnpaidMerchantOrders(int accountNumber) {
