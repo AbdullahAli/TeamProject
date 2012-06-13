@@ -123,6 +123,7 @@ public class ViewFindOrder extends InfoPharmaPanel{
         jScrollPane1 = new javax.swing.JScrollPane();
         tableProducts = new javax.swing.JTable();
         imageLabel = new javax.swing.JLabel();
+        btnOk = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -171,6 +172,15 @@ public class ViewFindOrder extends InfoPharmaPanel{
         imageLabel.setBounds(0, 0, 1100, 570);
         layeredPanel.add(imageLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnOk.setText("main menu");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+        btnOk.setBounds(1010, 70, 90, 500);
+        layeredPanel.add(btnOk, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         btnMainMenu.setText("main menu");
         btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,16 +203,20 @@ public class ViewFindOrder extends InfoPharmaPanel{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
-        // TODO add your handling code here:
-        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
+        mainMenu();
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void comboOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdersActionPerformed
         displayOrder();
     }//GEN-LAST:event_comboOrdersActionPerformed
 
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        mainMenu();
+    }//GEN-LAST:event_btnOkActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnOk;
     private javax.swing.JComboBox comboOrders;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JScrollPane jScrollPane1;
