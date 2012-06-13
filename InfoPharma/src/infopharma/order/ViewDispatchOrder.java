@@ -121,12 +121,20 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
             Dispatch dispatch = new Dispatch(courierRef, courier, deliveryDate, dispatchDate);
             dispatchOrder(dispatch);
         } else {
-            System.err.println("Bad");
+            displayError("Please fill in all the details");
         }
     }
     
+    public void displayError(String error) {
+        lblError.setText(error);
+        lblError.setVisible(true);
+    }
+    
     public String convertToShortDateString(Date date) {
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+        if(date != null) {
+            return new SimpleDateFormat("yyyy-MM-dd").format(date);
+        }
+        return null;
     }
 
     /**
@@ -221,8 +229,7 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
-        // TODO add your handling code here:
-        this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
+        mainMenu();
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
     private void comboOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdersActionPerformed
