@@ -78,8 +78,20 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         });
         btnOpen.setBounds(30, 300, 470, 29);
         layeredPanel.add(btnOpen, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        calFrom.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                calFromPropertyChange(evt);
+            }
+        });
         calFrom.setBounds(40, 230, 120, 20);
         layeredPanel.add(calFrom, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        calTo.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                calToPropertyChange(evt);
+            }
+        });
         calTo.setBounds(170, 230, 123, 20);
         layeredPanel.add(calTo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -163,6 +175,14 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         // TODO add your handling code here:
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void calFromPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_calFromPropertyChange
+        calTo.setMinSelectableDate(calFrom.getDate());
+    }//GEN-LAST:event_calFromPropertyChange
+
+    private void calToPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_calToPropertyChange
+        calFrom.setMaxSelectableDate(calTo.getDate());
+    }//GEN-LAST:event_calToPropertyChange
 
     public void generateNewReport()
     {

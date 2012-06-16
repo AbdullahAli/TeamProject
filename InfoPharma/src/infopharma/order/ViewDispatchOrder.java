@@ -179,8 +179,20 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         layeredPanel.add(textCourier, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textCourierRef.setBounds(40, 440, 250, 30);
         layeredPanel.add(textCourierRef, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        dateDelivery.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateDeliveryPropertyChange(evt);
+            }
+        });
         dateDelivery.setBounds(40, 530, 250, 20);
         layeredPanel.add(dateDelivery, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        dateDispatch.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateDispatchPropertyChange(evt);
+            }
+        });
         dateDispatch.setBounds(40, 290, 250, 20);
         layeredPanel.add(dateDispatch, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -239,6 +251,14 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
         validateDispatch();
     }//GEN-LAST:event_btnGoActionPerformed
+
+    private void dateDispatchPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateDispatchPropertyChange
+        dateDelivery.setMinSelectableDate(dateDispatch.getDate());
+    }//GEN-LAST:event_dateDispatchPropertyChange
+
+    private void dateDeliveryPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateDeliveryPropertyChange
+        dateDispatch.setMaxSelectableDate(dateDelivery.getDate());
+    }//GEN-LAST:event_dateDeliveryPropertyChange
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGo;

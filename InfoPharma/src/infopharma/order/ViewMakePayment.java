@@ -39,6 +39,8 @@ public class ViewMakePayment extends InfoPharmaPanel {
         initComponents();
         populateComboOrders();
         populateComboCards();
+        dateStart.setMaxSelectableDate(new Date());
+        dateExpiry.setMinSelectableDate(new Date());
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         setFieldsOpaque();
