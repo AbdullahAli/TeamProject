@@ -134,7 +134,8 @@ public class ViewNewCatalogue extends InfoPharmaPanel{
     
     public void validateCatalogueName()
     {
-        if(Validator.isFilledIn(txtCatalogueName.getText()))
+        Object[] fields = {txtCatalogueName};
+        if(Validator.isFilledIn(fields))
         {
             System.out.println("Is filled i");
             insertCatalogue();
