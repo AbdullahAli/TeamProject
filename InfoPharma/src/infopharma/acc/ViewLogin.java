@@ -15,6 +15,7 @@ import javax.swing.JLayeredPane;
  * @author Abdullah
  */
 public class ViewLogin extends InfoPharmaPanel{
+    
     private static InfoPharmaFrame frame;
 	
     public ViewLogin(InfoPharmaFrame mainMenuFrame)
@@ -99,11 +100,13 @@ public class ViewLogin extends InfoPharmaPanel{
 
     public void loginValidator()
     {
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        System.out.println("username:"+username+" password:"+password);
-        if(Validator.isFilledIn(username, password))
+
+        Object[] fields = {txtUsername, txtPassword};
+        if(Validator.isFilledIn(fields))
         {
+            String username = txtUsername.getText();
+            String password = txtPassword.getText();
+            System.out.println("username:"+username+" password:"+password);
             login(username,password);
         }
         else

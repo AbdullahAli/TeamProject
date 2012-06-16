@@ -21,19 +21,17 @@ import javax.swing.JTextField;
  * @author Abdullah
  */
 public class ViewProductInformation extends InfoPharmaPanel{
+    
     private static InfoPharmaFrame frame;
-    private ArrayList<JTextField> fields;
     private CatDBAccess catDBAccess;
 	
     public ViewProductInformation(InfoPharmaFrame mainMenuFrame, String productName)
     {
         initComponents();
-        fields = new ArrayList<JTextField>();
         catDBAccess = new CatDBAccess();
         populateFields(productName);
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
-        populateFieldsArray();
         this.setVisible(true);
         setFieldsOpaque();
     }
@@ -191,8 +189,9 @@ public class ViewProductInformation extends InfoPharmaPanel{
     
     public void validateFields()
     {
+        Object[] fields = {txtCost, txtInitialStock, txtName, txtType, txtUnitsInAPack};
         lblError.setVisible(false);
-        if(Validator.isFilled(fields))
+        if(Validator.isFilledIn(fields))
         {
             insertNewProduct();
         }
@@ -211,15 +210,6 @@ public class ViewProductInformation extends InfoPharmaPanel{
     public void goToMainMenu()
     {
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
-    }
-    
-    public void populateFieldsArray()
-    {
-        fields.add(txtCost);
-        fields.add(txtInitialStock);
-        fields.add(txtName);
-        fields.add(txtType);
-        fields.add(txtUnitsInAPack);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
