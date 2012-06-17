@@ -16,6 +16,17 @@ public class UserAccount {
     {
         this.role = role;
     }
+
+    //DONT REMOVE!
+    public UserAccount() 
+    {
+    }
+    
+    //DONT REMOVE!
+    public UserAccount(String role, String username) 
+    {
+        this.role = role;
+    }
     
     public static String getRole()
     {

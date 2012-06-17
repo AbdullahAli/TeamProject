@@ -108,7 +108,7 @@ public class OrderDBAccess extends DBAccess
         
         
         //for testing
-        accountNumber = 1;
+        accountNumber = MerchantAccount.getAccountNumber();
         
         try
         {
