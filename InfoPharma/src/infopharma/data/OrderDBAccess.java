@@ -664,7 +664,7 @@ public class OrderDBAccess extends DBAccess
         return paymentTypes;
     }
 
-    public void makeCardPayment(int accountNumber, int orderId, CardPayment payment) {
+    public boolean makeCardPayment(int accountNumber, int orderId, CardPayment payment) {
         int paymentId;
         int typeId = payment.getTypeId();
         String date = payment.getDate();
@@ -708,6 +708,7 @@ public class OrderDBAccess extends DBAccess
                     "UPDATE OrderDetails SET paymentID = '" + paymentId + "' WHERE orderDetailsID = '" + orderId + "'";
             st.executeUpdate(sqlSetOrder);
             con.commit();
+            return true;
             
         } catch(SQLException ex) {
             System.err.println("Error: " + ex.getMessage());
@@ -728,7 +729,7 @@ public class OrderDBAccess extends DBAccess
                 System.err.println("Could not close the resources in OrderDBAccess makeCardPayment");
             }
         }
-        
+        return false;
     }
     
     public void makeChequePayment(int accountNumber, int orderId, ChequePayment payment) {

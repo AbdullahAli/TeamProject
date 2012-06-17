@@ -28,10 +28,11 @@ public class ViewMakePayment extends InfoPharmaPanel {
     private ArrayList<Order> unpaidOrders;
     private HashMap<Integer, String> cardTypes;
     private HashMap<Integer, String> paymentTypes;
+    private int accountNumber;
     //Dummy accountNumber until we store the logged in account somewhere
-    private int dummyAccount = 1;
 	
     public ViewMakePayment(InfoPharmaFrame mainMenuFrame) {
+        accountNumber = MerchantAccount.getAccountNumber();
         dbOrder = new OrderDBAccess();
         getUnpaidOrders();
         getCardTypes();
@@ -70,7 +71,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
     }
     
     public void getUnpaidOrders() {
-        unpaidOrders = dbOrder.getUnpaidMerchantOrders(dummyAccount);
+        unpaidOrders = dbOrder.getUnpaidMerchantOrders(accountNumber);
     }
     
     public void getCardTypes() {
@@ -193,9 +194,11 @@ public class ViewMakePayment extends InfoPharmaPanel {
     public void makeCardPayment(CardPayment payment) {
         Order order = getOrder(Integer.parseInt(comboOrders.getSelectedItem().toString()));
         int orderId = order.getID();
-        dbOrder.makeCardPayment(dummyAccount, orderId, payment);
-        unpaidOrders.remove(order);
-        populateComboOrders();
+        if(dbOrder.makeCardPayment(accountNumber, orderId, payment)) {
+            mainMenu();
+        } else {
+            displayError("ERROR: Payment was not made.");
+        }
     }
     
     public String convertToShortDateString(Date date) {
@@ -208,7 +211,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
     public void makeChequePayment(ChequePayment payment) {
         Order order = getOrder(Integer.parseInt(comboOrders.getSelectedItem().toString()));
         int orderId = order.getID();
-        dbOrder.makeChequePayment(dummyAccount, orderId, payment);
+        dbOrder.makeChequePayment(accountNumber, orderId, payment);
         unpaidOrders.remove(order);
         populateComboOrders();
     }
@@ -268,6 +271,8 @@ public class ViewMakePayment extends InfoPharmaPanel {
 
         comboCards.setBounds(30, 30, 260, 50);
         paneCard.add(comboCards, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textCard.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         textCard.setBounds(40, 120, 250, 30);
         paneCard.add(textCard, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
