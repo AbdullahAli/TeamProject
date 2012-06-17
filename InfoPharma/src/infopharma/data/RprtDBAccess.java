@@ -381,4 +381,41 @@ public class RprtDBAccess extends DBAccess
         }
         return null;
     }
+    
+    
+    public ArrayList<String> getAllMerchantIDs(){
+        ArrayList<String> ids = new ArrayList<String>();
+        Connection connection = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sqlMerchants = "SELECT accountNumber FROM MerchantDetails";
+        try{
+            connection = makeConnection();
+            connection.setTransactionIsolation(connection.TRANSACTION_READ_COMMITTED);
+            stat = (Statement) connection.createStatement();
+            rs = stat.executeQuery(sqlMerchants);
+            while(rs.next()){
+                ids.add(rs.getString("accountNumber"));
+            }
+            return ids;
+        }catch(SQLException ex){
+            System.err.println("Error: "+ex.getMessage());
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+                if(stat != null){
+                    stat.close();
+                }
+                
+                if(rs != null){
+                    rs.close();
+                }
+            }catch(Exception e){
+                System.err.println("Could not close the resources in AccountDBAccess getAllMerchants");
+            }
+        }
+        return null;
+    }
 }

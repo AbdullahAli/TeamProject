@@ -10,10 +10,12 @@ import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
+import infopharma.data.RprtDBAccess;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -24,15 +26,32 @@ import javax.swing.JLayeredPane;
  */
 public class ViewGenerateReport extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
+    private RprtDBAccess rprtDBAccess;
     String documentPath = "";
 	
     public ViewGenerateReport(InfoPharmaFrame mainMenuFrame)
     {
         initComponents();
+        rprtDBAccess = new RprtDBAccess();
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         this.setVisible(true);
         btnOpen.setVisible(false);
+        pnlID.setVisible(false);
+        pnlID.setEnabled(false);
+        populateComboProducts();
+        
+    }
+    
+    public void populateComboProducts()
+    {
+        ddlMerchantIDs.removeAllItems();
+        ArrayList<String> merchantIDs = rprtDBAccess.getAllMerchantIDs();
+        for(int i =0; i< merchantIDs.size();i++)
+        {
+            ddlMerchantIDs.addItem(merchantIDs.get(i));
+        }
+        ddlMerchantIDs.updateUI();
     }
     
     public String convertToShortDateString(Date date)
@@ -60,6 +79,9 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
+        pnlID = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        ddlMerchantIDs = new javax.swing.JComboBox();
         btnOpen = new javax.swing.JButton();
         calFrom = new com.toedter.calendar.JDateChooser();
         calTo = new com.toedter.calendar.JDateChooser();
@@ -70,13 +92,45 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         btnGenerate = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
 
-        btnOpen.setText("open report");
+        pnlID.setOpaque(false);
+
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setText("Merchant ID");
+
+        org.jdesktop.layout.GroupLayout pnlIDLayout = new org.jdesktop.layout.GroupLayout(pnlID);
+        pnlID.setLayout(pnlIDLayout);
+        pnlIDLayout.setHorizontalGroup(
+            pnlIDLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(pnlIDLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel1)
+                .addContainerGap())
+            .add(pnlIDLayout.createSequentialGroup()
+                .add(ddlMerchantIDs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 270, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 60, Short.MAX_VALUE))
+        );
+        pnlIDLayout.setVerticalGroup(
+            pnlIDLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(pnlIDLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(ddlMerchantIDs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        pnlID.setBounds(360, 100, 330, 80);
+        layeredPanel.add(pnlID, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/report/open.png"))); // NOI18N
+        btnOpen.setBorderPainted(false);
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOpenActionPerformed(evt);
             }
         });
-        btnOpen.setBounds(30, 300, 470, 29);
+        btnOpen.setBounds(10, 300, 130, 42);
         layeredPanel.add(btnOpen, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         calFrom.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -95,8 +149,13 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         calTo.setBounds(170, 230, 123, 20);
         layeredPanel.add(calTo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        ddlReportType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Activity Report", "Low Stock Report", "Merchant Orders Report", "Stock Turnaround Report", "Product Turnaround Report" }));
-        ddlReportType.setBounds(30, 150, 270, 27);
+        ddlReportType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Activity Report", "Low Stock Report", "Merchant Orders Report", "Stock Turnaround Report" }));
+        ddlReportType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ddlReportTypeActionPerformed(evt);
+            }
+        });
+        ddlReportType.setBounds(30, 140, 270, 27);
         layeredPanel.add(ddlReportType, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -184,6 +243,17 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         calFrom.setMaxSelectableDate(calTo.getDate());
     }//GEN-LAST:event_calToPropertyChange
 
+    private void ddlReportTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddlReportTypeActionPerformed
+        pnlID.setVisible(false);
+        pnlID.setEnabled(false);
+        if(ddlReportType.getSelectedItem().equals("Activity Report") || ddlReportType.getSelectedItem().equals("Merchant Orders Report"))
+        {
+            pnlID.setVisible(true);
+            pnlID.setEnabled(true);
+        }
+        btnOpen.setVisible(false);
+    }//GEN-LAST:event_ddlReportTypeActionPerformed
+
     public void generateNewReport()
     {
         String reportType = ddlReportType.getSelectedItem().toString();
@@ -192,7 +262,11 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         String from = convertToShortDateString(calFrom.getDate());
         String to = convertToShortDateString(calTo.getDate());
         
-        String accountNumber = "1";
+        pnlID.setVisible(false);
+        pnlID.setEnabled(false);
+        ddlMerchantIDs.setSelectedIndex(0);
+        
+        String accountNumber = ddlMerchantIDs.getSelectedItem().toString();
         
         
         if(reportType.equals("Activity Report"))
@@ -266,9 +340,12 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     private javax.swing.JButton btnOpen;
     private com.toedter.calendar.JDateChooser calFrom;
     private com.toedter.calendar.JDateChooser calTo;
+    private javax.swing.JComboBox ddlMerchantIDs;
     private javax.swing.JComboBox ddlReportType;
     private javax.swing.JLabel imageLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JPanel pnlID;
     // End of variables declaration//GEN-END:variables
 }

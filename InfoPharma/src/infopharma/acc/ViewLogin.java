@@ -124,6 +124,7 @@ public class ViewLogin extends InfoPharmaPanel{
             UserAccount userAccount = miscDBAccess.login(username, password);
             if(userAccount != null)
             {
+                System.out.println("the username is is: "+username);
                 MerchantAccount.setAccountNumber(miscDBAccess.getAccountNumber(username));
                 this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
             }

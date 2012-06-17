@@ -25,7 +25,7 @@ public class OrderDBAccess extends DBAccess
         Statement stat = null;
         ResultSet rs = null;
         String sql = "SELECT discountPlanID FROM MerchantDetails WHERE accountNumber = '"+accountNumber+"'";
-        
+        System.out.println(">>" +sql);
         try
         {
             con = makeConnection();

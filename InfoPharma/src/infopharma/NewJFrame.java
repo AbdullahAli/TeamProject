@@ -171,7 +171,7 @@ public class NewJFrame extends javax.swing.JFrame {
             try 
             {
                 Thread.sleep(random);
-                int value = (int)(loadingBar.getValue() + (10 * Math.random()));
+                int value = (int)(loadingBar.getValue() + (30 * Math.random()));
                 loadingBar.setValue(value);
                 updateIPOS();
             } 
