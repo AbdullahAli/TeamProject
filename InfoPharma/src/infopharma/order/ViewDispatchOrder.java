@@ -32,12 +32,17 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         ordersArray = dbOrder.getAllUndispatchedOrders();
         orderStatuses = dbOrder.getOrderStatuses();
         initComponents();
+        getDispatcher();
+        dateDispatch.setMinSelectableDate(new Date());
         populateComboOrders();
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
         this.setVisible(true);
-        
         setFieldsOpaque();
+    }
+    
+    public void getDispatcher() {
+        textDispatcher.setText(UserAccount.getUsername() + "");
     }
     
     public void setFieldsOpaque()  {
