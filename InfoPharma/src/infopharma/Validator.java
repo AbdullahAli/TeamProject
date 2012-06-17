@@ -12,7 +12,7 @@ import javax.swing.JTextField;
  * @author Abdullah
  */
 public class Validator {
-    
+
     public static boolean isFilledIn(Object[] fields) {
         for(Object field : fields) {
             if(field == null || field.equals("")) {
@@ -21,5 +21,4 @@ public class Validator {
         }
         return true;
     }
-    
 }
