@@ -25,19 +25,13 @@ public class ViewFindOrder extends InfoPharmaPanel{
     private CatDBAccess dbCat;
     private ArrayList<Order> ordersArray;
     private DefaultTableModel model;
+    private double vat;
 	
     public ViewFindOrder(InfoPharmaFrame mainMenuFrame) {
+        vat = 1.175;
         dbOrder = new OrderDBAccess();
         dbCat = new CatDBAccess();
-        
-        if(UserAccount.getRole().equals("Administrator"))
-        {
-            ordersArray = dbOrder.getAllOrders();
-        }
-        else if(UserAccount.getRole().equals("Merchant"))
-        {
-            ordersArray = dbOrder.getAllOrdersByMerchant(MerchantAccount.getAccountNumber());
-        }
+        getOrders();
         initComponents();
         model = (DefaultTableModel) tableProducts.getModel();
         populateComboOrders();
@@ -45,6 +39,14 @@ public class ViewFindOrder extends InfoPharmaPanel{
         lblError.setVisible(false);
         this.setVisible(true);
         setFieldsOpaque();
+    }
+    
+    public void getOrders() {
+        if(UserAccount.getRole().equals("Administrator")) {
+            ordersArray = dbOrder.getAllOrders();
+        } else if(UserAccount.getRole().equals("Merchant")) {
+            ordersArray = dbOrder.getAllOrdersByMerchant(MerchantAccount.getAccountNumber());
+        }
     }
     
     public void setFieldsOpaque()  {
@@ -79,7 +81,7 @@ public class ViewFindOrder extends InfoPharmaPanel{
         double orderSubTotal = order.getTotal();
         textSubtotal.setValue(Double.parseDouble(orderSubTotal+""));
         textVAT.setText("17.5%");
-        textTotal.setValue(Double.parseDouble(17.5*orderSubTotal+""));
+        textTotal.setValue(Double.parseDouble(vat*orderSubTotal+""));
     }
     
     public void displayProducts(ArrayList<Product> productsInOrderArray) {
