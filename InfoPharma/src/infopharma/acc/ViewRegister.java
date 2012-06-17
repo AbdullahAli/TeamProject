@@ -26,11 +26,15 @@ public class ViewRegister extends InfoPharmaPanel{
     private static InfoPharmaFrame frame;
     private AccountDBAccess accountDB;
     private boolean isMerchant = false;
+    private String username;
+    private String password;
     
 	
     public ViewRegister(InfoPharmaFrame mainMenuFrame){
         accountDB = new AccountDBAccess();
+        
         initComponents();
+        txtDetails.setVisible(false);
         setFrame(mainMenuFrame);
         this.setVisible(true);
         lblError.setVisible(false);
@@ -81,12 +85,20 @@ public class ViewRegister extends InfoPharmaPanel{
     }
     
     public void registerValidation(){
-        if(isMerchant){
+        if(!txtDetails.isVisible())
+        {
+            if(isMerchant){
             validateMerchant();
-        }else{
-            String role = comboUserType.getSelectedItem().toString();
-            registerStaffUser(role);
+            }else{
+                String role = comboUserType.getSelectedItem().toString();
+                registerStaffUser(role);
+            }
         }
+        else
+        {
+            mainMenu();
+        }
+        
     }
     
     public void validateMerchant(){
@@ -116,19 +128,24 @@ public class ViewRegister extends InfoPharmaPanel{
         try{
             accountDB.registerMerchantUser(username, password, merchantAccount);
             System.out.println("Username: " + username + "\nPassword: " + password + "");
-            mainMenu();
+            paneMerchant.setVisible(false);
+            txtDetails.setText("Username: "+username+ " Password: "+password);
+            txtDetails.setVisible(true);
+            //mainMenu();
         }catch(Exception e){
             System.out.println("Could not create user: " + e.getMessage());
         }
     }
     
     public void registerStaffUser(String role){
-        String username = generateUsername();
-        String password = generatePassword();
+        username = generateUsername();
+        password = generatePassword();
         try{
             accountDB.registerStaffUser(username, password, role);
-            System.out.println("Username: " + username + "\nPassword: " + password + "");
-            mainMenu();
+            System.out.println("Username1: " + username + "\nPassword: " + password + "");
+            txtDetails.setText("Username: "+username+ " Password: "+password);
+            txtDetails.setVisible(true);
+            //mainMenu();
         }catch(Exception e){
             System.out.println("Could not create user.");
         }
@@ -156,6 +173,7 @@ public class ViewRegister extends InfoPharmaPanel{
     private void initComponents() {
 
         layeredPanel = new javax.swing.JLayeredPane();
+        txtDetails = new javax.swing.JLabel();
         lblError = new javax.swing.JLabel();
         paneMerchant = new javax.swing.JLayeredPane();
         textCredit = new javax.swing.JFormattedTextField();
@@ -171,6 +189,9 @@ public class ViewRegister extends InfoPharmaPanel{
         btnMainMenu1 = new javax.swing.JButton();
         btnGo = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
+
+        txtDetails.setBounds(40, 170, 670, 20);
+        layeredPanel.add(txtDetails, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -346,5 +367,6 @@ public class ViewRegister extends InfoPharmaPanel{
     private javax.swing.JFormattedTextField textCredit;
     private javax.swing.JTextField textNumber;
     private javax.swing.JTextField textPostcode;
+    private javax.swing.JLabel txtDetails;
     // End of variables declaration//GEN-END:variables
 }
