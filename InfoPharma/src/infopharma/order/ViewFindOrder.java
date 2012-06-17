@@ -29,7 +29,15 @@ public class ViewFindOrder extends InfoPharmaPanel{
     public ViewFindOrder(InfoPharmaFrame mainMenuFrame) {
         dbOrder = new OrderDBAccess();
         dbCat = new CatDBAccess();
-        ordersArray = dbOrder.getAllOrders();
+        
+        if(UserAccount.getRole().equals("Administrator"))
+        {
+            ordersArray = dbOrder.getAllOrders();
+        }
+        else if(UserAccount.getRole().equals("Merchant"))
+        {
+            ordersArray = dbOrder.getAllOrdersByMerchant(MerchantAccount.getAccountNumber());
+        }
         initComponents();
         model = (DefaultTableModel) tableProducts.getModel();
         populateComboOrders();
@@ -69,9 +77,9 @@ public class ViewFindOrder extends InfoPharmaPanel{
     
     public void displayTotals(Order order) {
         double orderSubTotal = order.getTotal();
-        textSubtotal.setText(Double.toString(orderSubTotal));
+        textSubtotal.setValue(Double.parseDouble(orderSubTotal+""));
         textVAT.setText("17.5%");
-        textTotal.setText(Double.toString(17.5*orderSubTotal));
+        textTotal.setValue(Double.parseDouble(17.5*orderSubTotal+""));
     }
     
     public void displayProducts(ArrayList<Product> productsInOrderArray) {
@@ -116,10 +124,10 @@ public class ViewFindOrder extends InfoPharmaPanel{
 
         layeredPanel = new javax.swing.JLayeredPane();
         lblError = new javax.swing.JLabel();
+        textTotal = new javax.swing.JFormattedTextField();
         comboOrders = new javax.swing.JComboBox();
+        textSubtotal = new javax.swing.JFormattedTextField();
         textVAT = new javax.swing.JTextField();
-        textTotal = new javax.swing.JTextField();
-        textSubtotal = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableProducts = new javax.swing.JTable();
         imageLabel = new javax.swing.JLabel();
@@ -131,6 +139,10 @@ public class ViewFindOrder extends InfoPharmaPanel{
         lblError.setBounds(10, 530, 820, 40);
         layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textTotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        textTotal.setBounds(40, 518, 250, 20);
+        layeredPanel.add(textTotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         comboOrders.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboOrdersActionPerformed(evt);
@@ -139,17 +151,13 @@ public class ViewFindOrder extends InfoPharmaPanel{
         comboOrders.setBounds(30, 120, 270, 27);
         layeredPanel.add(comboOrders, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textSubtotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        textSubtotal.setBounds(40, 380, 250, 20);
+        layeredPanel.add(textSubtotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         textVAT.setEditable(false);
         textVAT.setBounds(40, 450, 260, 20);
         layeredPanel.add(textVAT, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textTotal.setEditable(false);
-        textTotal.setBounds(40, 520, 260, 20);
-        layeredPanel.add(textTotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        textSubtotal.setEditable(false);
-        textSubtotal.setBounds(40, 380, 260, 20);
-        layeredPanel.add(textSubtotal, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         tableProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -223,8 +231,8 @@ public class ViewFindOrder extends InfoPharmaPanel{
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
     private javax.swing.JTable tableProducts;
-    private javax.swing.JTextField textSubtotal;
-    private javax.swing.JTextField textTotal;
+    private javax.swing.JFormattedTextField textSubtotal;
+    private javax.swing.JFormattedTextField textTotal;
     private javax.swing.JTextField textVAT;
     // End of variables declaration//GEN-END:variables
 }
