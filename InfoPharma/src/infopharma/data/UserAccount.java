@@ -11,6 +11,7 @@ package infopharma.data;
 public class UserAccount {
     
     private static String role;
+    private static String username;
 
     public UserAccount(String role) 
     {
@@ -26,6 +27,7 @@ public class UserAccount {
     public UserAccount(String role, String username) 
     {
         this.role = role;
+        this.username = username;
     }
     
     public static String getRole()
@@ -36,6 +38,16 @@ public class UserAccount {
     public static void setRole(String role)
     {
         UserAccount.role = role;
+    }
+    
+    public static String getUsername()
+    {
+        return username;
+    }
+    
+    public static void setUsername(String username)
+    {
+        UserAccount.username = username;
     }
     
 }
