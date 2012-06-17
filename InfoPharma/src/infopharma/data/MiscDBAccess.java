@@ -39,7 +39,7 @@ public class MiscDBAccess extends DBAccess{
                     String usr = rs.getString("username");
                     String pwd = rs.getString("password");
                     String role = rs.getString("roleType");
-                    userAccount = new UserAccount(role);
+                    userAccount = new UserAccount(role, username);
                     System.out.println("logged in as: " + role);
                     return userAccount;
                 }
@@ -210,4 +210,45 @@ public class MiscDBAccess extends DBAccess{
 
         return null;
      }
+        
+        public int getAccountNumber(String username)
+    {
+        Connection connection = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sql = "SELECT accountNumber FROM LoginDetails WHERE username = '"+username+"'";
+        System.out.println("::  "+sql);
+        try {
+            connection = makeConnection();
+            stat = (Statement) connection.createStatement();
+            rs = stat.executeQuery(sql);
+            rs.next();
+            return rs.getInt("accountNumber");
+            
+            
+        }catch(SQLException ex) {
+            try { 
+                connection.rollback();
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            }
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(connection != null) {
+                    connection.close();
+                }
+                if(stat != null) {
+                    stat.close();
+                }
+                
+                if(rs != null) {
+                    rs.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in AccountDBAccess ");
+            }
+        }
+        return 0;
+    }
 }
