@@ -168,7 +168,7 @@ public class ViewNewProduct extends InfoPharmaPanel{
     public void validateFields()
     {
         lblError.setVisible(false);
-        Object[] fields = {txtCost, txtInitialStock, txtName, txtStockLimit, txtType, txtUnitsInAPack};
+        Object[] fields = {txtCost.getText(), txtInitialStock.getText(), txtName.getText(), txtStockLimit.getText(), txtType.getText(), txtUnitsInAPack.getText()};
         if(Validator.isFilledIn(fields))
         {
             insertNewProduct();
