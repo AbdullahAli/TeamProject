@@ -5,6 +5,7 @@
 package infopharma.acc;
 
 import infopharma.Validator;
+import infopharma.data.MerchantAccount;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
 import javax.swing.JFrame;
@@ -123,6 +124,7 @@ public class ViewLogin extends InfoPharmaPanel{
             UserAccount userAccount = miscDBAccess.login(username, password);
             if(userAccount != null)
             {
+                MerchantAccount.setAccountNumber(miscDBAccess.getAccountNumber(username));
                 this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
             }
             else
