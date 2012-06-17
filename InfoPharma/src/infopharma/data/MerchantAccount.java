@@ -10,7 +10,7 @@ package infopharma.data;
  */
 public class MerchantAccount extends UserAccount {
     
-    private int accountNumber;
+    private static int accountNumber;
     private int accountStatusID;
     private String company;
     private String address;
@@ -22,7 +22,6 @@ public class MerchantAccount extends UserAccount {
     private String status;
     
     public MerchantAccount() {
-        super("merchant");
     }
     
     public MerchantAccount(String company, 
@@ -32,7 +31,6 @@ public class MerchantAccount extends UserAccount {
                            Double creditLimit, 
                            int discountPlan, 
                            String status) {
-        super("merchant");
         this.address = address;
         this.company = company;
         this.postcode = postcode;
@@ -51,7 +49,6 @@ public class MerchantAccount extends UserAccount {
                            Double creditLimit,
                            Double balance,
                            int discountPlan) {
-        super("merchant");
         this.accountNumber = accountNumber;
         this.accountStatusID = accountStatusID;
         this.address = address;
@@ -63,7 +60,7 @@ public class MerchantAccount extends UserAccount {
         this.discountPlan = discountPlan;
     }
     
-    public int getAccountNumber(){
+    public static int getAccountNumber(){
         return accountNumber;
     }
     
@@ -103,8 +100,8 @@ public class MerchantAccount extends UserAccount {
         return status;
     }
     
-    public void setAccountNumber(int accountNumber){
-        this.accountNumber = accountNumber;
+    public static void setAccountNumber(int accountNumber){
+        MerchantAccount.accountNumber = accountNumber;
     }
     
     public void setAccountStatusID(int accountStatusID){
