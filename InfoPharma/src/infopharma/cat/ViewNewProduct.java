@@ -74,7 +74,7 @@ public class ViewNewProduct extends InfoPharmaPanel{
         btnGo = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
-        txtStockLimit.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
+        txtStockLimit.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0"))));
         txtStockLimit.setBounds(380, 220, 250, 28);
         layeredPanel.add(txtStockLimit, javax.swing.JLayeredPane.DEFAULT_LAYER);
 

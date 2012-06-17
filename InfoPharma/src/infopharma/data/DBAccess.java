@@ -11,6 +11,8 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,6 +37,7 @@ public class DBAccess {
         catch (SQLException ex) 
         {
             System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog (null, "Could not connect to the database.", "CONNECTION ERROR", JOptionPane.ERROR_MESSAGE);
         } 
         //used to check if the connection failed
         return null;
