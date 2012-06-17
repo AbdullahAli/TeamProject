@@ -261,9 +261,9 @@ public class ViewMakePayment extends InfoPharmaPanel {
 
         textHolder.setBounds(380, 40, 250, 30);
         paneCard.add(textHolder, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dateExpiry.setBounds(160, 200, 140, 40);
+        dateExpiry.setBounds(160, 200, 130, 30);
         paneCard.add(dateExpiry, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dateStart.setBounds(30, 198, 130, 40);
+        dateStart.setBounds(27, 198, 123, 30);
         paneCard.add(dateStart, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         comboCards.setBounds(30, 30, 260, 50);

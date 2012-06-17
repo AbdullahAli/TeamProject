@@ -147,6 +147,7 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         imageLabel = new javax.swing.JLabel();
         btnOk = new javax.swing.JButton();
         btnMainMenu = new javax.swing.JButton();
+        btnMainMenu1 = new javax.swing.JButton();
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
@@ -200,6 +201,15 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnMainMenu1.setText("main menu");
+        btnMainMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenu1ActionPerformed(evt);
+            }
+        });
+        btnMainMenu1.setBounds(1020, 540, 80, 30);
+        layeredPanel.add(btnMainMenu1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -225,8 +235,13 @@ public class ViewUpdateOrderStatus extends InfoPharmaPanel {
         setOrderStatus();
     }//GEN-LAST:event_btnOkActionPerformed
 
+    private void btnMainMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenu1ActionPerformed
+        mainMenu();
+    }//GEN-LAST:event_btnMainMenu1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnMainMenu1;
     private javax.swing.JButton btnOk;
     private javax.swing.JComboBox comboOrderID;
     private javax.swing.JLabel imageLabel;

@@ -159,6 +159,7 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
         btnGo = new javax.swing.JButton();
+        btnMainMenu1 = new javax.swing.JButton();
 
         comboOrders.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,6 +229,15 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         btnGo.setBounds(1020, 70, 80, 470);
         layeredPanel.add(btnGo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnMainMenu1.setText("main menu");
+        btnMainMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenu1ActionPerformed(evt);
+            }
+        });
+        btnMainMenu1.setBounds(1020, 540, 80, 30);
+        layeredPanel.add(btnMainMenu1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -260,9 +270,14 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
         dateDispatch.setMaxSelectableDate(dateDelivery.getDate());
     }//GEN-LAST:event_dateDeliveryPropertyChange
 
+    private void btnMainMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenu1ActionPerformed
+        mainMenu();
+    }//GEN-LAST:event_btnMainMenu1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGo;
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnMainMenu1;
     private javax.swing.JComboBox comboOrders;
     private com.toedter.calendar.JDateChooser dateDelivery;
     private com.toedter.calendar.JDateChooser dateDispatch;
