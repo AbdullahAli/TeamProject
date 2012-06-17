@@ -39,7 +39,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     private int selectedID = 0;
     private double credit;
     private int discountID;
-    private int accountNumber = 1;
+    private int accountNumber = MerchantAccount.getAccountNumber();
 	
     public ViewPlaceOrder(InfoPharmaFrame mainMenuFrame)
     {
@@ -55,6 +55,8 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         updateCredit();
         discountID = ordDBAccess.getDiscountID(accountNumber);
         setFieldsOpaque();
+        
+        System.out.println("account id is "+accountNumber);
     }
     
     public void setFieldsOpaque()  {
@@ -216,31 +218,34 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         txtDescription.setBounds(290, 180, 150, 30);
         layeredPanel.add(txtDescription, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnCancel.setText("CANCEL");
+        btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/cancel.png"))); // NOI18N
+        btnCancel.setBorderPainted(false);
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
-        btnCancel.setBounds(850, 300, 95, 29);
+        btnCancel.setBounds(870, 260, 110, 30);
         layeredPanel.add(btnCancel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnUpdate.setText("UPDATE");
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/update.png"))); // NOI18N
+        btnUpdate.setBorderPainted(false);
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
-        btnUpdate.setBounds(730, 330, 94, 29);
+        btnUpdate.setBounds(870, 180, 110, 30);
         layeredPanel.add(btnUpdate, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnRemove.setText("REMOVE");
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/remove.png"))); // NOI18N
+        btnRemove.setBorderPainted(false);
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
             }
         });
-        btnRemove.setBounds(760, 230, 95, 29);
+        btnRemove.setBounds(870, 220, 110, 30);
         layeredPanel.add(btnRemove, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         tblOrder.setModel(new javax.swing.table.DefaultTableModel(
@@ -261,13 +266,14 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         jScrollPane1.setBounds(30, 240, 680, 120);
         layeredPanel.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnAdd.setText("ADD");
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/add.png"))); // NOI18N
+        btnAdd.setBorderPainted(false);
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
-        btnAdd.setBounds(860, 220, 75, 29);
+        btnAdd.setBounds(870, 180, 110, 30);
         layeredPanel.add(btnAdd, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -612,6 +618,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
     }//GEN-LAST:event_btnLessActionPerformed
 
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        lblError.setVisible(false);
         if(!isOrderEmpty())
         {
            insertOrder(); 
@@ -619,11 +626,13 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
         else
         {
             System.out.println("the order is empty");
+            lblError.setText("The order is empty");
+            lblError.setVisible(true);
         }        
     }//GEN-LAST:event_btnGoActionPerformed
 
     private void btnMainMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenu1ActionPerformed
-        // TODO add your handling code here:
+        mainMenu();
     }//GEN-LAST:event_btnMainMenu1ActionPerformed
 
     
@@ -738,6 +747,7 @@ public class ViewPlaceOrder extends InfoPharmaPanel{
             orderedProducts.add(product);
         }
         ordDBAccess.insertOrder(orderedProducts, accountNumber, removeComma(txtOrderTotal.getText()));
+        mainMenu();
     }
     
    public double calculateSubtotal()
