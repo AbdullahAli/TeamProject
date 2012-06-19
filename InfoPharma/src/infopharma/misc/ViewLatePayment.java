@@ -11,6 +11,8 @@ import infopharma.acc.ViewMainMenu;
 import infopharma.data.CatDBAccess;
 import infopharma.data.UserAccount;
 import infopharma.data.MiscDBAccess;
+import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.table.DefaultTableModel;
@@ -45,7 +47,8 @@ public class ViewLatePayment extends InfoPharmaPanel{
     public void populateLatePayments()
     {
         System.out.println("filling table");
-        tblLatePayments.setModel(new DefaultTableModel(miscDBAccess.getLatePayments().get(0), miscDBAccess.getLatePayments().get(1)));
+        ArrayList<Vector> latePayments = miscDBAccess.getLatePayments();
+        tblLatePayments.setModel(new DefaultTableModel(latePayments.get(0), latePayments.get(1)));
         System.out.println("table filled");
         tblLatePayments.updateUI();
     }
