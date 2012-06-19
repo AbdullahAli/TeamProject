@@ -769,7 +769,7 @@ public class OrderDBAccess extends DBAccess
         return false;
     }
     
-    public void makeChequePayment(int accountNumber, int orderId, ChequePayment payment) {
+    public boolean makeChequePayment(int accountNumber, int orderId, ChequePayment payment) {
         int paymentId;
         int typeId = payment.getTypeId();
         String date = payment.getDate();
@@ -820,6 +820,7 @@ public class OrderDBAccess extends DBAccess
             } catch(Exception error) {
                 System.err.println("Error: " + error.getMessage());
             }
+            return false;
         } finally {
             try {
                 if(con != null) {
@@ -832,6 +833,7 @@ public class OrderDBAccess extends DBAccess
                 System.err.println("Could not close the resources in OrderDBAccess makeCardPayment");
             }
         }
+        return true;
     }
     
     public ArrayList<OrderDetailProduct> getOrderDetailsProducts(int orderId) {

@@ -4,6 +4,7 @@
  */
 package infopharma.order;
 
+import infopharma.Treeple;
 import infopharma.Validator;
 import infopharma.acc.InfoPharmaFrame;
 import infopharma.acc.InfoPharmaPanel;
@@ -48,6 +49,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
         dateExpiry.setMinSelectableDate(new Date());
         setFrame(mainMenuFrame);
         lblError.setVisible(false);
+        lblError1.setVisible(false);
         setFieldsOpaque();
         this.setVisible(true);
     }
@@ -139,8 +141,13 @@ public class ViewMakePayment extends InfoPharmaPanel {
         String expDate = convertToShortDateString(dateExpiry.getDate());
         Object secCode = textSecurity.getValue();
         String cardHolder = textHolder.getText();
-        Object[] fields = {cardNo, startDate, expDate, secCode, cardHolder};
-        if(Validator.isFilledIn(fields)) {
+        Treeple[] tuples = {new Treeple(cardNo, "Credit Card Number", 16),
+                            new Treeple(startDate),
+                            new Treeple(expDate),
+                            new Treeple(secCode, "Security Code", 3),
+                            new Treeple(cardHolder)}; 
+        try {
+            Validator.validateTuple(tuples);
             int paymentTypeId = getPaymentTypeId("card");
             String dateNow = convertToShortDateString(new Date());
             double amount = Double.parseDouble(textAmount.getText());
@@ -154,10 +161,9 @@ public class ViewMakePayment extends InfoPharmaPanel {
                                                   startDate, 
                                                   Integer.parseInt(secCode.toString()));
             makeCardPayment(payment);
-        } else {
-            displayError("Please fill in all the details.");
+        } catch(Exception e) {
+            displayError("Error: " + e.getMessage());
         }
-        
     }
     
     public int getPaymentTypeId(String type) {
@@ -177,7 +183,12 @@ public class ViewMakePayment extends InfoPharmaPanel {
         Object sortcode = textSortCode.getValue();
         String payerName = textChequeName.getText();
         Object[] fields = {chequeNumber, chequeAccNumber, sortcode, payerName};
-        if(Validator.isFilledIn(fields)) {
+        Treeple[] treeples = {new Treeple(chequeNumber, "Cheque Number", 6),
+                              new Treeple(chequeAccNumber, "Account Number", 8),
+                              new Treeple(sortcode, "Sort Code", 6),
+                              new Treeple(payerName)};
+        try {
+            Validator.validateTuple(treeples);
             int paymentTypeId = getPaymentTypeId("cheque");
             String dateNow = convertToShortDateString(new Date());
             double amount = Double.parseDouble(textAmount.getText());
@@ -190,8 +201,8 @@ public class ViewMakePayment extends InfoPharmaPanel {
                                                       chequeAccNumber.toString(),
                                                       chequeNumber.toString());
             makeChequePayment(payment);
-        } else {
-            displayError("Please fill in all the details.");
+        } catch(Exception e) {
+            displayError("Error: " + e.getMessage());
         }
     }
     
@@ -215,14 +226,18 @@ public class ViewMakePayment extends InfoPharmaPanel {
     public void makeChequePayment(ChequePayment payment) {
         Order order = getOrder(Integer.parseInt(comboOrders.getSelectedItem().toString()));
         int orderId = order.getID();
-        dbOrder.makeChequePayment(accountNumber, orderId, payment);
-        unpaidOrders.remove(order);
-        populateComboOrders();
+        if(dbOrder.makeChequePayment(accountNumber, orderId, payment)) {
+            mainMenu();
+        } else {
+            displayError("ERROR: Payment was not made.");
+        }
     }
     
     public void displayError(String error) {
         lblError.setText(error);
         lblError.setVisible(true);
+        lblError1.setText(error);
+        lblError1.setVisible(true);
     }
 
     /**
@@ -246,6 +261,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
         textSecurity = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         paneCheque = new javax.swing.JLayeredPane();
+        lblError1 = new javax.swing.JLabel();
         textChequeName = new javax.swing.JTextField();
         textChequeNumber = new javax.swing.JFormattedTextField();
         textAccountNumber = new javax.swing.JFormattedTextField();
@@ -263,7 +279,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 290, 820, 30);
+        lblError.setBounds(0, 290, 820, 30);
         paneCard.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textHolder.setBounds(380, 40, 250, 30);
         paneCard.add(textHolder, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -290,6 +306,10 @@ public class ViewMakePayment extends InfoPharmaPanel {
         paneCard.setBounds(0, 240, 750, 320);
         layeredPanel.add(paneCard, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        lblError1.setForeground(new java.awt.Color(255, 0, 0));
+        lblError1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
+        lblError1.setBounds(0, 290, 820, 30);
+        paneCheque.add(lblError1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textChequeName.setBounds(40, 40, 240, 28);
         paneCheque.add(textChequeName, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -431,6 +451,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLayeredPane layeredPanel;
     private javax.swing.JLabel lblError;
+    private javax.swing.JLabel lblError1;
     private javax.swing.JLayeredPane paneCard;
     private javax.swing.JLayeredPane paneCheque;
     private javax.swing.JRadioButton radioBtnCard;

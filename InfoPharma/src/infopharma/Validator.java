@@ -21,4 +21,21 @@ public class Validator {
         }
         return true;
     }
+    
+    public static void validateTuple(Treeple[] tuples) throws Exception {
+        for(Treeple treeple : tuples) {
+            Object field = treeple.field;
+            if(treeple.size != null) { 
+                int size = Integer.parseInt(treeple.size.toString());
+                if(size != 0) {
+                    if(field == null || field.toString().length() != size) {
+                        String title = treeple.title.toString();
+                        throw new Exception(title + " must be " + size + " characters long.");
+                    }
+                } 
+            } else if(field == null || field.equals("")) {
+                throw new Exception("Please fill in all the details.");
+            }
+        }
+    }
 }
