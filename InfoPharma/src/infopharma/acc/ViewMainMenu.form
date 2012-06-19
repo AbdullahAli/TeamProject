@@ -138,14 +138,12 @@
                                   <Component id="btnFindOrder" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnPlaceOrder" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnMakePayement" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnViewOutstandingBalances" alignment="1" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnUpdateOrderStatus" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnViewOrderHistory" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="276" max="-2" attributes="0"/>
-                              <Component id="btnViewOrderHistory" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="251" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -155,22 +153,17 @@
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="btnViewOrderHistory" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="btnDispatchOrder" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnPlaceOrder" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnFindOrder" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnMakePayement" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnViewOutstandingBalances" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnUpdateOrderStatus" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <Component id="btnDispatchOrder" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnPlaceOrder" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnFindOrder" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnMakePayement" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnUpdateOrderStatus" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnViewOrderHistory" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="89" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -237,18 +230,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMakePayementActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnViewOrderHistory">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/infopharma/buttons/order/vieworderhistory.png"/>
-                </Property>
-                <Property name="borderPainted" type="boolean" value="false"/>
-                <Property name="contentAreaFilled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewOrderHistoryActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JButton" name="btnUpdateOrderStatus">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -261,16 +242,16 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateOrderStatusActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnViewOutstandingBalances">
+            <Component class="javax.swing.JButton" name="btnViewOrderHistory">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/infopharma/buttons/order/viewoutstandingbalances.png"/>
+                  <Image iconType="3" name="/infopharma/buttons/order/vieworderhistory.png"/>
                 </Property>
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewOutstandingBalancesActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewOrderHistoryActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

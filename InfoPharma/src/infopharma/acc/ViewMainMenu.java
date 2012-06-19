@@ -5,6 +5,8 @@
 package infopharma.acc;
 
 import infopharma.cat.*;
+import infopharma.data.MerchantAccount;
+import infopharma.data.OrderDBAccess;
 import infopharma.data.UserAccount;
 import infopharma.misc.ViewLatePayment;
 import infopharma.misc.ViewLowStockNotification;
@@ -12,6 +14,7 @@ import infopharma.order.*;
 import infopharma.rprt.ViewGenerateReport;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -121,14 +124,14 @@ public class ViewMainMenu extends InfoPharmaPanel{
         btnMakePayement.setVisible(isVisibleOrEnabled);
         btnMakePayement.setEnabled(isVisibleOrEnabled);
         
-        btnViewOutstandingBalances.setVisible(isVisibleOrEnabled);
-        btnViewOutstandingBalances.setEnabled(isVisibleOrEnabled);
-        
         btnUpdateOrderStatus.setVisible(isVisibleOrEnabled);
         btnUpdateOrderStatus.setVisible(isVisibleOrEnabled);
         
         btnDispatchOrder.setVisible(isVisibleOrEnabled);
         btnDispatchOrder.setEnabled(isVisibleOrEnabled);
+        
+        btnViewOrderHistory.setEnabled(isVisibleOrEnabled);
+        btnViewOrderHistory.setVisible(isVisibleOrEnabled);
         
         if(role.equals("Merchant"))
         {
@@ -140,6 +143,9 @@ public class ViewMainMenu extends InfoPharmaPanel{
             
             btnPlaceOrder.setVisible(true);
             btnPlaceOrder.setEnabled(true);
+            
+            btnViewOrderHistory.setEnabled(true);
+            btnViewOrderHistory.setVisible(true);
         }
         else if(role.equals("Dispatcher"))
         {
@@ -152,16 +158,22 @@ public class ViewMainMenu extends InfoPharmaPanel{
             btnMakePayement.setVisible(false);
             btnMakePayement.setEnabled(false);
 
-            btnViewOutstandingBalances.setVisible(false);
-            btnViewOutstandingBalances.setEnabled(false);
-
             btnUpdateOrderStatus.setVisible(false);
             btnUpdateOrderStatus.setVisible(false); 
+            
+            btnViewOrderHistory.setEnabled(false);
+            btnViewOrderHistory.setVisible(false);
         }
         else if(role.equals("Administrator"))
         {
             btnPlaceOrder.setVisible(false);
             btnPlaceOrder.setEnabled(false);
+            
+            btnViewOrderHistory.setEnabled(false);
+            btnViewOrderHistory.setVisible(false);
+            
+            btnDispatchOrder.setVisible(false);
+            btnDispatchOrder.setEnabled(false);
         }
     }
     
@@ -235,9 +247,8 @@ public class ViewMainMenu extends InfoPharmaPanel{
         btnPlaceOrder = new javax.swing.JButton();
         btnFindOrder = new javax.swing.JButton();
         btnMakePayement = new javax.swing.JButton();
-        btnViewOrderHistory = new javax.swing.JButton();
         btnUpdateOrderStatus = new javax.swing.JButton();
-        btnViewOutstandingBalances = new javax.swing.JButton();
+        btnViewOrderHistory = new javax.swing.JButton();
         pnlCatalogue = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         btnCreateANewCatalogue = new javax.swing.JButton();
@@ -355,15 +366,6 @@ public class ViewMainMenu extends InfoPharmaPanel{
             }
         });
 
-        btnViewOrderHistory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/vieworderhistory.png"))); // NOI18N
-        btnViewOrderHistory.setBorderPainted(false);
-        btnViewOrderHistory.setContentAreaFilled(false);
-        btnViewOrderHistory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewOrderHistoryActionPerformed(evt);
-            }
-        });
-
         btnUpdateOrderStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/updateorderstatus.png"))); // NOI18N
         btnUpdateOrderStatus.setBorderPainted(false);
         btnUpdateOrderStatus.setContentAreaFilled(false);
@@ -373,12 +375,12 @@ public class ViewMainMenu extends InfoPharmaPanel{
             }
         });
 
-        btnViewOutstandingBalances.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/viewoutstandingbalances.png"))); // NOI18N
-        btnViewOutstandingBalances.setBorderPainted(false);
-        btnViewOutstandingBalances.setContentAreaFilled(false);
-        btnViewOutstandingBalances.addActionListener(new java.awt.event.ActionListener() {
+        btnViewOrderHistory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/buttons/order/vieworderhistory.png"))); // NOI18N
+        btnViewOrderHistory.setBorderPainted(false);
+        btnViewOrderHistory.setContentAreaFilled(false);
+        btnViewOrderHistory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewOutstandingBalancesActionPerformed(evt);
+                btnViewOrderHistoryActionPerformed(evt);
             }
         });
 
@@ -398,11 +400,9 @@ public class ViewMainMenu extends InfoPharmaPanel{
                             .add(btnFindOrder)
                             .add(btnPlaceOrder)
                             .add(btnMakePayement)
-                            .add(btnViewOutstandingBalances)
-                            .add(btnUpdateOrderStatus))
-                        .add(276, 276, 276)
-                        .add(btnViewOrderHistory)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(btnUpdateOrderStatus)
+                            .add(btnViewOrderHistory))))
+                .addContainerGap(251, Short.MAX_VALUE))
         );
         pnlOrdersLayout.setVerticalGroup(
             pnlOrdersLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -410,20 +410,17 @@ public class ViewMainMenu extends InfoPharmaPanel{
                 .add(20, 20, 20)
                 .add(jLabel3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(pnlOrdersLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(btnViewOrderHistory)
-                    .add(pnlOrdersLayout.createSequentialGroup()
-                        .add(btnDispatchOrder)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnPlaceOrder)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnFindOrder)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnMakePayement)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnViewOutstandingBalances)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnUpdateOrderStatus)))
+                .add(btnDispatchOrder)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnPlaceOrder)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnFindOrder)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnMakePayement)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnUpdateOrderStatus)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnViewOrderHistory)
                 .addContainerGap(89, Short.MAX_VALUE))
         );
 
@@ -751,7 +748,17 @@ public class ViewMainMenu extends InfoPharmaPanel{
     }//GEN-LAST:event_btnDispatchOrderActionPerformed
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
-        frame.setPanel(new ViewPlaceOrder(this.getFrame()));
+        OrderDBAccess db = new OrderDBAccess();
+        int status = db.getAccountStatus(MerchantAccount.getAccountNumber());
+        if(status == 1)
+        {
+            frame.setPanel(new ViewPlaceOrder(this.getFrame()));
+        }
+        else
+        {
+            JOptionPane.showMessageDialog (null, "It looks like your account has been suspended or defaulted.\nPlease "
+                    + "pay all your outstanding orders and contact the Admin.", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     private void btnFindOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindOrderActionPerformed
@@ -762,17 +769,9 @@ public class ViewMainMenu extends InfoPharmaPanel{
         frame.setPanel(new ViewMakePayment(this.getFrame()));
     }//GEN-LAST:event_btnMakePayementActionPerformed
 
-    private void btnViewOrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderHistoryActionPerformed
-        frame.setPanel(new ViewOrderHistory(this.getFrame()));
-    }//GEN-LAST:event_btnViewOrderHistoryActionPerformed
-
     private void btnUpdateOrderStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateOrderStatusActionPerformed
         frame.setPanel(new ViewUpdateOrderStatus(this.getFrame()));
     }//GEN-LAST:event_btnUpdateOrderStatusActionPerformed
-
-    private void btnViewOutstandingBalancesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOutstandingBalancesActionPerformed
-        frame.setPanel(new ViewOutstandingBalances(this.getFrame()));
-    }//GEN-LAST:event_btnViewOutstandingBalancesActionPerformed
 
     private void btnCreateANewCatalogueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateANewCatalogueActionPerformed
         frame.setPanel(new ViewNewCatalogue(this.getFrame()));
@@ -818,6 +817,10 @@ public class ViewMainMenu extends InfoPharmaPanel{
         frame.setPanel(new ViewRegister(this.getFrame()));
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void btnViewOrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderHistoryActionPerformed
+        frame.setPanel(new ViewOrderHistory(this.getFrame()));
+    }//GEN-LAST:event_btnViewOrderHistoryActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccounts;
     private javax.swing.JButton btnCatalogue;
@@ -841,7 +844,6 @@ public class ViewMainMenu extends InfoPharmaPanel{
     private javax.swing.JButton btnViewLowStock;
     private javax.swing.JButton btnViewMerchantAccount;
     private javax.swing.JButton btnViewOrderHistory;
-    private javax.swing.JButton btnViewOutstandingBalances;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
