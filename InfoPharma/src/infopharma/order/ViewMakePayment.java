@@ -10,8 +10,12 @@ import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.*;
 import java.awt.Color;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -129,7 +133,7 @@ public class ViewMakePayment extends InfoPharmaPanel {
         }
     }
     
-    public void validateCardPayment() {
+     public void validateCardPayment() {
         Object cardNo = textCard.getValue();
         String startDate = convertToShortDateString(dateStart.getDate());
         String expDate = convertToShortDateString(dateExpiry.getDate());
@@ -232,8 +236,8 @@ public class ViewMakePayment extends InfoPharmaPanel {
 
         radioBtnGroup = new javax.swing.ButtonGroup();
         layeredPanel = new javax.swing.JLayeredPane();
-        lblError = new javax.swing.JLabel();
         paneCard = new javax.swing.JLayeredPane();
+        lblError = new javax.swing.JLabel();
         textHolder = new javax.swing.JTextField();
         dateExpiry = new com.toedter.calendar.JDateChooser();
         dateStart = new com.toedter.calendar.JDateChooser();
@@ -259,9 +263,8 @@ public class ViewMakePayment extends InfoPharmaPanel {
 
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/infopharma/acc/images/error.png"))); // NOI18N
-        lblError.setBounds(10, 520, 820, 40);
-        layeredPanel.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
+        lblError.setBounds(10, 290, 820, 30);
+        paneCard.add(lblError, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textHolder.setBounds(380, 40, 250, 30);
         paneCard.add(textHolder, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dateExpiry.setBounds(160, 200, 130, 30);
@@ -337,11 +340,11 @@ public class ViewMakePayment extends InfoPharmaPanel {
         layeredPanel.add(comboOrders, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textAmount.setEditable(false);
-        textAmount.setBounds(380, 200, 250, 30);
+        textAmount.setBounds(390, 200, 240, 30);
         layeredPanel.add(textAmount, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textDateOrdered.setEditable(false);
-        textDateOrdered.setBounds(380, 120, 250, 30);
+        textDateOrdered.setBounds(390, 120, 240, 30);
         layeredPanel.add(textDateOrdered, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         imgBackground.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
