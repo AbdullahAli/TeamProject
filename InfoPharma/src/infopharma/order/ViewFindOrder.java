@@ -80,10 +80,10 @@ public class ViewFindOrder extends InfoPharmaPanel{
     }
     
     public void displayTotals(Order order) {
-        double orderSubTotal = order.getTotal();
-        textSubtotal.setValue(Double.parseDouble(orderSubTotal+""));
+        double subtotal = order.getTotal() / 1.175;
+        textSubtotal.setValue(Double.parseDouble(subtotal+""));
         textVAT.setText("17.5%");
-        textTotal.setValue(Double.parseDouble(vat*orderSubTotal+""));
+        textTotal.setValue(Double.parseDouble(order.getTotal()+""));
     }
     
     public void displayProducts(HashMap<Integer, Product> productsHash,
