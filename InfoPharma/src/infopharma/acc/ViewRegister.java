@@ -112,29 +112,34 @@ public class ViewRegister extends InfoPharmaPanel{
         Object creditLimitObj = textCredit.getValue();
         Object[] fields = {company, address, contact, postcode, telNumber, creditLimitObj};
         if(Validator.isFilledIn(fields)){
-            double creditLimit = Double.parseDouble(creditLimitObj.toString());
-            MerchantAccount merchantAccount = new MerchantAccount(company, address, postcode, telNumber, creditLimit, discountPlanID, "default");
-            registerMerchantUser(merchantAccount);
+            if(!merchantExists(company)) {
+                double creditLimit = Double.parseDouble(creditLimitObj.toString());
+                MerchantAccount merchantAccount = new MerchantAccount(company, address, postcode, telNumber, creditLimit, discountPlanID, "default");
+                registerMerchantUser(merchantAccount);
+            } else {
+                displayError("That company name is already taken");
+            }
         }else{
-            lblError.setText("Please fill in all the details");
-            lblError.setVisible(true);
-            
+            displayError("Please fill in all the details");
         }
+    }
+    
+    public boolean merchantExists(String merchant) {
+        return accountDB.merchantExists(merchant);
     }
     
     public void registerMerchantUser(MerchantAccount merchantAccount){
         String username = generateUsername();
         String password = generatePassword();
-        try{
-            accountDB.registerMerchantUser(username, password, merchantAccount);
+        if(accountDB.registerMerchantUser(username, password, merchantAccount)) {
             System.out.println("Username: " + username + "\nPassword: " + password + "");
             paneMerchant.setVisible(false);
             txtDetails.setText("Username: "+username+ " Password: "+password);
             txtDetails.setVisible(true);
-            //mainMenu();
-        }catch(Exception e){
-            System.out.println("Could not create user: " + e.getMessage());
+        } else {
+            displayError("Could not create Merchant Account.");
         }
+            //mainMenu();
     }
     
     public void registerStaffUser(String role){
@@ -161,6 +166,11 @@ public class ViewRegister extends InfoPharmaPanel{
         SecureRandom random = new SecureRandom();
         String password = new BigInteger(60, random).toString(32);
         return password;
+    }
+    
+    public void displayError(String error) {
+        lblError.setText(error);
+        lblError.setVisible(true);
     }
     
     /**

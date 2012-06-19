@@ -84,7 +84,7 @@ public class AccountDBAccess extends DBAccess{
         return discountPlans;
     }
     
-    public void registerMerchantUser(String username, String password, MerchantAccount merchantAccount) throws SQLException {
+    public boolean registerMerchantUser(String username, String password, MerchantAccount merchantAccount) {
         String company = merchantAccount.getCompany();
         String address = merchantAccount.getAddress();
         String postcode = merchantAccount.getPostcode();
@@ -135,7 +135,7 @@ public class AccountDBAccess extends DBAccess{
                 statusID = resultSetAccountStatus.getInt("accountStatusID");
             }
             
-            String sqlCreateAccount = "INSERT INTO MerchantDetails VALUES('" + accountNumber + "','" + statusID + "','" + company + "', '" + address + "', '" + postcode + "', '" + telNumber + "', '" + creditLimit + "','0.00','" + discountPlanID + "')";
+            String sqlCreateAccount = "INSERT INTO MerchantDetails VALUES('" + accountNumber + "','" + statusID + "','" + company + "', '" + address + "', '" + postcode + "', '" + telNumber + "', '" + creditLimit + "', '0.00' ,'" + discountPlanID + "')";
             statementCreateAccount = (Statement) connection.createStatement();
             statementCreateAccount.executeUpdate(sqlCreateAccount);
             
@@ -146,7 +146,12 @@ public class AccountDBAccess extends DBAccess{
             connection.commit();
         }catch(SQLException ex){
             System.err.println("Error: "+ex.getMessage());
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (Exception e) {
+                System.err.println("Error: "+e.getMessage());
+            }
+            return false;
         }finally{
             try{
                 if(connection != null){
@@ -169,6 +174,7 @@ public class AccountDBAccess extends DBAccess{
                 System.err.println("Could not close the resources in AccountDBAccess registerMerchantUser");
             }
         }
+        return true;
     }
     
     public void registerStaffUser(String username, String password, String role) throws SQLException{
@@ -337,7 +343,7 @@ public class AccountDBAccess extends DBAccess{
         return successful;
     }
     
-        public MerchantAccount getMerchantByOrder(int orderId) {
+    public MerchantAccount getMerchantByOrder(int orderId) {
         MerchantAccount merchant = null;
         
         Connection connection = null;
@@ -398,7 +404,34 @@ public class AccountDBAccess extends DBAccess{
         }
         return merchant;
     }
-        
-    
-    
+     
+    public boolean merchantExists(String merchant) {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM MerchantDetails WHERE LOWER(company) = '" + merchant.toLowerCase() + "'";
+        try {
+            con = makeConnection();
+            con.setTransactionIsolation(con.TRANSACTION_READ_COMMITTED);
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery(sql);
+            if(rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(st != null) {
+                    st.close();
+                }
+            } catch(Exception e) {
+                System.err.println("Could not close the resources in AccountDBAccess merchantExists");
+            }
+        }
+        return false;
+    }
 }
