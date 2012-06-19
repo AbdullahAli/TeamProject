@@ -327,8 +327,8 @@ public class OrderDBAccess extends DBAccess
         return ordersArray;
     }
     
-    public ArrayList<Product> getAllProductsInOrder(int orderId) {
-        ArrayList<Product> productsInOrderArray = new ArrayList<Product>();
+    public HashMap<Integer, Product> getAllProductsInOrder(int orderId) {
+        HashMap<Integer, Product> productsInOrderArray = new HashMap<Integer, Product>();
         
         Connection connection = null;
         Statement statementProductIds = null;
@@ -370,7 +370,7 @@ public class OrderDBAccess extends DBAccess
                                                 unitsInPack,
                                                 currentStock,
                                                 dateReceived);
-                    productsInOrderArray.add(product);
+                    productsInOrderArray.put(id, product);
                 }
             }
         }catch(SQLException ex) {
@@ -795,6 +795,40 @@ public class OrderDBAccess extends DBAccess
                 System.err.println("Could not close the resources in OrderDBAccess makeCardPayment");
             }
         }
-        
+    }
+    
+    public ArrayList<OrderDetailProduct> getOrderDetailsProducts(int orderId) {
+        ArrayList<OrderDetailProduct> orderDetails = new ArrayList<OrderDetailProduct>();
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM OrderDetails_Products WHERE orderDetailsID = '" + orderId + "'";
+        try {
+            con = makeConnection();
+            con.setTransactionIsolation(con.TRANSACTION_READ_COMMITTED);
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery(sql);
+            while(rs.next()) {
+                int prdouctId = rs.getInt("productID");
+                double quantity = rs.getDouble("quantity");
+                int oId = rs.getInt("orderDetailsID");
+                OrderDetailProduct odp = new OrderDetailProduct(prdouctId, oId, quantity);
+                orderDetails.add(odp);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(st != null) {
+                    st.close();
+                }
+            } catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getOrderDetailsProducts");
+            }
+        }
+        return orderDetails;
     }
 }
