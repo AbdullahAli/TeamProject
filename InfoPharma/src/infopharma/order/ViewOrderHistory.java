@@ -8,10 +8,7 @@ import infopharma.Validator;
 import infopharma.acc.InfoPharmaFrame;
 import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
-import infopharma.data.UserAccount;
-import infopharma.data.MiscDBAccess;
-import infopharma.data.Order;
-import infopharma.data.OrderDBAccess;
+import infopharma.data.*;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -65,7 +62,7 @@ public class ViewOrderHistory extends InfoPharmaPanel{
 
     public void populateTable()
     {
-        ArrayList<Order> orders = ordDBAccess.getMerchantOrders(6);
+        ArrayList<Order> orders = ordDBAccess.getMerchantOrders(MerchantAccount.getAccountNumber());
         for(Order order : orders)
         {
             model.addRow(new Object[] {order.getID(), order.getDate(), convertToDoubleWithoutPrecisionLose(""+order.getTotal())});
@@ -82,6 +79,7 @@ public class ViewOrderHistory extends InfoPharmaPanel{
         tblOrders = new javax.swing.JTable();
         imageLabel = new javax.swing.JLabel();
         btnMainMenu = new javax.swing.JButton();
+        btnMainMenu1 = new javax.swing.JButton();
 
         tblOrders.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,6 +108,15 @@ public class ViewOrderHistory extends InfoPharmaPanel{
         btnMainMenu.setBounds(1010, 10, 80, 50);
         layeredPanel.add(btnMainMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnMainMenu1.setText("main menu");
+        btnMainMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenu1ActionPerformed(evt);
+            }
+        });
+        btnMainMenu1.setBounds(1020, 80, 70, 490);
+        layeredPanel.add(btnMainMenu1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,8 +134,13 @@ public class ViewOrderHistory extends InfoPharmaPanel{
         this.getFrame().setPanel(new ViewMainMenu(this.getFrame()));
     }//GEN-LAST:event_btnMainMenuActionPerformed
 
+    private void btnMainMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenu1ActionPerformed
+        mainMenu();
+    }//GEN-LAST:event_btnMainMenu1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnMainMenu1;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLayeredPane layeredPanel;
