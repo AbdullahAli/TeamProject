@@ -56,6 +56,43 @@ public class OrderDBAccess extends DBAccess
         return 0;
     }
     
+    public int getAccountStatus(int accountNumber)
+    {
+        Connection con = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        String sql = "SELECT accountStatusID FROM MerchantDetails WHERE accountNumber = '"+accountNumber+"'";
+        System.out.println(">>" +sql);
+        try
+        {
+            con = makeConnection();
+            stat = (Statement)con.createStatement();
+            rs = stat.executeQuery(sql);
+            
+            int discountID = 0;
+            while(rs.next())
+            {
+                discountID = rs.getInt("accountStatusID");
+            }
+            return discountID;
+        }
+        catch(Exception ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }finally {
+            try {
+                if(con != null) {
+                    con.close();
+                }
+                if(stat != null) {
+                    stat.close();
+                }
+            }catch(Exception e) {
+                System.err.println("Could not close the resources in OrderDBAccess getMerchantOrders");
+            }
+        }
+        return 0;
+    }
+    
     public ArrayList<Order> getMerchantOrders(int accountNumber)
     {
         ArrayList<Order> orders = new ArrayList<Order>();
