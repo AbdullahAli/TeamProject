@@ -104,16 +104,24 @@ public class ViewDispatchOrder extends InfoPharmaPanel {
     
     public void dispatchOrder(Dispatch dispatch) {
         //Possibly add code if no items in combo
-        int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
-        int orderStatus = getOrderStatusId("dispatch");
-        dbOrder.dispatchOrder(orderId, orderStatus, dispatch);
-        if(ordersArray.remove(getOrder(orderId))) {
-            populateComboOrders();
-            displayDetails();
-            mainMenu();
-        } else {
-            displayError("Ooops. Something went wrong.");
+        try
+        {
+            int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
+            int orderStatus = getOrderStatusId("dispatch");
+            dbOrder.dispatchOrder(orderId, orderStatus, dispatch);
+            if(ordersArray.remove(getOrder(orderId))) {
+                populateComboOrders();
+                displayDetails();
+                mainMenu();
+            } else {
+                displayError("Ooops. Something went wrong.");
+            }
         }
+        catch(Exception e)
+        {
+            displayError("You did not select any order to dispatch.");
+        }
+        
     }
     
     public void validateDispatch() {
