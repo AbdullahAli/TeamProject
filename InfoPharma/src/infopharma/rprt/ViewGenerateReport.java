@@ -221,8 +221,16 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         }
         else
         {
-            generateNewReport();
-            btnOpen.setVisible(true);
+            if(ddlReportType.getSelectedIndex() != 0)
+            {
+                generateNewReport();
+                btnOpen.setVisible(true);
+            }
+            else
+            {
+                lblError.setText("Please select a report type");
+                lblError.setVisible(true);
+            }
         }
     }//GEN-LAST:event_btnGenerateActionPerformed
 
@@ -300,6 +308,7 @@ public class ViewGenerateReport extends InfoPharmaPanel{
     
     public void openReport(String documentPath)
     {
+        lblError.setVisible(false);
         try 
         {
             String filePath = documentPath;
@@ -321,6 +330,8 @@ public class ViewGenerateReport extends InfoPharmaPanel{
             else 
             {
                 System.out.println("File is not exists!");
+                lblError.setText("Sorry, can not find the file.  Please regenerate it.");
+                lblError.setVisible(true);
             }
 
             System.out.println("Done");
