@@ -10,6 +10,7 @@ import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
 import infopharma.data.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JTextField;
@@ -72,9 +73,10 @@ public class ViewFindOrder extends InfoPharmaPanel{
         clearTable();
         int orderId = Integer.parseInt(comboOrders.getSelectedItem().toString());
         Order order = getOrder(orderId);
-        ArrayList<Product> productsInOrderArray = getProductsInOrder(orderId);
+        ArrayList<OrderDetailProduct> orderDetails = getOrderDetailsProducts(orderId);
+        HashMap<Integer, Product> productsInOrderArray = getProductsInOrder(orderId);
         displayTotals(order);
-        displayProducts(productsInOrderArray);
+        displayProducts(productsInOrderArray, orderDetails);
     }
     
     public void displayTotals(Order order) {
@@ -84,15 +86,16 @@ public class ViewFindOrder extends InfoPharmaPanel{
         textTotal.setValue(Double.parseDouble(vat*orderSubTotal+""));
     }
     
-    public void displayProducts(ArrayList<Product> productsInOrderArray) {
-        for(Product product : productsInOrderArray) {
+    public void displayProducts(HashMap<Integer, Product> productsHash,
+                                ArrayList<OrderDetailProduct> orderDetails) {
+        for(OrderDetailProduct odp : orderDetails) {
+            Product product = productsHash.get(odp.getProductId());
             String id = Integer.toString(product.getId());
             String description = product.getDescription();
             String unitPrice = Double.toString(product.getUnitPrice());
-            String quantity = "1";
-            String total = Double.toString(1*product.getUnitPrice());
+            String quantity = Double.toString(odp.getQuantity());
+            String total = Double.toString(odp.getQuantity() * product.getUnitPrice());
             model.insertRow(0, new Object[]{id, description, unitPrice, quantity, total});
-
         }
     }
     
@@ -110,9 +113,14 @@ public class ViewFindOrder extends InfoPharmaPanel{
         return null;
     }
     
-    public ArrayList<Product> getProductsInOrder(int orderId) {
-        ArrayList<Product> productsInOrderArray = dbOrder.getAllProductsInOrder(orderId);
+    public HashMap<Integer, Product> getProductsInOrder(int orderId) {
+        HashMap<Integer, Product> productsInOrderArray = dbOrder.getAllProductsInOrder(orderId);
         return productsInOrderArray;
+    }
+    
+    public ArrayList<OrderDetailProduct> getOrderDetailsProducts(int orderId) {
+        ArrayList<OrderDetailProduct> orderDetails = dbOrder.getOrderDetailsProducts(orderId);
+        return orderDetails;
     }
 
     /**
