@@ -174,6 +174,9 @@ public class ViewMainMenu extends InfoPharmaPanel{
             
             btnDispatchOrder.setVisible(false);
             btnDispatchOrder.setEnabled(false);
+            
+            btnMakePayement.setVisible(false);
+            btnMakePayement.setEnabled(false);
         }
     }
     
