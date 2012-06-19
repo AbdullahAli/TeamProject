@@ -59,7 +59,7 @@ public class ViewFindProduct extends InfoPharmaPanel{
     {
         ddlProducts.removeAllItems();
         products = catDBAccess.getProducts();
-        ddlProducts.addItem("");
+        ddlProducts.addItem("Please select an item");
         for(String product : products.values())
         {
             ddlProducts.addItem(product);
@@ -224,7 +224,7 @@ public class ViewFindProduct extends InfoPharmaPanel{
                 
                 
                 xxx.removeAllItems();
-                xxx.addItem("");
+                xxx.addItem("Please select an item");
                 for(String product : foundProducts.values())
                 {
                     xxx.addItem(product);
