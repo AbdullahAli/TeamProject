@@ -22,7 +22,8 @@ import javax.swing.JTextField;
  *
  * @author Abdullah
  */
-public class ViewRegister extends InfoPharmaPanel{
+public class ViewRegister extends InfoPharmaPanel {
+    
     private static InfoPharmaFrame frame;
     private AccountDBAccess accountDB;
     private boolean isMerchant = false;
@@ -30,9 +31,8 @@ public class ViewRegister extends InfoPharmaPanel{
     private String password;
     
 	
-    public ViewRegister(InfoPharmaFrame mainMenuFrame){
+    public ViewRegister(InfoPharmaFrame mainMenuFrame) {
         accountDB = new AccountDBAccess();
-        
         initComponents();
         txtDetails.setVisible(false);
         setFrame(mainMenuFrame);
@@ -42,7 +42,7 @@ public class ViewRegister extends InfoPharmaPanel{
         setFieldsOpaque();
     }
     
-    public void setFieldsOpaque()  {
+    public void setFieldsOpaque() {
         JTextField[] fields = {textCompany, textCredit, textNumber, textPostcode};
         setFieldsOpaque(fields);
     }
@@ -55,53 +55,50 @@ public class ViewRegister extends InfoPharmaPanel{
         InfoPharmaPanel.setFrame(frame);
     }
     
-    public void populateCombos(){
+    public void populateCombos() {
         populateComboUserTypes();
         populateComboDiscountPlan();
     }
     
-    public void populateComboUserTypes(){
+    public void populateComboUserTypes() {
         HashMap<Integer, String> userTypes = accountDB.getUserTypes();
         for(String userType : userTypes.values()){
             comboUserType.addItem(userType);
         }
     }
     
-    public void populateComboDiscountPlan(){
+    public void populateComboDiscountPlan() {
         ArrayList<Integer> discountPlans = accountDB.getDiscountPlans();
-        for(int discountPlanID : discountPlans){
+        for(int discountPlanID : discountPlans) {
             comboDiscountPlan.addItem(discountPlanID);
         }
     }
     
-    public void updatePane(){
+    public void updatePane() {
         if(comboUserType.getSelectedItem().toString().toLowerCase().equals("merchant")){
             paneMerchant.setVisible(true);
             isMerchant = true;
-        }else{ 
+        } else { 
             paneMerchant.setVisible(false);
             isMerchant = false;
         }
     }
     
-    public void registerValidation(){
-        if(!txtDetails.isVisible())
-        {
-            if(isMerchant){
-            validateMerchant();
-            }else{
+    public void registerValidation() {
+        if(!txtDetails.isVisible()) {
+            if(isMerchant) {
+                validateMerchant();
+            } else {
                 String role = comboUserType.getSelectedItem().toString();
                 registerStaffUser(role);
             }
         }
-        else
-        {
+        else {
             mainMenu();
-        }
-        
+        } 
     }
     
-    public void validateMerchant(){
+    public void validateMerchant() {
         lblError.setVisible(false);
         String company = textCompany.getText();
         String address = textAreaAddress.getText();
@@ -111,15 +108,13 @@ public class ViewRegister extends InfoPharmaPanel{
         int discountPlanID = Integer.parseInt(comboDiscountPlan.getSelectedItem().toString());
         Object creditLimitObj = textCredit.getValue();
         Object[] fields = {company, address, contact, postcode, telNumber, creditLimitObj};
-        if(Validator.isFilledIn(fields)){
+        if(Validator.isFilledIn(fields)) {
             if(!merchantExists(company)) {
                 double creditLimit = Double.parseDouble(creditLimitObj.toString());
                 MerchantAccount merchantAccount = new MerchantAccount(company, address, postcode, telNumber, creditLimit, discountPlanID, "default");
                 registerMerchantUser(merchantAccount);
-            } else {
-                displayError("That company name is already taken");
-            }
-        }else{
+            } else displayError("That company name is already taken");
+        } else {
             displayError("Please fill in all the details");
         }
     }
@@ -128,7 +123,7 @@ public class ViewRegister extends InfoPharmaPanel{
         return accountDB.merchantExists(merchant);
     }
     
-    public void registerMerchantUser(MerchantAccount merchantAccount){
+    public void registerMerchantUser(MerchantAccount merchantAccount) {
         String username = generateUsername();
         String password = generatePassword();
         if(accountDB.registerMerchantUser(username, password, merchantAccount)) {
@@ -136,35 +131,28 @@ public class ViewRegister extends InfoPharmaPanel{
             paneMerchant.setVisible(false);
             txtDetails.setText("Username: "+username+ " Password: "+password);
             txtDetails.setVisible(true);
-        } else {
-            displayError("Could not create Merchant Account.");
-        }
-            //mainMenu();
+        } else displayError("Could not create Merchant Account.");
     }
     
-    public void registerStaffUser(String role){
+    public void registerStaffUser(String role) {
         username = generateUsername();
         password = generatePassword();
-        try{
-            accountDB.registerStaffUser(username, password, role);
+        if(accountDB.registerStaffUser(username, password, role)) {
             System.out.println("Username1: " + username + "\nPassword: " + password + "");
             txtDetails.setText("Username: "+username+ " Password: "+password);
             txtDetails.setVisible(true);
-            //mainMenu();
-        }catch(Exception e){
-            System.out.println("Could not create user.");
-        }
+        } else displayError("Could not create Staff Account.");
     }
     
-    public String generateUsername(){
+    public String generateUsername() {
         SecureRandom random = new SecureRandom();
-        String username = new BigInteger(60, random).toString(32);
+        String username = "user" + new BigInteger(30, random).toString(32);
         return username;
     }
     
-    public String generatePassword(){
+    public String generatePassword() {
         SecureRandom random = new SecureRandom();
-        String password = new BigInteger(60, random).toString(32);
+        String password = "pass" + new BigInteger(30, random).toString(32);
         return password;
     }
     

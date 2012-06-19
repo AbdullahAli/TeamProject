@@ -177,7 +177,7 @@ public class AccountDBAccess extends DBAccess{
         return true;
     }
     
-    public void registerStaffUser(String username, String password, String role) throws SQLException{
+    public boolean registerStaffUser(String username, String password, String role) {
         Connection connection = null;
         Statement statementRoleID = null;
         Statement statementCreateLoginDetails = null;
@@ -203,8 +203,13 @@ public class AccountDBAccess extends DBAccess{
             
             connection.commit();
         }catch(SQLException ex){
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (Exception e) {
+                System.err.println("Error: "+e.getMessage());
+            }
             System.err.println("Error: "+ex.getMessage());
+            return false;
         }finally{
             try{
                 if(connection != null){
@@ -221,7 +226,7 @@ public class AccountDBAccess extends DBAccess{
                 System.err.println("Could not close the resources in AccountDBAccess registerMerchantUser");
             }
         }
-        
+        return true;
     }
     
     public ArrayList<MerchantAccount> getAllMerchants(){
