@@ -5,19 +5,11 @@
 package infopharma.rprt;
 
 import com.itextpdf.text.*;
-import java.io.FileOutputStream;
 import java.util.Date;
 
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.sun.crypto.provider.DESKeyFactory;
-import infopharma.data.OrderDBAccess;
-import infopharma.data.RprtDBAccess;
 import infopharma.data.UserAccount;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 public class GeneralReport 
 {               

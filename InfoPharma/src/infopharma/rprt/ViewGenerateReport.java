@@ -4,21 +4,15 @@
  */
 package infopharma.rprt;
 
-import infopharma.Validator;
 import infopharma.acc.InfoPharmaFrame;
 import infopharma.acc.InfoPharmaPanel;
 import infopharma.acc.ViewMainMenu;
-import infopharma.data.UserAccount;
-import infopharma.data.MiscDBAccess;
 import infopharma.data.RprtDBAccess;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 
 /**
  *
