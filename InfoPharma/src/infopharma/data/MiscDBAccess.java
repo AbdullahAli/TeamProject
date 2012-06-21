@@ -28,7 +28,9 @@ public class MiscDBAccess extends DBAccess{
                 "INNER JOIN UserRoles " +
                 "ON LoginDetails.roleID = UserRoles.roleID " +
                 "WHERE LoginDetails.username='" + username + "'" +
-                "AND LoginDetails.password='" + password + "'";
+                "AND LoginDetails.password= MD5('" + password + "')";
+            
+            System.out.println(sql);
             try
             {
                 con = makeConnection();
@@ -130,6 +132,63 @@ public class MiscDBAccess extends DBAccess{
          }
 
         return null;
+     }
+        
+        public void suspendAccounts()
+     {
+         
+         Connection con = null;
+         Statement stat = null;
+         ResultSet rs = null;
+         ResultSetMetaData md = null;
+         String sql = "SELECT accountNumber FROM OrderDetails WHERE paymentID IS NULL AND orderDate <= CURDATE() - 30";
+         
+         System.out.println(sql);
+         ArrayList<Vector> latePayments  = null;
+         try
+         {
+             con = makeConnection();
+             stat = (Statement) con.createStatement();
+             rs = stat.executeQuery(sql);
+            //store row data
+            while(rs.next())
+            {
+                
+                String updateSQL = "UPDATE MerchantDetails set accountStatusID = 3 WHERE accountNumber = '"+
+                        rs.getInt("accountNumber") +"'";
+                
+                System.out.println(updateSQL);
+                
+                Statement stat2 = (Statement)con.createStatement();
+                stat2.executeUpdate(updateSQL);
+                
+            }
+            
+         }
+         catch (Exception e)
+         {
+             System.err.println("Error: "+e.getMessage());
+         }
+         finally
+         {
+             try
+            {
+                if(con != null)
+                {
+                    con.close();
+                }
+
+                if(stat != null)
+                {
+                    stat.close();
+                }
+
+            }
+            catch(Exception e)
+            {
+                System.err.println("Could not close the resources in CatDBAccess suspentacounts");
+            }
+         }
      }
         
         

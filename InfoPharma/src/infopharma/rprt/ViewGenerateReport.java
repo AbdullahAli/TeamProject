@@ -272,9 +272,10 @@ public class ViewGenerateReport extends InfoPharmaPanel{
         
         pnlID.setVisible(false);
         pnlID.setEnabled(false);
-        ddlMerchantIDs.setSelectedIndex(0);
+        ddlReportType.setSelectedIndex(0);
         
         String accountNumber = ddlMerchantIDs.getSelectedItem().toString();
+        System.out.println(accountNumber);
         
         
         if(reportType.equals("Activity Report"))

@@ -139,7 +139,7 @@ public class AccountDBAccess extends DBAccess{
             statementCreateAccount = (Statement) connection.createStatement();
             statementCreateAccount.executeUpdate(sqlCreateAccount);
             
-            String sqlCreateLoginDetails = "INSERT INTO LoginDetails VALUES('" + username + "', '" + password + "', '" + roleID + "', '" + accountNumber + "')";
+            String sqlCreateLoginDetails = "INSERT INTO LoginDetails VALUES('" + username + "', MD5('" + password + "'), '" + roleID + "', '" + accountNumber + "')";
             statementCreateLoginDetails = (Statement) connection.createStatement();
             statementCreateLoginDetails.executeUpdate(sqlCreateLoginDetails);
             
@@ -197,7 +197,7 @@ public class AccountDBAccess extends DBAccess{
                 roleID = resultSetRoleID.getInt("roleID");
             }
             
-            String createLoginDetailsSQL = "INSERT INTO LoginDetails VALUES('" + username + "', '" + password + "', '" + roleID + "', NULL)";
+            String createLoginDetailsSQL = "INSERT INTO LoginDetails VALUES('" + username + "', MD5('" + password + "'), '" + roleID + "', NULL)";
             statementCreateLoginDetails = (Statement) connection.createStatement();
             statementCreateLoginDetails.executeUpdate(createLoginDetailsSQL);
             
